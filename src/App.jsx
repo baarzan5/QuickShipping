@@ -1,21 +1,56 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { CategoriesProvider } from "./context/CategoriesContext";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import SignUpPage from "./pages/auth/SignUpPage";
+import AdminPage from "./pages/admin/AdminPage";
+import Header from "./components/Header";
+import CategoriesPage from "./pages/admin/CategoriesPage";
+import CategoryPage from "./pages/admin/CategoryPage";
+import ProductsPage from "./pages/admin/ProductsPage";
+import AddProduct from "./pages/admin/AddProduct";
+import BrandsPage from "./pages/admin/BrandsPage";
+import PropertiesPage from "./pages/admin/PropertiesPage";
+import { BrandsProvider } from "./context/BrandsContext";
+import { PropertiesProvider } from "./context/PropertiesContext";
+import AttributePage from "./pages/admin/AttributePage";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route excat path="/login" element={<LoginPage />} />
-          <Route excat path="/forgot-password" element={<ForgotPassword />} />
-          <Route excat path="/signup" element={<SignUpPage />} />
+        <CategoriesProvider>
+          <BrandsProvider>
+            <PropertiesProvider>
+              <Header />
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/signup" element={<SignUpPage />} />
 
-          <Route excat path="/" element={<HomePage />} />
-        </Routes>
+                <Route path="/" element={<HomePage />} />
+
+                {/* Admin Panel */}
+                <Route path="/admin/home" element={<AdminPage />} />
+                <Route path="/admin/categories" element={<CategoriesPage />} />
+                <Route
+                  path="/admin/category/:categorySlug"
+                  element={<CategoryPage />}
+                />
+                <Route path="/admin/products" element={<ProductsPage />} />
+                <Route path="/admin/add-product" element={<AddProduct />} />
+                <Route path="/admin/brands" element={<BrandsPage />} />
+                <Route path="/admin/properties" element={<PropertiesPage />} />
+                <Route
+                  path="/admin/properties/attribute/:attributeSlug"
+                  element={<AttributePage />}
+                />
+              </Routes>
+            </PropertiesProvider>
+          </BrandsProvider>
+        </CategoriesProvider>
       </AuthProvider>
     </Router>
   );
