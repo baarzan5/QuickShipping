@@ -3,9 +3,11 @@ import { useAuth } from "../../context/AuthContext";
 import SideBar from "../../components/admin/SideBar";
 import { IoIosAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { useProducts } from "../../context/ProductsContext";
 
 const ProductsPage = () => {
   const { user } = useAuth();
+  const { products } = useProducts();
 
   return (
     <>
@@ -18,7 +20,7 @@ const ProductsPage = () => {
               <div className="col-span-3 p-2 w-full">
                 <div className="flex flex-col justify-center items-center gap-5 w-full p-3">
                   <header className="sticky top-0 right-0 flex justify-between items-center w-full border-b border-b-[#969393]/25 pb-2">
-                    <h2 className="text-2xl font-bold">Products</h2>
+                    <h2 className="text-2xl font-bold">Products ({products.length})</h2>
 
                     <Link
                       to="/admin/add-product"

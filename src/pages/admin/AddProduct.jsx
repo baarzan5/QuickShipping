@@ -7,13 +7,17 @@ import { useProperties } from "../../context/PropertiesContext";
 import Select from "react-select";
 import { Helmet } from "react-helmet";
 import { IoIosArrowBack } from "react-icons/io";
+import { PRODUCTSACTIONS } from "../../actions/productsActions";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../firebase/firebaseConfig";
 
 const AddProduct = () => {
   const { user } = useAuth();
-  const { addProduct } = useProducts();
+  const { addProduct, dispatch } = useProducts();
   const { categories, getSubCategories, subCategories } = useCategories();
   const { brands } = useBrands();
-  const { colors, attributes, subAttributes } = useProperties();
+  const { colors, attributes, subAttributes, getSubAttributes } =
+    useProperties();
   const productId = useId();
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState(null);
@@ -24,7 +28,6 @@ const AddProduct = () => {
   const [productSubAttributes, setProductSubAttributes] = useState([]);
   const [productThumbnailImage, setProductThumbnailImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
-  const [productVideo, setProductVideo] = useState(null);
   const [productPrice, setProductPrice] = useState("");
   const [isFreeShipping, setIsFreeShipping] = useState(true);
   const [isFlatRate, setIsFlatRate] = useState(false);
@@ -33,16 +36,7 @@ const AddProduct = () => {
   const [productDescription, setProductDescription] = useState("");
   const [productDiscount, setProductDiscount] = useState("");
   const [productDiscountType, setProductDiscountType] = useState("Flat");
-
-  const handleFreeShippingChange = () => {
-    setIsFreeShipping(true);
-    setIsFlatRate(false);
-  };
-
-  const handleFlatRateChange = () => {
-    setIsFlatRate(true);
-    setIsFreeShipping(false);
-  };
+  const [productProfit, setProductProfit] = useState("");
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
@@ -72,15 +66,116 @@ const AddProduct = () => {
     setProductBrand(brand);
   };
 
+  const handleUploadProductThumbnailImage = async () => {
+    try {
+      const productThumbnailImageRef = ref(
+        storage,
+        `${productThumbnailImage.name}`
+      );
+      await uploadBytes(productThumbnailImageRef, productThumbnailImage);
+      const productThumbnailImageURL = await getDownloadURL(
+        productThumbnailImageRef
+      );
+      console.log("PRODUCT THUMBNAIL IMAGE URL: ", productThumbnailImageURL);
+      return productThumbnailImageURL;
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const handleUploadProductImages = async () => {
+    try {
+      const productImagesURL = [];
+
+      for (let i = 0; i < productImages.length; i++) {
+        const productImagesRef = ref(storage, `${productImages[i].name}`);
+        await uploadBytes(productImagesRef, productImages[i]);
+        const imagURL = await getDownloadURL(productImagesRef);
+        console.log("PRODUCT IMAGES: ", imagURL);
+        productImagesURL.push(imagURL);
+      }
+
+      return productImagesURL;
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const handleColorsInputChange = (selectedColors) => {
     setProductColors(selectedColors);
   };
 
   const handleAttributesInputChange = (selectedAttributes) => {
-    const selectedAttributesId = selectedAttributes.map(
-      (selectedAttribute) => selectedAttribute.value
-    );
-    setProductAttributes(selectedAttributesId);
+    setProductAttributes(selectedAttributes);
+  };
+
+  /* useEffect(() => {
+    if(productAttributes) {
+      getSubAttributes(productAttributes.id);
+    }
+  }, [productAttributes, subAttributes]); */
+
+  const handleFreeShippingChange = () => {
+    setIsFreeShipping(true);
+    setIsFlatRate(false);
+  };
+
+  const handleFlatRateChange = () => {
+    setIsFlatRate(true);
+    setIsFreeShipping(false);
+  };
+
+  const handleAddProduct = async () => {
+    try {
+      if (productName.trim() == "") {
+        return alert("Please write product name");
+      } else {
+        let productThumbnailImageURL = null;
+        let productImageURLS = [];
+
+        if (productThumbnailImage) {
+          productThumbnailImageURL = await handleUploadProductThumbnailImage();
+        }
+
+        if (productImages.length > 0) {
+          productImageURLS = await handleUploadProductImages();
+        }
+
+        const productData = {
+          productName,
+          productCategory,
+          productSubCategory,
+          productBrand,
+          productThumbnailImageURL,
+          productImageURLS,
+          productColors: productColors.map((productColor) => ({
+            colorCode: productColor.value,
+            colorName: productColor.colorName,
+          })),
+          productAttributes: productAttributes.map((productAttribute) => ({
+            productAttributeName: productAttribute.value,
+          })),
+          productSubAttributes,
+          productPrice,
+          productDiscount,
+          productDiscountType,
+          productDescription,
+          isFreeShipping,
+          isFlatRate,
+          shippingCost,
+          shippingDays,
+          productProfit,
+          createdAt: new Date(),
+        };
+        await addProduct(productData);
+        alert(`${productName} product added successfully`);
+      }
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
   };
 
   return (
@@ -240,30 +335,6 @@ const AddProduct = () => {
 
                   <div className="w-full mainShadow flex flex-col justify-start items-start gap-4 p-2 rounded-md">
                     <h3 className="text-lg font-semibold w-full border-b border-b-[#969393]/25">
-                      Product Videos
-                    </h3>
-
-                    <div className="flex flex-col gap-3 w-full">
-                      <div className="flex justify-start items-center gap-5 w-full">
-                        <label htmlFor={`${productId}-product-gallery-images`}>
-                          Product Video
-                        </label>
-
-                        <input
-                          type="file"
-                          datatype="video"
-                          accept="videos/*"
-                          multiple
-                          onChange={(e) => setProductVideo(e.target.files[0])}
-                          required
-                          className="w-[600px] p-2 border border-[#e4e4e5] rounded-md"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="w-full mainShadow flex flex-col justify-start items-start gap-4 p-2 rounded-md">
-                    <h3 className="text-lg font-semibold w-full border-b border-b-[#969393]/25">
                       Product Variation
                     </h3>
 
@@ -326,6 +397,37 @@ const AddProduct = () => {
                         Choose the attributes of this product and then input
                         values of each attribute
                       </p>
+
+                      {productAttributes && (
+                        <div className="flex justify-start items-center gap-5 w-full">
+                          <label
+                            htmlFor={`${productId}-product-gallery-images`}
+                          >
+                            Selected Attributes:
+                            {productAttributes.map((attribute) => (
+                              <span key={attribute.value}>
+                                {attribute.label}
+                              </span>
+                            ))}
+                          </label>
+
+                          <Select
+                            options={subAttributes.map((subAttribute) => ({
+                              value: subAttribute.subAttributeName,
+                              label: (
+                                <div className="flex justify-start items-center w-full">
+                                  <span>{subAttribute.subAttributeName}</span>
+                                </div>
+                              ),
+                            }))}
+                            isMulti={true}
+                            value={productSubAttributes}
+                            onChange={handleAttributesInputChange}
+                            className="w-[600px] p-2 z-10"
+                            placeholder="Select Product Attributes"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -380,6 +482,24 @@ const AddProduct = () => {
                           <option value="Flat">Flat</option>
                           <option value="Percent">Percent</option>
                         </select>
+                      </div>
+
+                      <div className="flex justify-start items-center gap-5 w-full">
+                        <label htmlFor={`${productId}-product-gallery-images`}>
+                          Product Profit
+                        </label>
+
+                        <input
+                          type="number"
+                          min={1}
+                          placeholder="Product Profit"
+                          value={productProfit}
+                          onChange={(e) =>
+                            setProductProfit(parseInt(e.target.value))
+                          }
+                          required
+                          className="w-[600px] p-2 border border-[#e4e4e5] rounded-md"
+                        />
                       </div>
                     </div>
                   </div>
@@ -483,7 +603,10 @@ const AddProduct = () => {
                     </div>
                   </div>
 
-                  <button className="w-[150px] bg-[#FF6F00] text-black hover:text-white transform transition-all ease-in-out duration-100 active:scale-95 p-2 rounded-md">
+                  <button
+                    onClick={handleAddProduct}
+                    className="w-[150px] bg-[#FF6F00] text-black hover:text-white transform transition-all ease-in-out duration-100 active:scale-95 p-2 rounded-md"
+                  >
                     Add Product
                   </button>
                 </div>
