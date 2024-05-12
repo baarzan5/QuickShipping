@@ -109,13 +109,16 @@ const AddProduct = () => {
 
   const handleAttributesInputChange = (selectedAttributes) => {
     setProductAttributes(selectedAttributes);
+    const subAttributes = selectedAttributes.map(
+      async (selectedAttribute) =>
+        await getSubAttributes(selectedAttribute.value)
+    );
+    setProductSubAttributes(subAttributes);
   };
 
-  /* useEffect(() => {
-    if(productAttributes) {
-      getSubAttributes(productAttributes.id);
-    }
-  }, [productAttributes, subAttributes]); */
+  const handleSubAttributesInputChange = (subAttributes) => {
+    setProductSubAttributes(subAttributes);
+  }
 
   const handleFreeShippingChange = () => {
     setIsFreeShipping(true);
@@ -155,9 +158,13 @@ const AddProduct = () => {
             colorName: productColor.colorName,
           })),
           productAttributes: productAttributes.map((productAttribute) => ({
-            productAttributeName: productAttribute.value,
+            productAttributeName: productAttribute.attributeName,
           })),
-          productSubAttributes,
+          productSubAttributes: productSubAttributes.map(
+            (productSubAttribute) => ({
+              productSubAttribute: productSubAttribute.value,
+            })
+          ),
           productPrice,
           productDiscount,
           productDiscountType,
@@ -340,7 +347,7 @@ const AddProduct = () => {
 
                     <div className="flex flex-col gap-3 w-full">
                       <div className="flex justify-start items-center gap-5 w-full">
-                        <label htmlFor={`${productId}-product-gallery-images`}>
+                        <label htmlFor={`${productId}-product-colors`}>
                           Product Colors
                         </label>
 
@@ -372,13 +379,14 @@ const AddProduct = () => {
                       </div>
 
                       <div className="flex justify-start items-center gap-5 w-full">
-                        <label htmlFor={`${productId}-product-gallery-images`}>
+                        <label htmlFor={`${productId}-product-attributes`}>
                           Product Attributes
                         </label>
 
                         <Select
                           options={attributes.map((attribute) => ({
-                            value: attribute.attributeName,
+                            value: attribute.id,
+                            attributeName: attribute.attributeName,
                             label: (
                               <div className="flex justify-start items-center w-full">
                                 <span>{attribute.attributeName}</span>
@@ -398,12 +406,11 @@ const AddProduct = () => {
                         values of each attribute
                       </p>
 
-                      {productAttributes && (
+                      {productAttributes.length > 0 && (
                         <div className="flex justify-start items-center gap-5 w-full">
                           <label
-                            htmlFor={`${productId}-product-gallery-images`}
+                            htmlFor={`${productId}-product-sub-attributes`}
                           >
-                            Selected Attributes:
                             {productAttributes.map((attribute) => (
                               <span key={attribute.value}>
                                 {attribute.label}
@@ -422,9 +429,9 @@ const AddProduct = () => {
                             }))}
                             isMulti={true}
                             value={productSubAttributes}
-                            onChange={handleAttributesInputChange}
+                            onChange={handleSubAttributesInputChange}
                             className="w-[600px] p-2 z-10"
-                            placeholder="Select Product Attributes"
+                            placeholder="Select Sub Attribute"
                           />
                         </div>
                       )}
