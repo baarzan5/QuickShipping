@@ -107,18 +107,19 @@ const AddProduct = () => {
     setProductColors(selectedColors);
   };
 
-  const handleAttributesInputChange = (selectedAttributes) => {
+  const handleAttributesInputChange = async (selectedAttributes) => {
     setProductAttributes(selectedAttributes);
-    const subAttributes = selectedAttributes.map(
+    const subAttributesPromises = selectedAttributes.map(
       async (selectedAttribute) =>
         await getSubAttributes(selectedAttribute.value)
     );
-    setProductSubAttributes(subAttributes);
+    const resolvedSubAttributes = await Promise.all(subAttributesPromises);
+    setProductSubAttributes(resolvedSubAttributes);
   };
 
   const handleSubAttributesInputChange = (subAttributes) => {
     setProductSubAttributes(subAttributes);
-  }
+  };
 
   const handleFreeShippingChange = () => {
     setIsFreeShipping(true);
@@ -387,6 +388,7 @@ const AddProduct = () => {
                           options={attributes.map((attribute) => ({
                             value: attribute.id,
                             attributeName: attribute.attributeName,
+                            key: attribute.id,
                             label: (
                               <div className="flex justify-start items-center w-full">
                                 <span>{attribute.attributeName}</span>
@@ -519,12 +521,12 @@ const AddProduct = () => {
                     <div className="flex flex-col gap-3 w-full">
                       <div className="flex justify-start items-start gap-5 w-full">
                         <label htmlFor={`${productId}-product-gallery-images`}>
-                          Product Desctiption
+                          Product Description
                         </label>
 
                         <textarea
                           type="text"
-                          placeholder="Product Desctiption"
+                          placeholder="Product Description"
                           value={productDescription}
                           onChange={(e) =>
                             setProductDescription(e.target.value)
