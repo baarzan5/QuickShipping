@@ -16,8 +16,6 @@ const PropertiesContext = createContext();
 
 const propertiesIntialState = {
   colors: [],
-  attributes: [],
-  subAttributes: [],
   error: null,
 };
 
@@ -27,18 +25,6 @@ function propertiesReducer(state, action) {
       return {
         ...state,
         colors: action.payload,
-      };
-
-    case PROPERTIESACTIONS.SET_ATTRIBUTES:
-      return {
-        ...state,
-        attributes: action.payload,
-      };
-
-    case PROPERTIESACTIONS.SET_SUB_ATTRIBUTES:
-      return {
-        ...state,
-        subAttributes: action.payload,
       };
 
     case PROPERTIESACTIONS.SET_ERROR:
@@ -77,57 +63,10 @@ export function PropertiesProvider({ children }) {
     }
   };
 
-  const getAttributes = async () => {
-    try {
-      const attributesCollection = collection(db, "attributes");
-      onSnapshot(
-        query(attributesCollection, orderBy("createdAt", "desc")),
-        (snapshot) => {
-          const attributes = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          dispatch({
-            type: PROPERTIESACTIONS.SET_ATTRIBUTES,
-            payload: attributes,
-          });
-        }
-      );
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
 
   useEffect(() => {
     getColors();
-    getAttributes();
   }, []);
-
-  const getSubAttributes = async (attributeId) => {
-    try {
-      const subAttributesCollection = collection(
-        db,
-        `attributes/${attributeId}/subAttributes`
-      );
-      onSnapshot(
-        query(subAttributesCollection, orderBy("createdAt", "desc")),
-        (snapshot) => {
-          const subAttributes = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          dispatch({
-            type: PROPERTIESACTIONS.SET_SUB_ATTRIBUTES,
-            payload: subAttributes,
-          });
-        }
-      );
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
 
   const addColor = async (colorData) => {
     try {
@@ -150,68 +89,13 @@ export function PropertiesProvider({ children }) {
     }
   };
 
-  const addAttribute = async (attributeData) => {
-    try {
-      const attributesCollection = collection(db, "attributes");
-      await addDoc(attributesCollection, attributeData);
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
-
-  const deleteAttribute = async (attribute) => {
-    try {
-      const attributeDoc = doc(db, "attributes", attribute.id);
-      await deleteDoc(attributeDoc, attribute.id);
-      alert(`${attribute.attributeName} attribute deleted successfully!`);
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
-
-  const addSubAttribute = async (attributeId, subAttributeData) => {
-    try {
-      const subAttributesCollection = collection(
-        db,
-        `attributes/${attributeId}/subAttributes`
-      );
-      await addDoc(subAttributesCollection, subAttributeData);
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
-
-  const deleteSubAttribute = async (attributeId, subAttribute) => {
-    try {
-      const subAttributeDoc = doc(
-        db,
-        `attributes/${attributeId}/subAttributes/${subAttribute.id}`
-      );
-      await deleteDoc(subAttributeDoc, subAttribute.id);
-      alert(
-        `${subAttribute.subAttributeName} sub attribute deleted successfully!`
-      );
-    } catch (error) {
-      dispatch({ type: PROPERTIESACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
-
   const contextData = {
     colors: state.colors,
     attributes: state.attributes,
     error: state.error,
-    getSubAttributes,
     subAttributes: state.subAttributes,
     addColor,
     deleteColor,
-    addAttribute,
-    deleteAttribute,
-    addSubAttribute,
-    deleteSubAttribute,
     state,
     dispatch,
   };

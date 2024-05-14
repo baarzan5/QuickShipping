@@ -11,13 +11,36 @@ import { PRODUCTSACTIONS } from "../../actions/productsActions";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase/firebaseConfig";
 
+const attributes = [
+  { value: "size", label: "Size" },
+  { value: "number", label: "Number" },
+  { value: "ageMonth", label: "Age Month" },
+  // Add other attributes here
+];
+
+const subAttributes = {
+  size: [
+    { value: "s", label: "Small" },
+    { value: "m", label: "Medium" },
+    { value: "l", label: "Large" },
+  ],
+  number: [
+    { value: "38", label: "38" },
+    { value: "39", label: "39" },
+    // Add other sub-attributes here
+  ],
+  ageMonth: [
+    { value: "2 month", label: "2 month" },
+    { value: "6 month", label: "6 month" },
+  ],
+};
+
 const AddProduct = () => {
   const { user } = useAuth();
   const { addProduct, dispatch } = useProducts();
   const { categories, getSubCategories, subCategories } = useCategories();
   const { brands } = useBrands();
-  const { colors, attributes, subAttributes, getSubAttributes } =
-    useProperties();
+  const { colors } = useProperties();
   const productId = useId();
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState(null);
@@ -25,7 +48,7 @@ const AddProduct = () => {
   const [productBrand, setProductBrand] = useState(null);
   const [productColors, setProductColors] = useState([]);
   const [productAttributes, setProductAttributes] = useState([]);
-  const [productSubAttributes, setProductSubAttributes] = useState([]);
+  const [productSubAttributes, setProductSubAttributes] = useState({});
   const [productThumbnailImage, setProductThumbnailImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
   const [productPrice, setProductPrice] = useState("");
@@ -107,6 +130,16 @@ const AddProduct = () => {
     setProductColors(selectedColors);
   };
 
+  const handleAttributesInputChange = (selected) => {
+    setProductAttributes(selected);
+    // Initialize sub-attributes options for each selected attribute
+    const newSubAttributesOptions = {};
+    selected.forEach((attr) => {
+      newSubAttributesOptions[attr.value] = subAttributes[attr.value];
+    });
+    setProductSubAttributes(newSubAttributesOptions);
+  };
+  /* 
   const handleAttributesInputChange = async (selectedAttributes) => {
     setProductAttributes(selectedAttributes);
     const subAttributesPromises = selectedAttributes.map(
@@ -115,11 +148,7 @@ const AddProduct = () => {
     );
     const resolvedSubAttributes = await Promise.all(subAttributesPromises);
     setProductSubAttributes(resolvedSubAttributes);
-  };
-
-  const handleSubAttributesInputChange = (subAttributes) => {
-    setProductSubAttributes(subAttributes);
-  };
+  }; */
 
   const handleFreeShippingChange = () => {
     setIsFreeShipping(true);
@@ -158,14 +187,8 @@ const AddProduct = () => {
             colorCode: productColor.value,
             colorName: productColor.colorName,
           })),
-          productAttributes: productAttributes.map((productAttribute) => ({
-            productAttributeName: productAttribute.attributeName,
-          })),
-          productSubAttributes: productSubAttributes.map(
-            (productSubAttribute) => ({
-              productSubAttribute: productSubAttribute.value,
-            })
-          ),
+          productAttributes,
+          productSubAttributes,
           productPrice,
           productDiscount,
           productDiscountType,
@@ -385,21 +408,14 @@ const AddProduct = () => {
                         </label>
 
                         <Select
+                          isMulti
                           options={attributes.map((attribute) => ({
-                            value: attribute.id,
-                            attributeName: attribute.attributeName,
-                            key: attribute.id,
-                            label: (
-                              <div className="flex justify-start items-center w-full">
-                                <span>{attribute.attributeName}</span>
-                              </div>
-                            ),
+                            value: attribute.value,
+                            label: attribute.label,
                           }))}
-                          isMulti={true}
-                          value={productAttributes}
                           onChange={handleAttributesInputChange}
-                          className="w-[600px] p-2 z-20"
-                          placeholder="Select Product Attributes"
+                          placeholder="Select Attributes"
+                          className="w-[600px]"
                         />
                       </div>
 
@@ -408,34 +424,21 @@ const AddProduct = () => {
                         values of each attribute
                       </p>
 
-                      {productAttributes.length > 0 && (
-                        <div className="flex justify-start items-center gap-5 w-full">
-                          <label
-                            htmlFor={`${productId}-product-sub-attributes`}
-                          >
-                            {productAttributes.map((attribute) => (
-                              <span key={attribute.value}>
-                                {attribute.label}
-                              </span>
-                            ))}
-                          </label>
-
-                          <Select
-                            options={subAttributes.map((subAttribute) => ({
-                              value: subAttribute.subAttributeName,
-                              label: (
-                                <div className="flex justify-start items-center w-full">
-                                  <span>{subAttribute.subAttributeName}</span>
-                                </div>
-                              ),
-                            }))}
-                            isMulti={true}
-                            value={productSubAttributes}
-                            onChange={handleSubAttributesInputChange}
-                            className="w-[600px] p-2 z-10"
-                            placeholder="Select Sub Attribute"
-                          />
-                        </div>
+                      {Object.keys(productSubAttributes).length > 0 && (
+                        <>
+                          {Object.entries(productSubAttributes).map(
+                            ([key, options]) => (
+                              <div key={key}>
+                                <h4>{key}</h4>
+                                <Select
+                                  isMulti
+                                  options={options}
+                                  placeholder={`Select ${key}`}
+                                />
+                              </div>
+                            )
+                          )}
+                        </>
                       )}
                     </div>
                   </div>

@@ -5,14 +5,11 @@ import SideBar from "../../components/admin/SideBar";
 import AddColorModal from "../../components/admin/modals/AddColorModal";
 import { useProperties } from "../../context/PropertiesContext";
 import { RiDeleteBin4Line } from "react-icons/ri";
-import AddAttributeModal from "../../components/admin/modals/AddAttributeModal";
-import { Link } from "react-router-dom";
 
 const PropertiesPage = () => {
   const { user } = useAuth();
-  const { colors, deleteColor, attributes } = useProperties();
+  const { colors, deleteColor } = useProperties();
   const [showAddColorModal, setShowAddColorModal] = useState(false);
-  const [showAddAttributeModal, setShowAddAttributeModal] = useState(false);
 
   return (
     <>
@@ -35,16 +32,6 @@ const PropertiesPage = () => {
                         <IoIosAdd size={25} />
                         Add color
                       </button>
-
-                      <button
-                        onClick={() =>
-                          setShowAddAttributeModal(!showAddAttributeModal)
-                        }
-                        className="flex justify-center items-center gap-0.5 p-2 hover:bg-[#969393]/25 rounded-md transform transition-all ease-in-out duration-100 active:scale-95"
-                      >
-                        <IoIosAdd size={25} />
-                        Add attribute
-                      </button>
                     </div>
                   </header>
 
@@ -52,13 +39,6 @@ const PropertiesPage = () => {
                     <AddColorModal
                       showAddColorModal={showAddColorModal}
                       setShowAddColorModal={setShowAddColorModal}
-                    />
-                  )}
-
-                  {showAddAttributeModal && (
-                    <AddAttributeModal
-                      showAddAttributeModal={showAddAttributeModal}
-                      setShowAddAttributeModal={setShowAddAttributeModal}
                     />
                   )}
 
@@ -91,24 +71,6 @@ const PropertiesPage = () => {
                             <RiDeleteBin4Line size={25} />
                           </button>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-start items-start gap-3 w-full border-b border-b-[#969393]/25 py-2">
-                    <h2 className="text-xl font-semibold">
-                      Attributes ({attributes.length})
-                    </h2>
-
-                    <div className="flex flex-wrap justify-center items-center gap-5">
-                      {attributes.map((attribute, index) => (
-                        <Link
-                          key={index}
-                          to={`/admin/properties/attribute/${attribute.attributeSlug}`}
-                          className="flex justify-between items-center p-2 w-[200px] border border-[#969393]/25 rounded-md"
-                        >
-                          <p>{attribute.attributeName}</p>
-                        </Link>
                       ))}
                     </div>
                   </div>

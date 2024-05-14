@@ -15,7 +15,6 @@ import BrandsPage from "./pages/admin/BrandsPage";
 import PropertiesPage from "./pages/admin/PropertiesPage";
 import { BrandsProvider } from "./context/BrandsContext";
 import { PropertiesProvider } from "./context/PropertiesContext";
-import AttributePage from "./pages/admin/AttributePage";
 import { ProductsProvider } from "./context/ProductsContext";
 
 function App() {
@@ -50,10 +49,6 @@ function App() {
                   <Route
                     path="/admin/properties"
                     element={<PropertiesPage />}
-                  />
-                  <Route
-                    path="/admin/properties/attribute/:attributeSlug"
-                    element={<AttributePage />}
                   />
                 </Routes>
               </ProductsProvider>
