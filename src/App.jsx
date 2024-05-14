@@ -16,6 +16,7 @@ import PropertiesPage from "./pages/admin/PropertiesPage";
 import { BrandsProvider } from "./context/BrandsContext";
 import { PropertiesProvider } from "./context/PropertiesContext";
 import { ProductsProvider } from "./context/ProductsContext";
+import AdminProductPage from "./pages/admin/AdminProductPage";
 
 function App() {
   return (
@@ -49,6 +50,11 @@ function App() {
                   <Route
                     path="/admin/properties"
                     element={<PropertiesPage />}
+                  />
+                  <Route
+                    excat
+                    path="/admin/product/:productId"
+                    element={<AdminProductPage />}
                   />
                 </Routes>
               </ProductsProvider>

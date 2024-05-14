@@ -1,6 +1,14 @@
 import { createContext, useReducer, useEffect, useContext } from "react";
 import { PRODUCTSACTIONS } from "../actions/productsActions";
-import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
 const ProductsContext = createContext();
@@ -65,8 +73,20 @@ export function ProductsProvider({ children }) {
 
   const addProduct = async (productData) => {
     try {
-        const productsCollection = collection(db, "products");
-        await addDoc(productsCollection, productData);
+      const productsCollection = collection(db, "products");
+      await addDoc(productsCollection, productData);
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const deleteProduct = async (product) => {
+    try {
+      const productDoc = doc(db, "products", product.id);
+      await deleteDoc(productDoc, product.id);
+      alert(`${product.productName} product deleted successfully`);
+      return window.location.href = "/admin/products";
     } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -78,6 +98,7 @@ export function ProductsProvider({ children }) {
     products: state.products,
     error: state.error,
     addProduct,
+    deleteProduct,
     state,
     dispatch,
   };
