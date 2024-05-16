@@ -59,6 +59,7 @@ const SignUpPage = () => {
           phoneNumber,
           email,
           password,
+          userMoney: 0,
           isAdmin: false,
           createdAt: new Date(),
           lastLogin: new Date(),

@@ -156,6 +156,7 @@ export function AuthProvider({ children }) {
           fullName: user.displayName,
           phoneNumber: user.phoneNumber,
           userImageURL: user.photoURL,
+          userMoney: 0,
           isAdmin: false,
           createdAt: new Date(),
           lastLogin: new Date(),
