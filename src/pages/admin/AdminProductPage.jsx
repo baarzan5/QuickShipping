@@ -15,7 +15,7 @@ const AdminProductPage = () => {
   const { products } = useProducts();
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
-  const [showEditProductModal, setShowEditProductModal] = useState(false);
+  // const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
 
   const getProduct = () => {
@@ -53,7 +53,7 @@ const AdminProductPage = () => {
                     </h3>
 
                     <div className="flex justify-center items-center gap-3">
-                      <button
+                     {/*  <button
                         onClick={() =>
                           setShowEditProductModal(!showEditProductModal)
                         }
@@ -61,7 +61,7 @@ const AdminProductPage = () => {
                       >
                         <FiEdit2 size={20} />
                         Edit product
-                      </button>
+                      </button> */}
 
                       <button
                         onClick={() =>
@@ -75,13 +75,13 @@ const AdminProductPage = () => {
                     </div>
                   </header>
 
-                  {showEditProductModal && (
+                 {/*  {showEditProductModal && (
                     <EditProductModal
                       showEditProductModal={showEditProductModal}
                       setShowEditProductModal={setShowEditProductModal}
                       product={product}
                     />
-                  )}
+                  )} */}
 
                   {showDeleteProductModal && (
                     <DeleteProduct

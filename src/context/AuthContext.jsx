@@ -1,7 +1,16 @@
 import { createContext, useReducer, useEffect, useContext } from "react";
 import { AUTHACTIONS } from "../actions/authActions";
 import { auth, db } from "../firebase/firebaseConfig";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -19,6 +28,7 @@ const authInitialState = {
   loading: true,
   user: null,
   error: null,
+  users: [],
 };
 
 function authReducer(state, action) {
@@ -41,6 +51,13 @@ function authReducer(state, action) {
         ...state,
         loading: false,
         user: action.payload,
+      };
+
+    case AUTHACTIONS.SET_USERS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
       };
 
     case AUTHACTIONS.SET_LOGOUT:
@@ -76,8 +93,28 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const getUsers = async () => {
+    try {
+      const usersCollection = collection(db, "users");
+      onSnapshot(
+        query(usersCollection, orderBy("createdAt", "desc")),
+        (snapshot) => {
+          const users = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          dispatch({ type: AUTHACTIONS.SET_USERS, payload: users });
+        }
+      );
+    } catch (error) {
+      dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getUserOnLoad();
+    getUsers();
   }, []);
 
   const signUpUser = async (userData) => {
@@ -214,6 +251,7 @@ export function AuthProvider({ children }) {
     loading: state.loading,
     user: state.user,
     error: state.error,
+    users: state.users,
     signUpUser,
     loginUser,
     forgotPassword,

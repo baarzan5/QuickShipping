@@ -6,9 +6,11 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import ProductCard from "./ProductCard";
+import { useProducts } from "../context/ProductsContext";
 
 const NewestProducts = () => {
   const swiperRef = useRef(null);
+  const { products } = useProducts();
 
   const goNext = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -52,36 +54,11 @@ const NewestProducts = () => {
             spaceBetween={25}
             width={1300}
           >
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
+            {products.slice(0, 10).map((product, index) => (
+              <SwiperSlide key={index}>
+                <ProductCard product={product} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

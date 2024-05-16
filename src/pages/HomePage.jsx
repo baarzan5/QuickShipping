@@ -12,9 +12,9 @@ const HomePage = () => {
     <div className="flex flex-col gap-12 w-full pb-3">
       <Hero />
       <NewestProducts />
+      {/* <CategoryProducts />
       <CategoryProducts />
-      <CategoryProducts />
-      <CategoryProducts />
+      <CategoryProducts /> */}
       <Footer />
     </div>
   );

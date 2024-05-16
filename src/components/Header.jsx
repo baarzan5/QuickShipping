@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { CiHeart, CiSearch } from "react-icons/ci";
 import { FiShoppingCart } from "react-icons/fi";
 import Categories from "./Categories";
+import { useProducts } from "../context/ProductsContext";
 
 const Header = () => {
   const { user } = useAuth();
+  const { getUserWishLists, wishLists, getUserCart, cart } = useProducts();
   const [showCategories, setShowCategories] = useState(false);
   const location = useLocation();
 
   if (location.pathname.includes("/admin")) return null;
+
+  useEffect(() => {
+    if(user) {
+      getUserWishLists(user);
+      getUserCart(user);
+    }
+  }, [user, wishLists, cart]);
 
   return (
     <div
@@ -28,7 +37,7 @@ const Header = () => {
             <Link to="/">سەرەتا</Link>
           </li>
 
-          <li className="relative">
+          <li className="">
             <button
               onMouseEnter={() => setShowCategories(true)}
               onMouseLeave={() => setShowCategories(false)}
@@ -58,9 +67,12 @@ const Header = () => {
           <CiSearch size={30} title="گەڕان" />
         </Link>
 
+        <div className="relative">
+          <p className="absolute top-0 right-0 w-7 h-7 rounded-full flex justify-center items-center text-center bg-red-600 text-white">{wishLists.length}</p>
         <Link>
           <CiHeart size={30} title="لیستی دڵخوازەکان" />
         </Link>
+        </div>
 
         <Link>
           <FiShoppingCart size={25} title="سەبەتە" />

@@ -5,6 +5,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -17,6 +18,8 @@ const productsInitialState = {
   loading: true,
   products: [],
   error: null,
+  wishLists: [],
+  cart: [],
 };
 
 function productsReducer(state, action) {
@@ -38,6 +41,20 @@ function productsReducer(state, action) {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case PRODUCTSACTIONS.SET_WISH_LIST:
+      return {
+        ...state,
+        loading: false,
+        wishLists: action.payload,
+      };
+
+    case PRODUCTSACTIONS.SET_CART:
+      return {
+        ...state,
+        loading: false,
+        cart: action.payload,
       };
 
     default:
@@ -86,7 +103,94 @@ export function ProductsProvider({ children }) {
       const productDoc = doc(db, "products", product.id);
       await deleteDoc(productDoc, product.id);
       alert(`${product.productName} product deleted successfully`);
-      return window.location.href = "/admin/products";
+      return (window.location.href = "/admin/products");
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const toggleWishListAndCart = async (collectionName, product) => {
+    try {
+      const collectionSnapshot = await getDocs(collectionName);
+      const isExists = collectionSnapshot.docs.find(
+        (doc) => doc.data().product.id == product.id
+      );
+
+      if (isExists) {
+        await deleteDoc(doc(collectionName, isExists.id));
+        console.log("PRODUCT DELETED");
+      } else {
+        await addDoc(collectionName, {
+          product,
+          addedAt: new Date(),
+        });
+        console.log("PRODUCT ADDED");
+      }
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const handleWishList = async (user, product) => {
+    try {
+      const wishListsCollection = collection(
+        db,
+        `users/${user.email}/wishLists`
+      );
+      await toggleWishListAndCart(wishListsCollection, product);
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const handleCart = async (user, product) => {
+    try {
+      const cartCollection = collection(db, `users/${user.email}/cart`);
+      await toggleWishListAndCart(cartCollection, product);
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const getUserWishLists = async (user) => {
+    try {
+      const wishListsCollection = collection(
+        db,
+        `users/${user.email}/wishLists`
+      );
+      onSnapshot(
+        query(wishListsCollection, orderBy("addedAt", "desc")),
+        (snapshot) => {
+          const wishLists = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          dispatch({ type: PRODUCTSACTIONS.SET_WISH_LIST, payload: wishLists });
+        }
+      );
+    } catch (error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const getUserCart = async (user) => {
+    try {
+      const cartCollection = collection(db, `users/${user.email}/cart`);
+      onSnapshot(
+        query(cartCollection, orderBy("addedAt", "desc")),
+        (snapshot) => {
+          const cart = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          dispatch({ type: PRODUCTSACTIONS.SET_CART, payload: cart });
+        }
+      );
     } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -99,6 +203,12 @@ export function ProductsProvider({ children }) {
     error: state.error,
     addProduct,
     deleteProduct,
+    handleWishList,
+    handleCart,
+    getUserWishLists,
+    getUserCart,
+    wishLists: state.wishLists,
+    cart: state.cart,
     state,
     dispatch,
   };

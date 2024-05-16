@@ -8,7 +8,8 @@ import { GiProfit } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
 const AdminPage = () => {
-  const { user } = useAuth();
+  const { user, users } = useAuth();
+
   return (
     <>
       {user ? (
@@ -57,7 +58,7 @@ const AdminPage = () => {
                         />
                         <h3 className="text-xl font-semibold">Users</h3>
                       </div>
-                      <strong className="text-lg">16,000</strong>
+                      <strong className="text-lg">{users.length}</strong>
                     </div>
 
                     <div className="w-full flex flex-col justify-center items-center gap-2 h-full border-r border-r-[#969393]/50">
