@@ -14,8 +14,8 @@ import { storage } from "../../firebase/firebaseConfig";
 const attributes = [
   { value: "size", label: "Size" },
   { value: "number", label: "Number" },
-  { value: "ageMonth", label: "Age Month" },
-  // Add other attributes here
+  { value: "ageMonths", label: "Age Months" },
+  { value: "ageYears", label: "Age Years" },
 ];
 
 const subAttributes = {
@@ -27,11 +27,14 @@ const subAttributes = {
   number: [
     { value: "38", label: "38" },
     { value: "39", label: "39" },
-    // Add other sub-attributes here
   ],
-  ageMonth: [
-    { value: "2 month", label: "2 month" },
-    { value: "6 month", label: "6 month" },
+  ageMonths: [
+    { value: "2 months", label: "2 months" },
+    { value: "6 months", label: "6 months" },
+  ],
+  ageYears: [
+    { value: "2 years", label: "2 years" },
+    { value: "6 years", label: "6 years" },
   ],
 };
 
@@ -48,7 +51,7 @@ const AddProduct = () => {
   const [productBrand, setProductBrand] = useState(null);
   const [productColors, setProductColors] = useState([]);
   const [productAttributes, setProductAttributes] = useState([]);
-  const [productSubAttributes, setProductSubAttributes] = useState({});
+  const [productSubAttributes, setProductSubAttributes] = useState([]);
   const [productThumbnailImage, setProductThumbnailImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
   const [productPrice, setProductPrice] = useState("");
@@ -130,7 +133,7 @@ const AddProduct = () => {
     setProductColors(selectedColors);
   };
 
-  const handleAttributesInputChange = (selected) => {
+  /* const handleAttributesInputChange = (selected) => {
     setProductAttributes(selected);
     // Initialize sub-attributes options for each selected attribute
     const newSubAttributesOptions = {};
@@ -138,7 +141,38 @@ const AddProduct = () => {
       newSubAttributesOptions[attr.value] = subAttributes[attr.value];
     });
     setProductSubAttributes(newSubAttributesOptions);
+  }; */
+
+  const handleAttributesInputChange = (selected) => {
+    // Set selected attributes
+    setProductAttributes(selected);
+
+    // Extract sub-attributes for each selected attribute
+    const subAttributesData = selected.map((attr) => ({
+      attributeName: attr.label,
+      subAttributes: subAttributes[attr.value] || [],
+    }));
+
+    // Set sub-attributes
+    setProductSubAttributes(subAttributesData);
   };
+
+  const handleSubAttributesInputChange = (selected, attributeName) => {
+    // Find the index of the attribute
+    const attributeIndex = productAttributes.findIndex(
+      (attr) => attr.value === attributeName
+    );
+
+    // Update sub-attributes for the corresponding attribute
+    if (attributeIndex !== -1) {
+      const updatedSubAttributes = [...productSubAttributes];
+      updatedSubAttributes[attributeIndex].subAttributes = selected.map(
+        (subAttr) => subAttr.label
+      );
+      setProductSubAttributes(updatedSubAttributes);
+    }
+  };
+
   /* 
   const handleAttributesInputChange = async (selectedAttributes) => {
     setProductAttributes(selectedAttributes);
@@ -187,8 +221,10 @@ const AddProduct = () => {
             colorCode: productColor.value,
             colorName: productColor.colorName,
           })),
-          productAttributes,
-          productSubAttributes,
+          productAttributes: productAttributes.map((attribute, index) => ({
+            attributeName: attribute.label,
+            subAttributes: productSubAttributes[index].subAttributes,
+          })),
           productPrice,
           productDiscount,
           productDiscountType,
@@ -424,22 +460,22 @@ const AddProduct = () => {
                         values of each attribute
                       </p>
 
-                      {Object.keys(productSubAttributes).length > 0 && (
-                        <>
-                          {Object.entries(productSubAttributes).map(
-                            ([key, options]) => (
-                              <div key={key}>
-                                <h4>{key}</h4>
-                                <Select
-                                  isMulti
-                                  options={options}
-                                  placeholder={`Select ${key}`}
-                                />
-                              </div>
-                            )
-                          )}
-                        </>
-                      )}
+                      {productSubAttributes.map((attribute, index) => (
+                        <div key={index}>
+                          <h4>{attribute.attributeName}</h4>
+                          <Select
+                            isMulti
+                            options={attribute.subAttributes.map((subAttr) => ({
+                              value: subAttr.value,
+                              label: subAttr.label,
+                            }))}
+                            placeholder={`Select ${attribute.attributeName}`}
+                            onChange={(selected) =>
+                              handleSubAttributesInputChange(selected, index)
+                            }
+                          />
+                        </div>
+                      ))}
                     </div>
                   </div>
 

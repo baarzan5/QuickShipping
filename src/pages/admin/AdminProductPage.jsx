@@ -159,6 +159,19 @@ const AdminProductPage = () => {
                           ></span>
                         ))}
                       </p>
+
+                      <div>
+                        {product.productAttributes.map((productAttribute, index) => (
+                          <div key={index} className="flex justify-start items-center gap-6">
+                            {productAttribute.attributeName}: 
+                            {productAttribute.subAttributes.map((subAttribute, index) => (
+                              <div key={index}>
+                                {subAttribute.label}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
