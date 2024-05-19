@@ -17,6 +17,9 @@ import { BrandsProvider } from "./context/BrandsContext";
 import { PropertiesProvider } from "./context/PropertiesContext";
 import { ProductsProvider } from "./context/ProductsContext";
 import AdminProductPage from "./pages/admin/AdminProductPage";
+import ProductCategoryPage from "./pages/ProductCategoryPage";
+import Footer from "./components/Footer";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -33,6 +36,11 @@ function App() {
                   <Route path="/signup" element={<SignUpPage />} />
 
                   <Route path="/" element={<HomePage />} />
+                  <Route
+                    path="/category/:categorySlug"
+                    element={<ProductCategoryPage />}
+                  />
+                  <Route path="/profile" element={<ProfilePage />} />
 
                   {/* Admin Panel */}
                   <Route path="/admin/home" element={<AdminPage />} />
@@ -57,6 +65,7 @@ function App() {
                     element={<AdminProductPage />}
                   />
                 </Routes>
+                <Footer />
               </ProductsProvider>
             </PropertiesProvider>
           </BrandsProvider>

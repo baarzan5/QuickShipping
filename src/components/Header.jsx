@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -16,7 +16,7 @@ const Header = () => {
   if (location.pathname.includes("/admin")) return null;
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       getUserWishLists(user);
       getUserCart(user);
     }
@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <div
-      className="sticky top-0 left-0 w-full h-12 bg-[#F5E5D7] flex flex-row-reverse justify-between items-center px-2"
+      className="sticky top-0 left-0 w-full h-16 bg-[#F5E5D7] flex flex-row-reverse justify-between items-center px-2"
       style={{ zIndex: 999 }}
     >
       <Link to="/" className="text-2xl font-bold">
@@ -68,15 +68,22 @@ const Header = () => {
         </Link>
 
         <div className="relative">
-          <p className="absolute top-0 right-0 w-7 h-7 rounded-full flex justify-center items-center text-center bg-red-600 text-white">{wishLists.length}</p>
-        <Link>
-          <CiHeart size={30} title="لیستی دڵخوازەکان" />
-        </Link>
+          <p className="absolute -top-4 left-0 w-5 h-5 rounded-full flex justify-center items-center text-center bg-red-600 text-white">
+            {wishLists.length}
+          </p>
+          <Link>
+            <CiHeart size={30} title="لیستی دڵخوازەکان" />
+          </Link>
         </div>
 
-        <Link>
-          <FiShoppingCart size={25} title="سەبەتە" />
-        </Link>
+        <div className="relative">
+          <p className="absolute -top-[19px] left-0 w-5 h-5 rounded-full flex justify-center items-center text-center bg-red-600 text-white">
+            {cart.length}
+          </p>
+          <Link>
+            <FiShoppingCart size={25} title="سەبەتە" />
+          </Link>
+        </div>
 
         {user ? (
           <Link to="/profile">

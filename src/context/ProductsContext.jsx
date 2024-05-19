@@ -110,18 +110,19 @@ export function ProductsProvider({ children }) {
     }
   };
 
-  const toggleWishListAndCart = async (collectionName, product) => {
+  const toggleWishList = async (user, product) => {
     try {
-      const collectionSnapshot = await getDocs(collectionName);
-      const isExists = collectionSnapshot.docs.find(
+      const userWishListsCollection = collection(db, `users/${user.email}/wishLists`);
+      const wishListsSnapshot = await getDocs(userWishListsCollection);
+      const isExists = wishListsSnapshot.docs.find(
         (doc) => doc.data().product.id == product.id
       );
 
       if (isExists) {
-        await deleteDoc(doc(collectionName, isExists.id));
+        await deleteDoc(doc(userWishListsCollection, isExists.id));
         console.log("PRODUCT DELETED");
       } else {
-        await addDoc(collectionName, {
+        await addDoc(userWishListsCollection, {
           product,
           addedAt: new Date(),
         });
@@ -133,28 +134,37 @@ export function ProductsProvider({ children }) {
     }
   };
 
-  const handleWishList = async (user, product) => {
+  const addToCart = async (user, product) => {
     try {
-      const wishListsCollection = collection(
-        db,
-        `users/${user.email}/wishLists`
-      );
-      await toggleWishListAndCart(wishListsCollection, product);
-    } catch (error) {
-      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
+      const userCartCollection = collection(db, `users/${user.email}/cart`);
+      const cartSnapshot = await getDocs(userCartCollection);
+      const isExists = cartSnapshot.docs.map((doc) => doc.data().product.id == product.id);
 
-  const handleCart = async (user, product) => {
-    try {
-      const cartCollection = collection(db, `users/${user.email}/cart`);
-      await toggleWishListAndCart(cartCollection, product);
-    } catch (error) {
+      if(isExists){
+        alert("ئەم بەرهەمە لە سەبەتەی کڕینەکەت هەیە");
+        return;
+      } else {
+        await addDoc(userCartCollection, {
+          product,
+          addedAt: new Date(),
+        })
+      }
+    } catch(error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
-  };
+  }
+
+  const deleteProductFromCart = async (user, productId) => {
+    try {
+      const userCartCollection = collection(db, `users/${user.email}/cart/${productId}`);
+      await deleteDoc(doc(userCartCollection, productId));
+      alert("ئەم بەرهەمە لەسەبەتەی کڕینەکەت سڕایەوە");
+    } catch(error) {
+      dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  }
 
   const getUserWishLists = async (user) => {
     try {
@@ -203,8 +213,9 @@ export function ProductsProvider({ children }) {
     error: state.error,
     addProduct,
     deleteProduct,
-    handleWishList,
-    handleCart,
+    toggleWishList,
+    addToCart,
+    deleteProductFromCart,
     getUserWishLists,
     getUserCart,
     wishLists: state.wishLists,

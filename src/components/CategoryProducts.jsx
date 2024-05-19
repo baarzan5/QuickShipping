@@ -8,7 +8,7 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 
-const CategoryProducts = () => {
+const CategoryProducts = ({ categoryName, categorySlug, products }) => {
   const swiperRef = useRef(null);
 
   const goNext = () => {
@@ -23,17 +23,16 @@ const CategoryProducts = () => {
     }
   };
 
+  // console.log(`Rendering products for category: ${categoryName}`, products);
+
   return (
     <div className="relative flex flex-col justify-center items-end gap-5 bg-white mainShadow w-[95%] mx-auto rounded-md p-2">
-      <h2 className="text-2xl font-semibold text-right">منداڵان</h2>
+      <h2 className="text-2xl font-semibold text-right">{categoryName}</h2>
 
-      <div className="relative hidden lg:flex flex-row-reverse justify-center items-center w-full gap-5 xl:gap-2">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+      <div className="relative hidden lg:flex flex-row-reverse justify-center items-center w-full gap-5 xl:gap-2.5">
+        {products.slice(0, 6).map((product, index) => (
+          <ProductCard key={index} product={product} />
+        ))}
       </div>
 
       <div className="lg:hidden relative flex flex-row-reverse justify-center items-center w-full mx-auto">
@@ -41,39 +40,14 @@ const CategoryProducts = () => {
           ref={swiperRef}
           loop
           slidesPerView={5}
-          spaceBetween={25}
+          spaceBetween={15}
           width={1300}
         >
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
+          {products.slice(0, 6).map((product, index) => (
+            <SwiperSlide key={index}>
+              <ProductCard product={product} />
+            </SwiperSlide>
+          ))}
         </Swiper>
 
         <div
@@ -96,7 +70,7 @@ const CategoryProducts = () => {
       </div>
 
       <Link
-        to=""
+        to={`/category/${categorySlug}`}
         className="mx-auto text-[#FF6F00] border border-[#FF6F00] rounded-md p-2 hover:bg-[#FF6F00] hover:text-white transform transition-all ease-in-out duration-100"
       >
         بینینی زیاتر

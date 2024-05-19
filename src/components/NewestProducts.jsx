@@ -51,7 +51,7 @@ const NewestProducts = () => {
             ref={swiperRef}
             loop
             slidesPerView={5}
-            spaceBetween={25}
+            spaceBetween={15}
             width={1300}
           >
             {products.slice(0, 10).map((product, index) => (

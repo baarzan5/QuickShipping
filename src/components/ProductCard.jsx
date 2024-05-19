@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 const ProductCard = ({ product }) => {
   const { user } = useAuth();
-  const { handleWishList, handleCart, getUserWishLists, wishLists, getUserCart, cart } = useProducts();
+  const { getUserWishLists, wishLists, getUserCart, cart, toggleWishList, addToCart } = useProducts();
 
   useEffect(() => {
     if(user) {
@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
       <div className="absolute top-0 right-0 w-full p-2 flex flex-row-reverse justify-between items-center">
         {isWishListed ? (
           <button
-            onClick={() => handleWishList(user, product)}
+            onClick={() => toggleWishList(user, product)}
             className="bg-black/50 rounded-full p-1 text-white active:scale-95 transform transition-all ease-in-out duration-200"
           >
             <IoIosHeart
@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
           </button>
         ) : (
           <button
-            onClick={() => handleWishList(user, product)}
+            onClick={() => toggleWishList(user, product)}
             className="bg-black/50 rounded-full p-1 text-white active:scale-95 transform transition-all ease-in-out duration-200"
           >
             <IoIosHeartEmpty size={30} title="زیادبکە بۆ لیستی دڵخوازەکانم" />
@@ -53,7 +53,7 @@ const ProductCard = ({ product }) => {
         )}
 
         <button
-          onClick={() => handleCart(user, product)}
+          onClick={() => addToCart(user, product)}
           className="bg-black/50 rounded-full p-1.5 text-white active:scale-95 transform transition-all ease-in-out duration-200"
         >
           <FiShoppingCart size={25} title="زیادبکە بۆ سەبەتەی کڕین" />
