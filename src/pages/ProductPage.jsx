@@ -10,7 +10,8 @@ import { CgMathMinus } from "react-icons/cg";
 const ProductPage = () => {
   const { productId } = useParams();
   const { user } = useAuth();
-  const { products, getUserWishLists, wishLists, toggleWishList, addToCart } = useProducts();
+  const { products, getUserWishLists, wishLists, toggleWishList, addToCart } =
+    useProducts();
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
   const [quantity, setQuantity] = useState(1);
@@ -25,12 +26,14 @@ const ProductPage = () => {
   }, [products, productId]);
 
   useEffect(() => {
-    if(user){
+    if (user) {
       getUserWishLists(user);
     }
   }, [user, wishLists]);
 
-  const isWishList = wishLists.some((wishList) => wishList.product.id == product.id);
+  const isWishList = wishLists.some(
+    (wishList) => wishList.product.id == product?.id
+  );
 
   const handleImageSelect = (index) => {
     setSelectedImageIndex(index);
@@ -204,20 +207,33 @@ const ProductPage = () => {
               </div>
 
               <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-3">
-                <button onClick={() => toggleWishList(user, product)} className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out">
-                  {isWishList ? "بیسڕەوە لە لیستی دڵخوازەکان" : "زیادبکە بۆ لیستی دڵخوازەکان"}
+                <button
+                  onClick={() => toggleWishList(user, product)}
+                  className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
+                >
+                  {isWishList
+                    ? "بیسڕەوە لە لیستی دڵخوازەکان"
+                    : "زیادبکە بۆ لیستی دڵخوازەکان"}
                 </button>
 
-                <button onClick={() => addToCart(user, product)} className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out">زیادبکە بۆ لیستی سەبەتەی کڕین</button>
-                
-                <button className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out">داواکردن</button>
-              </div>
+                <button
+                  onClick={() => addToCart(user, product)}
+                  className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
+                >
+                  زیادبکە بۆ لیستی سەبەتەی کڕین
+                </button>
 
+                <button className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out">
+                  داواکردن
+                </button>
+              </div>
             </div>
           </div>
 
           <div className="flex flex-col justify-end items-end gap-3 p-2 w-full">
-            <h2 className="text-xl font-semibold border-b border-b-[#e4e4e5] w-full py-2 text-right">بۆچوونەکان</h2>
+            <h2 className="text-xl font-semibold border-b border-b-[#e4e4e5] w-full py-2 text-right">
+              بۆچوونەکان
+            </h2>
           </div>
         </div>
       ) : (
