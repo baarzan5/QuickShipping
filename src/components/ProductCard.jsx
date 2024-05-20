@@ -8,10 +8,17 @@ import { useAuth } from "../context/AuthContext";
 
 const ProductCard = ({ product }) => {
   const { user } = useAuth();
-  const { getUserWishLists, wishLists, getUserCart, cart, toggleWishList, addToCart } = useProducts();
+  const {
+    getUserWishLists,
+    wishLists,
+    getUserCart,
+    cart,
+    toggleWishList,
+    addToCart,
+  } = useProducts();
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       getUserWishLists(user);
       getUserCart(user);
     }
@@ -23,7 +30,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="relative">
-      <Link to="">
+      <Link to={`/product/${product.id}`}>
         <img
           src={product.productThumbnailImageURL}
           className="w-[250px] h-[300px] rounded-md object-cover"
@@ -61,7 +68,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       <Link
-        to=""
+        to={`/product/${product.id}`}
         className="absolute bottom-0 right-0 w-full h-10 p-1.5 flex flex-row-reverse justify-between items-center bg-black/50 text-white rounded-br-md rounded-bl-md"
       >
         <strong className="text-2xl">{product.productName}</strong>

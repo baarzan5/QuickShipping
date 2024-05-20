@@ -50,13 +50,23 @@ export function OrdersProvider({ children }) {
 
   const orderBalance = async (balanceData) => {
     try {
-        const balanceOrdersCollection = collection(db, "orders", "balance-orders");
-        await addDoc(balanceOrdersCollection, balanceData);
-    } catch(error){
-        dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
-        console.error(error.message);
+      const balanceOrdersCollection = collection(db, "orders.balance-orders");
+      await addDoc(balanceOrdersCollection, balanceData);
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
     }
-  }
+  };
+
+  const orderProducts = async (products) => {
+    try {
+      const productOrdersCollection = collection(db, "orders.product-orders");
+      await addDoc(productOrdersCollection, products);
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
 
   const contextData = {
     state,
@@ -65,6 +75,7 @@ export function OrdersProvider({ children }) {
     balanceOrders: state.balanceOrders,
     error: state.error,
     orderBalance,
+    orderProducts,
   };
   return (
     <OrdersContext.Provider value={contextData}>

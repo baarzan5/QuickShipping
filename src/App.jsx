@@ -23,6 +23,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AddBalancePage from "./pages/AddBalancePage";
 import MyWishListsPage from "./pages/MyWishListsPage";
 import { OrdersProvider } from "./context/OrdersContext";
+import ProductPage from "./pages/ProductPage";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/add-balance" element={<AddBalancePage />} />
                     <Route path="/wishlists" element={<MyWishListsPage />} />
+                    <Route path="/product/:productId" element={<ProductPage />} />
 
                     {/* Admin Panel */}
                     <Route path="/admin/home" element={<AdminPage />} />
