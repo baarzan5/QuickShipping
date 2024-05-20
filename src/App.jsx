@@ -20,6 +20,9 @@ import AdminProductPage from "./pages/admin/AdminProductPage";
 import ProductCategoryPage from "./pages/ProductCategoryPage";
 import Footer from "./components/Footer";
 import ProfilePage from "./pages/ProfilePage";
+import AddBalancePage from "./pages/AddBalancePage";
+import MyWishListsPage from "./pages/MyWishListsPage";
+import { OrdersProvider } from "./context/OrdersContext";
 
 function App() {
   return (
@@ -29,43 +32,50 @@ function App() {
           <BrandsProvider>
             <PropertiesProvider>
               <ProductsProvider>
-                <Header />
-                <Routes>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/signup" element={<SignUpPage />} />
+                <OrdersProvider>
+                  <Header />
+                  <Routes>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                    <Route path="/signup" element={<SignUpPage />} />
 
-                  <Route path="/" element={<HomePage />} />
-                  <Route
-                    path="/category/:categorySlug"
-                    element={<ProductCategoryPage />}
-                  />
-                  <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/" element={<HomePage />} />
+                    <Route
+                      path="/category/:categorySlug"
+                      element={<ProductCategoryPage />}
+                    />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/add-balance" element={<AddBalancePage />} />
+                    <Route path="/wishlists" element={<MyWishListsPage />} />
 
-                  {/* Admin Panel */}
-                  <Route path="/admin/home" element={<AdminPage />} />
-                  <Route
-                    path="/admin/categories"
-                    element={<CategoriesPage />}
-                  />
-                  <Route
-                    path="/admin/category/:categorySlug"
-                    element={<CategoryPage />}
-                  />
-                  <Route path="/admin/products" element={<ProductsPage />} />
-                  <Route path="/admin/add-product" element={<AddProduct />} />
-                  <Route path="/admin/brands" element={<BrandsPage />} />
-                  <Route
-                    path="/admin/properties"
-                    element={<PropertiesPage />}
-                  />
-                  <Route
-                    excat
-                    path="/admin/product/:productId"
-                    element={<AdminProductPage />}
-                  />
-                </Routes>
-                <Footer />
+                    {/* Admin Panel */}
+                    <Route path="/admin/home" element={<AdminPage />} />
+                    <Route
+                      path="/admin/categories"
+                      element={<CategoriesPage />}
+                    />
+                    <Route
+                      path="/admin/category/:categorySlug"
+                      element={<CategoryPage />}
+                    />
+                    <Route path="/admin/products" element={<ProductsPage />} />
+                    <Route path="/admin/add-product" element={<AddProduct />} />
+                    <Route path="/admin/brands" element={<BrandsPage />} />
+                    <Route
+                      path="/admin/properties"
+                      element={<PropertiesPage />}
+                    />
+                    <Route
+                      excat
+                      path="/admin/product/:productId"
+                      element={<AdminProductPage />}
+                    />
+                  </Routes>
+                  <Footer />
+                </OrdersProvider>
               </ProductsProvider>
             </PropertiesProvider>
           </BrandsProvider>

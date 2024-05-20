@@ -71,7 +71,7 @@ const Header = () => {
           <p className="absolute -top-4 left-0 w-5 h-5 rounded-full flex justify-center items-center text-center bg-red-600 text-white">
             {wishLists.length}
           </p>
-          <Link>
+          <Link to="/wishlists">
             <CiHeart size={30} title="لیستی دڵخوازەکان" />
           </Link>
         </div>

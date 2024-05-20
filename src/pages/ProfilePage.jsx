@@ -2,11 +2,14 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { FormatMoney } from "../utils/FormatMoney";
 import { FiEdit } from "react-icons/fi";
-import { IoIosLogOut } from "react-icons/io";
+import { IoIosHeartEmpty, IoIosLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { LiaMoneyCheckAltSolid } from "react-icons/lia";
+import { CiCircleList, CiStar } from "react-icons/ci";
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user, logOutUser } = useAuth();
 
   return (
     <>
@@ -24,6 +27,7 @@ const ProfilePage = () => {
                 {user.email ? user.email : user.phoneNumber}
               </h3>
               <div className="flex flex-row-reverse justify-center items-center gap-1">
+                <p>باڵانس</p>
                 <h3 className="text-2xl font-semibold">
                   {FormatMoney(user.userMoney)}
                 </h3>
@@ -44,19 +48,57 @@ const ProfilePage = () => {
                 <FiEdit size={25} />
               </button>
 
-              <button className="flex justify-center items-center gap-2 border border-[#FF0000] text-[#FF0000] p-1 rounded-md hover:bg-[#FF0000] hover:text-white transform transition-all duration-100 ease-in-out active:scale-95">
+              <button
+                onClick={logOutUser}
+                className="flex justify-center items-center gap-2 border border-[#FF0000] text-[#FF0000] p-1 rounded-md hover:bg-[#FF0000] hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
+              >
                 <p>چوونەدەرەوە</p>
-              <IoIosLogOut size={25} />
+                <IoIosLogOut size={25} />
               </button>
             </div>
           </div>
 
-          <div className="flex flex-row-reverse flex-wrap justify-end items-end gap-4">
-            <Link to="/add-balance" className="flex justify-end items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] hover:mainShadow transform transition-all duration-100 ease-in-out">
-                زیادکردنی باڵانس
+          <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-4">
+            <Link
+              to="/add-balance"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <RiMoneyDollarCircleLine size={30} />
+              <h3 className="text-lg">زیادکردنی باڵانس</h3>
+            </Link>
+
+            <Link
+              to="/balance-orders"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <LiaMoneyCheckAltSolid size={30} />
+              <h3 className="text-lg">داواکاریەکانی باڵانس</h3>
+            </Link>
+
+            <Link
+              to="/orders"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <CiCircleList size={30} />
+              <h3 className="text-lg">داواکاریەکانم</h3>
+            </Link>
+
+            <Link
+              to="/reviews"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <CiStar size={30} />
+              <h3 className="text-lg">بۆچوونەکانم</h3>
+            </Link>
+
+            <Link
+              to="/wishlists"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <IoIosHeartEmpty size={30} />
+              <h3 className="text-lg">دڵخوازەکانم</h3>
             </Link>
           </div>
-
         </div>
       ) : (
         <>Loading...</>
