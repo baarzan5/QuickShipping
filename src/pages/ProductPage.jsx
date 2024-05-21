@@ -14,9 +14,9 @@ const ProductPage = () => {
   const { products, getUserWishLists, wishLists, toggleWishList, addToCart } =
     useProducts();
   const [product, setProduct] = useState(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  let [totalPrice, setTotalPrice] = useState(product?.discountType == "Flat" ? quantity * product?.productPrice - product?.productDiscount : quantity * product?.productPrice * (1 - product?.productDiscount / 100));
+  const [totalPrice, setTotalPrice] = useState(0);
   const { handleOrder, dispatch } = useOrders();
 
   const getProduct = () => {
@@ -33,6 +33,18 @@ const ProductPage = () => {
       getUserWishLists(user);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (product) {
+      const price =
+        product.discountType === "Flat"
+          ? quantity * product.productPrice - product.productDiscount
+          : quantity *
+            product.productPrice *
+            (1 - product.productDiscount / 100);
+      setTotalPrice(price);
+    }
+  }, [product, quantity]);
 
   const isWishList = wishLists.some(
     (wishList) => wishList.product.id == product?.id
