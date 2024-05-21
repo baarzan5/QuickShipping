@@ -150,7 +150,7 @@ const ProductPage = () => {
                   className="h-10"
                 />
               </p>
-              <p className="flex justify-center items-center gap-1">
+              <div className="flex justify-center items-center gap-1">
                 {product.productDiscount ? (
                   <>
                     {product.discountType == "Flat" ? (
@@ -200,10 +200,18 @@ const ProductPage = () => {
                     )}
                   </>
                 ) : (
-                  <p className="text-xl">{FormatMoney(product.productPrice)}</p>
+                  <div className="flex flex-col justify-center items-center gap-2">
+                    <p className="text-xl">
+                      {FormatMoney(product.productPrice)}
+                    </p>
+                    <p>
+                      کۆی گستی نرخ :{" "}
+                      {FormatMoney(quantity * product.productPrice)} IQD
+                    </p>
+                  </div>
                 )}{" "}
                 IQD : نرخ
-              </p>
+              </div>
               <p className="flex justify-center items-center gap-2">
                 {product.productColors.map((color) => (
                   <span
