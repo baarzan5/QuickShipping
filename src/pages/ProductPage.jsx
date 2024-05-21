@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { useProducts } from "../context/ProductsContext";
 import { Link, useParams } from "react-router-dom";
 import { FormatMoney } from "../utils/FormatMoney";
-import { FaMinus } from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 import { CgMathMinus } from "react-icons/cg";
 import { useOrders } from "../context/OrdersContext";
@@ -17,7 +16,7 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
   const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState();
+  let [totalPrice, setTotalPrice] = useState(product?.discountType == "Flat" ? quantity * product?.productPrice - product?.productDiscount : quantity * product?.productPrice * (1 - product?.productDiscount / 100));
   const { handleOrder, dispatch } = useOrders();
 
   const getProduct = () => {
@@ -33,7 +32,7 @@ const ProductPage = () => {
     if (user) {
       getUserWishLists(user);
     }
-  }, [user, wishLists]);
+  }, [user]);
 
   const isWishList = wishLists.some(
     (wishList) => wishList.product.id == product?.id
@@ -157,10 +156,8 @@ const ProductPage = () => {
                         <p className="text-xl">
                           کۆی گشتی نرخ :{" "}
                           {FormatMoney(
-                            setTotalPrice(
-                              quantity * product.productPrice -
-                                product.productDiscount
-                            )
+                            quantity * product.productPrice -
+                              product.productDiscount
                           )}{" "}
                           IQD
                         </p>
@@ -181,11 +178,9 @@ const ProductPage = () => {
                         <p className="text-xl">
                           کۆی گشتی نرخ :{" "}
                           {FormatMoney(
-                            setTotalPrice(
-                              quantity *
-                                product.productPrice *
-                                (1 - product.productDiscount / 100)
-                            )
+                            quantity *
+                              product.productPrice *
+                              (1 - product.productDiscount / 100)
                           )}{" "}
                           IQD
                         </p>
