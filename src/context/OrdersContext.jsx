@@ -48,20 +48,10 @@ function ordersReducer(state, action) {
 export function OrdersProvider({ children }) {
   const [state, dispatch] = useReducer(ordersReducer, ordersInitialState);
 
-  const orderBalance = async (balanceData) => {
+  const handleOrder = async (orderData) => {
     try {
-      const balanceOrdersCollection = collection(db, "orders.balance-orders");
-      await addDoc(balanceOrdersCollection, balanceData);
-    } catch (error) {
-      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
-
-  const orderProducts = async (products) => {
-    try {
-      const productOrdersCollection = collection(db, "orders.product-orders");
-      await addDoc(productOrdersCollection, products);
+      const ordersCollection = collection(db, "orders");
+      await addDoc(ordersCollection, orderData);
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -74,8 +64,7 @@ export function OrdersProvider({ children }) {
     productOrders: state.productOrders,
     balanceOrders: state.balanceOrders,
     error: state.error,
-    orderBalance,
-    orderProducts,
+    handleOrder,
   };
   return (
     <OrdersContext.Provider value={contextData}>

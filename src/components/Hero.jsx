@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Hero = ({ product }) => {
   const { user } = useAuth();
-  const { handleWishList, getUserWishLists, wishLists } =
+  const { toggleWishList, getUserWishLists, wishLists } =
     useProducts();
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const Hero = ({ product }) => {
 
             <div className="flex flex-wrap flex-row-reverse justify-center items-center gap-3">
               <button
-                onClick={() => handleWishList(user, product)}
+                onClick={() => toggleWishList(user, product)}
                 className="bg-[#FF6F00] py-2 px-3 text-white rounded-md active:scale-95 transform transition-all ease-in-out duration-100 hover:bg-[#e47017]"
               >
                 {isWishListed ? "بیسڕەوە لە لیستی دڵخوازەکان" : "زیادی بکە بۆ لیستی دڵخوازەکان"}

@@ -1,9 +1,15 @@
 import React from "react";
 import { LuFacebook, LuInstagram } from "react-icons/lu";
 import { PiTiktokLogoThin, PiSnapchatLogoLight } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Footer = () => {
+  const location = useLocation();
+
+  if (location.pathname.includes("/admin")) {
+    return null;
+  }
+
   return (
     <div className="pt-10 w-full">
       <footer className="flex flex-col justify-center items-center gap-5 w-full bg-[#F5E5D7]">

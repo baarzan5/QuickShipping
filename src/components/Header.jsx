@@ -22,6 +22,14 @@ const Header = () => {
     }
   }, [user, wishLists, cart]);
 
+  const memorizedWishListsLength = useMemo(() => {
+    return wishLists.length;
+  }, [wishLists]);
+
+  const memorizedCartLength = useMemo(() => {
+    return cart.length;
+  }, [cart]);
+
   return (
     <div
       className="sticky top-0 left-0 w-full h-16 bg-[#F5E5D7] flex flex-row-reverse justify-between items-center px-2"
@@ -69,18 +77,19 @@ const Header = () => {
 
         <div className="relative">
           <p className="absolute -top-4 left-0 w-5 h-5 rounded-full flex justify-center items-center text-center bg-red-600 text-white">
-            {wishLists.length}
+            {memorizedWishListsLength}
           </p>
-          <Link to="/wishlists">
+          <Link to={`${user ? "/wishlists" : "/login"}`}>
             <CiHeart size={30} title="لیستی دڵخوازەکان" />
           </Link>
         </div>
 
         <div className="relative">
           <p className="absolute -top-[19px] left-0 w-5 h-5 rounded-full flex justify-center items-center text-center bg-red-600 text-white">
-            {cart.length}
+            {memorizedCartLength}
           </p>
-          <Link>
+
+          <Link to={`${user ? "/cart" : "/login"}`}>
             <FiShoppingCart size={25} title="سەبەتە" />
           </Link>
         </div>

@@ -112,7 +112,10 @@ export function ProductsProvider({ children }) {
 
   const toggleWishList = async (user, product) => {
     try {
-      const userWishListsCollection = collection(db, `users/${user.email}/wishLists`);
+      const userWishListsCollection = collection(
+        db,
+        `users/${user.email}/wishLists`
+      );
       const wishListsSnapshot = await getDocs(userWishListsCollection);
       const isExists = wishListsSnapshot.docs.find(
         (doc) => doc.data().product.id == product.id
@@ -138,33 +141,37 @@ export function ProductsProvider({ children }) {
     try {
       const userCartCollection = collection(db, `users/${user.email}/cart`);
       const cartSnapshot = await getDocs(userCartCollection);
-      const isExists = cartSnapshot.docs.map((doc) => doc.data().product.id == product.id);
+      const isExists = cartSnapshot.docs.find(
+        (doc) => doc.data().product.id == product.id
+      );
 
-      if(isExists){
-        alert("ئەم بەرهەمە لە سەبەتەی کڕینەکەت هەیە");
-        return;
+      if (isExists) {
+        return alert("ئەم بەرهەمە لە سەبەتەی کڕینەکەت هەیە");
       } else {
         await addDoc(userCartCollection, {
           product,
           addedAt: new Date(),
-        })
+        });
       }
-    } catch(error) {
+    } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
-  }
+  };
 
   const deleteProductFromCart = async (user, productId) => {
     try {
-      const userCartCollection = collection(db, `users/${user.email}/cart/${productId}`);
+      const userCartCollection = collection(
+        db,
+        `users/${user.email}/cart/${productId}`
+      );
       await deleteDoc(doc(userCartCollection, productId));
       alert("ئەم بەرهەمە لەسەبەتەی کڕینەکەت سڕایەوە");
-    } catch(error) {
+    } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
-  }
+  };
 
   const getUserWishLists = async (user) => {
     try {

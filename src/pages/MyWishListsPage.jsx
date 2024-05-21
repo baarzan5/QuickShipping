@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { useProducts } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
-import { FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FormatMoney } from "../utils/FormatMoney";
 
 const MyWishListsPage = () => {
   const { user } = useAuth();
-  const { getUserWishLists, wishLists, addToCart } = useProducts();
+  const { toggleWishList, getUserWishLists, wishLists, addToCart } =
+    useProducts();
 
   useEffect(() => {
     if (user) {
@@ -39,7 +40,12 @@ const MyWishListsPage = () => {
                   />
                 </Link>
 
-                <button className="absolute top-2 right-2 rounded-full bg-[#FF0000] text-white"></button>
+                <button
+                  onClick={() => toggleWishList(user, wishList.product)}
+                  className="absolute top-2 right-2 rounded-full bg-[#FF0000] text-white p-1 hover:bg-red-600 active:scale-95 transform transition-all duration-100 ease-in-out"
+                >
+                  <FiTrash2 size={25} />
+                </button>
               </div>
 
               <Link
@@ -55,7 +61,10 @@ const MyWishListsPage = () => {
               </Link>
 
               <div className="py-2">
-                <button onClick={() => addToCart(user, wishList.product)} className="flex justify-center items-center gap-2 w-[300px] rounded-md p-2 bg-[#FF6F00] text-black hover:text-white transform transition-all duration-100 ease-in-out active:scale-95">
+                <button
+                  onClick={() => addToCart(user, wishList.product)}
+                  className="flex justify-center items-center gap-2 w-[300px] rounded-md p-2 bg-[#FF6F00] text-black hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
+                >
                   <FiShoppingCart size={25} />
                   زیادبکە بۆ سەبەتەی کڕین
                 </button>

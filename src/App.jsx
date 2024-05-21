@@ -24,6 +24,7 @@ import AddBalancePage from "./pages/AddBalancePage";
 import MyWishListsPage from "./pages/MyWishListsPage";
 import { OrdersProvider } from "./context/OrdersContext";
 import ProductPage from "./pages/ProductPage";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                     <Route path="/add-balance" element={<AddBalancePage />} />
                     <Route path="/wishlists" element={<MyWishListsPage />} />
                     <Route path="/product/:productId" element={<ProductPage />} />
+                    <Route path="/cart" element={<CartPage />} />
 
                     {/* Admin Panel */}
                     <Route path="/admin/home" element={<AdminPage />} />

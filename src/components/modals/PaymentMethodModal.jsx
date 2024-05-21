@@ -12,7 +12,7 @@ const PaymentMethodModal = ({
 }) => {
   hideScrollBar(isSelectedPaymentMethod);
 
-  const { orderBalance, dispatch } = useOrders();
+  const { handleOrder, dispatch } = useOrders();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [balanceValue, setBalanceValue] = useState("");
@@ -24,15 +24,21 @@ const PaymentMethodModal = ({
       } else if (!balanceValue) {
         alert("تکایە ئەو بڕە پارەیەی کە ناردووتە بنووسە");
       } else if (phoneNumber && balanceValue) {
-        const balanceData = {
+        const orderData = {
+          orderType: "Balance",
           paymentMethod,
           phoneNumber,
           balanceValue,
           user,
+          isActive: false,
           orderedAt: new Date(),
         };
 
-        await orderBalance(balanceData);
+        await handleOrder(orderData);
+        alert(
+          "داواکاریەکەت سەرکەوتوو بوو \nتکایە چاوەڕێ بکە بۆ ئەوەی باڵانسەکەت زیاد بکرێت"
+        );
+        setIsSelectedPaymentMethod(false);
       }
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
@@ -95,7 +101,7 @@ const PaymentMethodModal = ({
           <input
             type="number"
             placeholder="بڕی پارە"
-            min={0}
+            min={1}
             value={balanceValue}
             onChange={(e) => setBalanceValue(parseInt(e.target.value))}
             className={`w-[300px] p-2 border border-[#e4e4e5] rounded-md text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}

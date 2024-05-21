@@ -6,6 +6,8 @@ import { FormatMoney } from "../utils/FormatMoney";
 import { FaMinus } from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 import { CgMathMinus } from "react-icons/cg";
+import { useOrders } from "../context/OrdersContext";
+import { ORDERSACTIONS } from "../actions/ordersActions";
 
 const ProductPage = () => {
   const { productId } = useParams();
@@ -15,6 +17,8 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
   const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState();
+  const { handleOrder, dispatch } = useOrders();
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id == productId);
@@ -48,6 +52,31 @@ const ProductPage = () => {
   let increaseQuantity = () => {
     if (quantity) {
       setQuantity(quantity + 1);
+    }
+  };
+
+  const handleOrderProduct = async () => {
+    try {
+      const orderData = {
+        orderType: "Product",
+        products: [product],
+        quantity: quantity,
+        user,
+        orderStatus: {
+          isPending: true,
+          isConfirmed: false,
+          isOnDelivered: false,
+          isDelivered: false,
+          isCompleted: false,
+          isCancelled: false,
+        },
+        totalPrice,
+        orderedAt: new Date(),
+      };
+      await handleOrder(orderData);
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
     }
   };
 
@@ -114,36 +143,57 @@ const ProductPage = () => {
                 {product.productDiscount ? (
                   <>
                     {product.discountType == "Flat" ? (
-                      <div className="flex justify-center items-center gap-2">
-                        <p className="text-2xl text-red-500">
+                      <div className="flex flex-col justify-center items-center gap-2">
+                        <div className="flex justify-center items-center gap-2">
+                          <p className="text-2xl text-[#FF6F00]">
+                            {FormatMoney(
+                              product.productPrice - product.productDiscount
+                            )}
+                          </p>
+                          <p className="text-[#969393] text-sm line-through">
+                            {FormatMoney(product.productDiscount)}IQD
+                          </p>
+                        </div>
+                        <p className="text-xl">
+                          کۆی گشتی نرخ :{" "}
                           {FormatMoney(
-                            quantity * quantity.productPrice -
-                              product.productDiscount
-                          )}
-                        </p>
-                        <p className="text-[#969393] text-sm line-through">
-                          {FormatMoney(product.productDiscount)}IQD
+                            setTotalPrice(
+                              quantity * product.productPrice -
+                                product.productDiscount
+                            )
+                          )}{" "}
+                          IQD
                         </p>
                       </div>
                     ) : (
-                      <div className="flex justify-center items-center gap-2">
-                        <p className="text-2xl text-red-500">
+                      <div className="flex flex-col justify-center items-center gap-2">
+                        <div className="flex justify-center items-center gap-2">
+                          <p className="text-2xl text-[#FF6F00]">
+                            {FormatMoney(
+                              product.productPrice *
+                                (1 - product.productDiscount / 100)
+                            )}
+                          </p>
+                          <p className="text-[#969393] text-sm line-through">
+                            {FormatMoney(product.productPrice)}
+                          </p>
+                        </div>
+                        <p className="text-xl">
+                          کۆی گشتی نرخ :{" "}
                           {FormatMoney(
-                            quantity *
-                              quantity.productPrice *
-                              (1 - product.productPrice / 100)
-                          )}
-                        </p>
-                        <p className="text-[#969393] text-sm line-through">
-                          {FormatMoney(product.productPrice)}
+                            setTotalPrice(
+                              quantity *
+                                product.productPrice *
+                                (1 - product.productDiscount / 100)
+                            )
+                          )}{" "}
+                          IQD
                         </p>
                       </div>
                     )}
                   </>
                 ) : (
-                  <p className="text-xl">
-                    {FormatMoney(quantity * product.productPrice)}
-                  </p>
+                  <p className="text-xl">{FormatMoney(product.productPrice)}</p>
                 )}{" "}
                 IQD : نرخ
               </p>
@@ -208,7 +258,11 @@ const ProductPage = () => {
 
               <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-3">
                 <button
-                  onClick={() => toggleWishList(user, product)}
+                  onClick={
+                    user
+                      ? () => toggleWishList(user, product)
+                      : alert("تکایە سەرەتا بچۆ ژووەرەوە")
+                  }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
                 >
                   {isWishList
@@ -217,13 +271,24 @@ const ProductPage = () => {
                 </button>
 
                 <button
-                  onClick={() => addToCart(user, product)}
+                  onClick={
+                    user
+                      ? () => addToCart(user, product)
+                      : alert("تکایە سەرەتا بچۆ ژوورەوە")
+                  }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
                 >
                   زیادبکە بۆ لیستی سەبەتەی کڕین
                 </button>
 
-                <button className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out">
+                <button
+                  onClick={
+                    user
+                      ? handleOrderProduct
+                      : alert("تکایە سەرەتا بچۆ ژوورەوە")
+                  }
+                  className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
+                >
                   داواکردن
                 </button>
               </div>
