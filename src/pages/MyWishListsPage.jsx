@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProducts } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
 import { FiShoppingCart, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FormatMoney } from "../utils/FormatMoney";
+import AddToCartModal from "../components/modals/AddToCartModal";
 
 const MyWishListsPage = () => {
   const { user } = useAuth();
-  const { toggleWishList, getUserWishLists, wishLists, addToCart } =
-    useProducts();
+  const { toggleWishList, getUserWishLists, wishLists } = useProducts();
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -62,13 +63,21 @@ const MyWishListsPage = () => {
 
               <div className="py-2">
                 <button
-                  onClick={() => addToCart(user, wishList.product)}
+                  onClick={() => setShowAddToCartModal(!showAddToCartModal)}
                   className="flex justify-center items-center gap-2 w-[300px] rounded-md p-2 bg-[#FF6F00] text-black hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
                 >
                   <FiShoppingCart size={25} />
                   زیادبکە بۆ سەبەتەی کڕین
                 </button>
               </div>
+
+              {showAddToCartModal && (
+                <AddToCartModal
+                  showAddToCartModal={showAddToCartModal}
+                  setShowAddToCartModal={setShowAddToCartModal}
+                  product={wishList.product}
+                />
+              )}
             </div>
           ))}
         </div>

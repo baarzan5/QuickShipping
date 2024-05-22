@@ -140,19 +140,11 @@ export function ProductsProvider({ children }) {
   const addToCart = async (user, product) => {
     try {
       const userCartCollection = collection(db, `users/${user.email}/cart`);
-      const cartSnapshot = await getDocs(userCartCollection);
-      const isExists = cartSnapshot.docs.find(
-        (doc) => doc.data().product.id == product.id
-      );
-
-      if (isExists) {
-        return alert("ئەم بەرهەمە لە سەبەتەی کڕینەکەت هەیە");
-      } else {
-        await addDoc(userCartCollection, {
-          product,
-          addedAt: new Date(),
-        });
-      }
+      await addDoc(userCartCollection, {
+        product,
+        addedAt: new Date(),
+      });
+      alert("ئەم بەرهەمە بەسەرکەوتووی زیادکرا بۆ لیستی سەبەتەی کڕین");
     } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);

@@ -7,6 +7,7 @@ import { IoIosAdd } from "react-icons/io";
 import { CgMathMinus } from "react-icons/cg";
 import { useOrders } from "../context/OrdersContext";
 import { ORDERSACTIONS } from "../actions/ordersActions";
+import AddToCartModal from "../components/modals/AddToCartModal";
 
 const ProductPage = () => {
   const { productId } = useParams();
@@ -18,6 +19,12 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const { handleOrder, dispatch } = useOrders();
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
+  const [selectedProductAttributes, setSelectedProductAttributes] = useState(
+    []
+  );
+  const [selectedProductSubAttributes, setSelectedProductSubAttributes] =
+    useState([]);
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id == productId);
@@ -70,18 +77,20 @@ const ProductPage = () => {
     try {
       const orderData = {
         orderType: "Product",
-        products: [product],
-        quantity: quantity,
-        user,
-        orderStatus: {
-          isPending: true,
-          isConfirmed: false,
-          isOnDelivered: false,
-          isDelivered: false,
-          isCompleted: false,
-          isCancelled: false,
+        order: {
+          product,
+          quantity,
+          user,
+          orderStatus: {
+            isPending: true,
+            isConfirmed: false,
+            isOnDelivered: false,
+            isDelivered: false,
+            isCompleted: false,
+            isCancelled: false,
+          },
+          totalPrice,
         },
-        totalPrice,
         orderedAt: new Date(),
       };
       await handleOrder(orderData);
@@ -213,8 +222,9 @@ const ProductPage = () => {
                 IQD : نرخ
               </div>
               <p className="flex justify-center items-center gap-2">
-                {product.productColors.map((color) => (
+                {product.productColors.map((color, index) => (
                   <span
+                    key={index}
                     style={{
                       backgroundColor: `#${color.colorCode}`,
                       padding: "5px",
@@ -288,13 +298,21 @@ const ProductPage = () => {
                 <button
                   onClick={
                     user
-                      ? () => addToCart(user, product)
+                      ? () => setShowAddToCartModal(!showAddToCartModal)
                       : alert("تکایە سەرەتا بچۆ ژوورەوە")
                   }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
                 >
                   زیادبکە بۆ لیستی سەبەتەی کڕین
                 </button>
+
+                {showAddToCartModal && (
+                  <AddToCartModal
+                    showAddToCartModal={showAddToCartModal}
+                    setShowAddToCartModal={setShowAddToCartModal}
+                    product={product}
+                  />
+                )}
 
                 <button
                   onClick={

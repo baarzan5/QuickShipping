@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { FormatMoney } from "../utils/FormatMoney";
 import { useProducts } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
+import AddToCartModal from "./modals/AddToCartModal";
 
 const ProductCard = ({ product }) => {
   const { user } = useAuth();
@@ -16,6 +17,7 @@ const ProductCard = ({ product }) => {
     toggleWishList,
     addToCart,
   } = useProducts();
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -60,12 +62,20 @@ const ProductCard = ({ product }) => {
         )}
 
         <button
-          onClick={() => addToCart(user, product)}
+          onClick={() => setShowAddToCartModal(!showAddToCartModal)}
           className="bg-black/50 rounded-full p-1.5 text-white active:scale-95 transform transition-all ease-in-out duration-200"
         >
           <FiShoppingCart size={25} title="زیادبکە بۆ سەبەتەی کڕین" />
         </button>
       </div>
+
+      {showAddToCartModal && (
+        <AddToCartModal
+          showAddToCartModal={showAddToCartModal}
+          setShowAddToCartModal={setShowAddToCartModal}
+          product={product}
+        />
+      )}
 
       <Link
         to={`/product/${product.id}`}
