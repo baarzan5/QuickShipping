@@ -24,7 +24,7 @@ const ProductCard = ({ product }) => {
       getUserWishLists(user);
       getUserCart(user);
     }
-  }, [user, wishLists, cart]);
+  }, [user]);
 
   const isWishListed = wishLists.some(
     (wishList) => wishList.product.id == product.id

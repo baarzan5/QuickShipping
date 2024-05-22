@@ -13,7 +13,7 @@ const Hero = ({ product }) => {
     if (user) {
       getUserWishLists(user);
     }
-  }, [user, wishLists]);
+  }, [user]);
 
   const isWishListed = wishLists.some(
     (wishList) => wishList.product.id == product.id

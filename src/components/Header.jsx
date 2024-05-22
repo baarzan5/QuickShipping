@@ -20,7 +20,7 @@ const Header = () => {
       getUserWishLists(user);
       getUserCart(user);
     }
-  }, [user, wishLists, cart]);
+  }, [user]);
 
   const memorizedWishListsLength = useMemo(() => {
     return wishLists.length;

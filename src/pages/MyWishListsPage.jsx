@@ -15,7 +15,7 @@ const MyWishListsPage = () => {
     if (user) {
       getUserWishLists(user);
     }
-  }, [user, wishLists]);
+  }, [user]);
 
   return (
     <div className="pt-[30px]">
