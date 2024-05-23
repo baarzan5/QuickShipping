@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import { CiCircleList, CiStar } from "react-icons/ci";
+import { FaRegAddressCard } from "react-icons/fa";
 
 const ProfilePage = () => {
   const { user, logOutUser } = useAuth();
@@ -97,6 +98,14 @@ const ProfilePage = () => {
             >
               <IoIosHeartEmpty size={30} />
               <h3 className="text-lg">دڵخوازەکانم</h3>
+            </Link>
+
+            <Link
+              to="/address"
+              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+            >
+              <FaRegAddressCard size={30} />
+              <h3 className="text-lg">ناونیشانەکانم</h3>
             </Link>
           </div>
         </div>

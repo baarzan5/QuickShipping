@@ -151,13 +151,10 @@ export function ProductsProvider({ children }) {
     }
   };
 
-  const deleteProductFromCart = async (user, productId) => {
+  const deleteProductFromCart = async (userEmail, cartId) => {
     try {
-      const userCartCollection = collection(
-        db,
-        `users/${user.email}/cart/${productId}`
-      );
-      await deleteDoc(doc(userCartCollection, productId));
+      const productDoc = doc(db, `users/${userEmail}/cart`, cartId);
+      await deleteDoc(productDoc);
       alert("ئەم بەرهەمە لەسەبەتەی کڕینەکەت سڕایەوە");
     } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });

@@ -25,6 +25,8 @@ import MyWishListsPage from "./pages/MyWishListsPage";
 import { OrdersProvider } from "./context/OrdersContext";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
+import AddressPage from "./pages/AddressPage";
+import { AddressProvider } from "./context/AddressContext";
 
 function App() {
   return (
@@ -35,50 +37,62 @@ function App() {
             <PropertiesProvider>
               <ProductsProvider>
                 <OrdersProvider>
-                  <Header />
-                  <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                    />
-                    <Route path="/signup" element={<SignUpPage />} />
+                  <AddressProvider>
+                    <Header />
+                    <Routes>
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route
+                        path="/forgot-password"
+                        element={<ForgotPassword />}
+                      />
+                      <Route path="/signup" element={<SignUpPage />} />
 
-                    <Route path="/" element={<HomePage />} />
-                    <Route
-                      path="/category/:categorySlug"
-                      element={<ProductCategoryPage />}
-                    />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/add-balance" element={<AddBalancePage />} />
-                    <Route path="/wishlists" element={<MyWishListsPage />} />
-                    <Route path="/product/:productId" element={<ProductPage />} />
-                    <Route path="/cart" element={<CartPage />} />
+                      <Route path="/" element={<HomePage />} />
+                      <Route
+                        path="/category/:categorySlug"
+                        element={<ProductCategoryPage />}
+                      />
+                      <Route path="/profile" element={<ProfilePage />} />
+                      <Route path="/add-balance" element={<AddBalancePage />} />
+                      <Route path="/wishlists" element={<MyWishListsPage />} />
+                      <Route
+                        path="/product/:productId"
+                        element={<ProductPage />}
+                      />
+                      <Route path="/cart" element={<CartPage />} />
+                      <Route path="/address" element={<AddressPage />} />
 
-                    {/* Admin Panel */}
-                    <Route path="/admin/home" element={<AdminPage />} />
-                    <Route
-                      path="/admin/categories"
-                      element={<CategoriesPage />}
-                    />
-                    <Route
-                      path="/admin/category/:categorySlug"
-                      element={<CategoryPage />}
-                    />
-                    <Route path="/admin/products" element={<ProductsPage />} />
-                    <Route path="/admin/add-product" element={<AddProduct />} />
-                    <Route path="/admin/brands" element={<BrandsPage />} />
-                    <Route
-                      path="/admin/properties"
-                      element={<PropertiesPage />}
-                    />
-                    <Route
-                      excat
-                      path="/admin/product/:productId"
-                      element={<AdminProductPage />}
-                    />
-                  </Routes>
-                  <Footer />
+                      {/* Admin Panel */}
+                      <Route path="/admin/home" element={<AdminPage />} />
+                      <Route
+                        path="/admin/categories"
+                        element={<CategoriesPage />}
+                      />
+                      <Route
+                        path="/admin/category/:categorySlug"
+                        element={<CategoryPage />}
+                      />
+                      <Route
+                        path="/admin/products"
+                        element={<ProductsPage />}
+                      />
+                      <Route
+                        path="/admin/add-product"
+                        element={<AddProduct />}
+                      />
+                      <Route path="/admin/brands" element={<BrandsPage />} />
+                      <Route
+                        path="/admin/properties"
+                        element={<PropertiesPage />}
+                      />
+                      <Route
+                        excat
+                        path="/admin/product/:productId"
+                        element={<AdminProductPage />}
+                      />
+                    </Routes>
+                    <Footer />
+                  </AddressProvider>
                 </OrdersProvider>
               </ProductsProvider>
             </PropertiesProvider>
