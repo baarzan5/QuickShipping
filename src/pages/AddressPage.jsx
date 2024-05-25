@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import AddAddressModal from "../components/modals/AddAddressModal";
-import { useAddress } from "../context/AddressContext";
+import { useLocations } from "../context/LocationsContext";
 
 const AddressPage = () => {
   const { user } = useAuth();
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
-  const { getUserAddress, address } = useAddress();
+  const { getUserAddress, address } = useLocations();
 
   useEffect(() => {
     if (user) {

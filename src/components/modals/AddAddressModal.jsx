@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { hideScrollBar } from "../../hooks/hideScrollBar";
 import { IoCloseOutline } from "react-icons/io5";
 import Select from "react-select";
-import { Countries } from "../../data/Countries";
-import { Cities } from "../../data/Cities";
-import { useAddress } from "../../context/AddressContext";
-import { ADDRESS_ACTIONS } from "../../actions/addressActions";
+import { useLocations } from "../../context/LocationsContext";
+import { LOCATION_ACTIONS } from "../../actions/locationActions";
 
 const AddAddressModal = ({
   showAddAddressModal,
@@ -13,29 +11,30 @@ const AddAddressModal = ({
   user,
 }) => {
   hideScrollBar(showAddAddressModal);
+  const { countries, getCities, cities, addAddress, dispatch } = useLocations();
   const [country, setCountry] = useState(null);
   const [city, setCity] = useState(null);
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const { addAddress, dispatch } = useAddress();
 
   const handleCountryChange = (selectedOption) => {
     const selectedCountryId = selectedOption.value;
-    const country = Countries.find(
+    const country = countries?.find(
       (country) => country.id === selectedCountryId
     );
     setCountry(country);
+    getCities(country);
   };
 
   const handleCityChange = (selectedOption) => {
     const selectedCityId = selectedOption.value;
-    const city = Cities.find((city) => city.id === selectedCityId);
+    const city = cities.find((city) => city.id === selectedCityId);
     setCity(city);
   };
 
   const handleAddAddress = async () => {
     try {
-      if (country && city && address.trim() != "" && phoneNumber) {
+      if (country && city && address.trim() !== "" && phoneNumber) {
         const addressData = {
           country,
           city,
@@ -48,7 +47,7 @@ const AddAddressModal = ({
         setShowAddAddressModal(false);
       }
     } catch (error) {
-      dispatch({ type: ADDRESS_ACTIONS.SET_ERROR, payload: error.message });
+      dispatch({ type: LOCATION_ACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
   };
@@ -80,16 +79,16 @@ const AddAddressModal = ({
             <p className="">وڵات</p>
 
             <Select
+              options={countries?.map((country) => ({
+                value: country.value,
+                label: country.label,
+              }))}
               value={
                 country
                   ? { value: country.id, label: country.countryName }
                   : null
               }
               onChange={handleCountryChange}
-              options={Countries.map((country) => ({
-                value: country.id,
-                label: country.countryName,
-              }))}
               placeholder="وڵات هەلبژێرە"
               className="w-full text-right"
             />
@@ -99,12 +98,12 @@ const AddAddressModal = ({
             <p>شار</p>
 
             <Select
+              options={cities?.map((city) => ({
+                value: city.value,
+                label: city.label,
+              }))}
               value={city ? { value: city.id, label: city.cityName } : null}
               onChange={handleCityChange}
-              options={Cities.map((city) => ({
-                value: city.id,
-                label: city.cityName,
-              }))}
               placeholder="شار هەلبژێرە"
               className="w-full text-right"
             />
@@ -115,6 +114,7 @@ const AddAddressModal = ({
 
             <input
               type="text"
+              placeholder="ناونیشان"
               className="w-full border border-[#e4e4e5] rounded-md p-2 text-right"
               required
               value={address}
@@ -127,6 +127,7 @@ const AddAddressModal = ({
 
             <input
               type="number"
+              placeholder="ژ.مۆبایل"
               min={0}
               className="w-full border border-[#e4e4e5] rounded-md p-2 text-right"
               required

@@ -26,7 +26,9 @@ import { OrdersProvider } from "./context/OrdersContext";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import AddressPage from "./pages/AddressPage";
-import { AddressProvider } from "./context/AddressContext";
+import { LocationsProvider } from "./context/LocationsContext";
+import LocationsPage from "./pages/admin/LocationsPage";
+import CountryPage from "./pages/admin/CountryPage";
 
 function App() {
   return (
@@ -37,7 +39,7 @@ function App() {
             <PropertiesProvider>
               <ProductsProvider>
                 <OrdersProvider>
-                  <AddressProvider>
+                  <LocationsProvider>
                     <Header />
                     <Routes>
                       <Route path="/login" element={<LoginPage />} />
@@ -90,9 +92,19 @@ function App() {
                         path="/admin/product/:productId"
                         element={<AdminProductPage />}
                       />
+                      <Route
+                        excat
+                        path="/admin/locations"
+                        element={<LocationsPage />}
+                      />
+                      <Route
+                        excat
+                        path="/admin/country/:countryId"
+                        element={<CountryPage />}
+                      />
                     </Routes>
                     <Footer />
-                  </AddressProvider>
+                  </LocationsProvider>
                 </OrdersProvider>
               </ProductsProvider>
             </PropertiesProvider>
