@@ -205,7 +205,7 @@ export function LocationsProvider({ children }) {
     }
   };
 
-  const editAddress = async (userEmail, addressData, addressId) => {
+  const editAddress = async (userEmail, addressId, addressData) => {
     try {
       const userAddressDoc = doc(db, `users/${userEmail}/address`, addressId);
       await updateDoc(userAddressDoc, addressData);

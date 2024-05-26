@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { FormatMoney } from "../utils/FormatMoney";
 import { FiEdit } from "react-icons/fi";
@@ -8,9 +8,11 @@ import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import { CiCircleList, CiStar } from "react-icons/ci";
 import { FaRegAddressCard } from "react-icons/fa";
+import EditProfileModal from "../components/modals/EditProfileModal";
 
 const ProfilePage = () => {
   const { user, logOutUser } = useAuth();
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
 
   return (
     <>
@@ -44,10 +46,21 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex flex-col justify-between items-start h-full">
-              <button className="flex justify-center items-center gap-2 border border-[#FF6F00] text-[#FF6F00] p-1 rounded-md hover:bg-[#FF6F00] hover:text-white transform transition-all duration-100 ease-in-out active:scale-95">
+              <button
+                onClick={() => setShowEditProfileModal(!showEditProfileModal)}
+                className="flex justify-center items-center gap-2 border border-[#FF6F00] text-[#FF6F00] p-1 rounded-md hover:bg-[#FF6F00] hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
+              >
                 <p>دەستکاریکردنی هەژمار</p>
                 <FiEdit size={25} />
               </button>
+
+              {showEditProfileModal && (
+                <EditProfileModal
+                  showEditProfileModal={showEditProfileModal}
+                  setShowEditProfileModal={setShowEditProfileModal}
+                  user={user}
+                />
+              )}
 
               <button
                 onClick={logOutUser}

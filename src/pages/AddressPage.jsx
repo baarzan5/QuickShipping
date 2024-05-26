@@ -70,6 +70,7 @@ const AddressPage = () => {
                         setShowEditAddressModal={setShowEditAddressModal}
                         userEmail={user.email}
                         addressInfo={address}
+                        countries={countries}
                       />
                     )}
 

@@ -3,20 +3,56 @@ import { hideScrollBar } from "../../hooks/hideScrollBar";
 import { IoCloseOutline } from "react-icons/io5";
 import Select from "react-select";
 import { useLocations } from "../../context/LocationsContext";
+import { LOCATION_ACTIONS } from "../../actions/locationActions";
 
 const EditAddressModal = ({
   showEditAddressModal,
   setShowEditAddressModal,
   userEmail,
   addressInfo,
+  countries,
 }) => {
   hideScrollBar(showEditAddressModal);
 
-  const { countries, getCities, cities } = useLocations();
+  const { getCities, cities, editAddress, dispatch } = useLocations();
   const [country, setCountry] = useState(addressInfo.country.countryName);
   const [city, setCity] = useState(addressInfo.city.cityName);
   const [address, setAddress] = useState(addressInfo.address);
   const [phoneNumber, setPhoneNumber] = useState(addressInfo.phoneNumber);
+
+  const handleCountryChange = (selectedOption) => {
+    const selectedCountryId = selectedOption.value;
+    const country = countries.find(
+      (country) => country.id === selectedCountryId
+    );
+    setCountry(country);
+    getCities(country.id);
+  };
+
+  const handleCityChange = (selectedOption) => {
+    const selectedCityId = selectedOption.value;
+    const city = cities.find((city) => city.id === selectedCityId);
+    setCity(city);
+  };
+
+  const handleEditAddress = async () => {
+    try {
+      if(country && city && address.trim() != "" && phoneNumber.trim() != ""){
+        const editedData = {
+          country,
+          city,
+          address,
+          phoneNumber,
+        }
+        await editAddress(userEmail, addressInfo.id, editedData);
+        alert("ناونیشانەکەت بەسەرکەوتووی دەستکاری کرا");
+        setShowEditAddressModal(false);
+      }
+    } catch(error){
+      dispatch({ type: LOCATION_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  }
 
   return (
     <div
@@ -60,6 +96,7 @@ const EditAddressModal = ({
                   ? { value: country?.id, label: country?.countryName }
                   : null
               }
+              defaultInputValue={country}
               onChange={handleCountryChange}
               placeholder="وڵات هەلبژێرە"
               className="w-full text-right"
@@ -79,6 +116,7 @@ const EditAddressModal = ({
                   : []
               }
               value={city ? { value: city.id, label: city.cityName } : null}
+              defaultInputValue={city}
               onChange={handleCityChange}
               placeholder="شار هەلبژێرە"
               className="w-full text-right"
@@ -105,7 +143,7 @@ const EditAddressModal = ({
               type="number"
               placeholder="ژ.مۆبایل"
               min={0}
-              className="w-full border border-[#e4e4e5] rounded-md p-2 text-right"
+              className="w-full border border-[#e4e4e5] rounded-md p-2 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               required
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -113,10 +151,10 @@ const EditAddressModal = ({
           </div>
 
           <button
-            // onClick={handleAddAddress}
+            onClick={handleEditAddress}
             className="bg-[#FF6F00] w-[350px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
           >
-            زیادکردن
+            دەستکاری کردن
           </button>
         </div>
       </div>

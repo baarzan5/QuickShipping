@@ -235,6 +235,16 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const editProfile = async (userData) => {
+    try {
+      const userDoc = doc(db, "users", userData.email);
+      await updateDoc(userDoc, userData);
+    } catch (error) {
+      dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const logOutUser = async () => {
     try {
       await signOut(auth);
@@ -258,6 +268,7 @@ export function AuthProvider({ children }) {
     forgotPassword,
     googleSignIn,
     facebookSignIn,
+    editProfile,
     logOutUser,
   };
   return (

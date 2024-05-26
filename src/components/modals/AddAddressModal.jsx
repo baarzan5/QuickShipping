@@ -139,7 +139,7 @@ const AddAddressModal = ({
               type="number"
               placeholder="ژ.مۆبایل"
               min={0}
-              className="w-full border border-[#e4e4e5] rounded-md p-2 text-right"
+              className="w-full border border-[#e4e4e5] rounded-md p-2 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               required
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
