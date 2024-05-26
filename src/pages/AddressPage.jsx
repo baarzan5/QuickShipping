@@ -6,13 +6,17 @@ import { useLocations } from "../context/LocationsContext";
 const AddressPage = () => {
   const { user } = useAuth();
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
-  const { getUserAddress, address } = useLocations();
+  const { getUserAddress, address, countries, getCountries } = useLocations();
 
   useEffect(() => {
     if (user) {
       getUserAddress(user.email);
     }
   }, [user]);
+
+  useEffect(() => {
+    getCountries();
+  }, [countries]);
 
   return (
     <div>
@@ -32,7 +36,8 @@ const AddressPage = () => {
                 <AddAddressModal
                   showAddAddressModal={showAddAddressModal}
                   setShowAddAddressModal={setShowAddAddressModal}
-                  user={user}
+                  userEmail={user?.email}
+                  countries={countries}
                 />
               )}
             </div>

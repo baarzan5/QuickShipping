@@ -8,10 +8,12 @@ import { LOCATION_ACTIONS } from "../../actions/locationActions";
 const AddAddressModal = ({
   showAddAddressModal,
   setShowAddAddressModal,
-  user,
+  userEmail,
+  countries,
 }) => {
   hideScrollBar(showAddAddressModal);
-  const { countries, getCities, cities, addAddress, dispatch } = useLocations();
+
+  const { getCities, cities, addAddress, dispatch } = useLocations();
   const [country, setCountry] = useState(null);
   const [city, setCity] = useState(null);
   const [address, setAddress] = useState("");
@@ -19,11 +21,11 @@ const AddAddressModal = ({
 
   const handleCountryChange = (selectedOption) => {
     const selectedCountryId = selectedOption.value;
-    const country = countries?.find(
+    const country = countries.find(
       (country) => country.id === selectedCountryId
     );
     setCountry(country);
-    getCities(country);
+    getCities(country.id);
   };
 
   const handleCityChange = (selectedOption) => {
@@ -42,7 +44,7 @@ const AddAddressModal = ({
           phoneNumber,
           addedAt: new Date(),
         };
-        await addAddress(user?.email, addressData);
+        await addAddress(userEmail, addressData);
         alert("ناونیشانەکەت بەسەرکەوتووی زیادکرا");
         setShowAddAddressModal(false);
       }
@@ -79,10 +81,14 @@ const AddAddressModal = ({
             <p className="">وڵات</p>
 
             <Select
-              options={countries?.map((country) => ({
-                value: country.value,
-                label: country.label,
-              }))}
+              options={
+                countries
+                  ? countries.map((country) => ({
+                      value: country.id,
+                      label: country.countryName,
+                    }))
+                  : []
+              }
               value={
                 country
                   ? { value: country.id, label: country.countryName }
@@ -98,10 +104,14 @@ const AddAddressModal = ({
             <p>شار</p>
 
             <Select
-              options={cities?.map((city) => ({
-                value: city.value,
-                label: city.label,
-              }))}
+              options={
+                cities
+                  ? cities.map((city) => ({
+                      value: city.id,
+                      label: city.cityName,
+                    }))
+                  : []
+              }
               value={city ? { value: city.id, label: city.cityName } : null}
               onChange={handleCityChange}
               placeholder="شار هەلبژێرە"

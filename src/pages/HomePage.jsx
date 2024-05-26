@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import Hero from "../components/Hero";
 import NewestProducts from "../components/NewestProducts";
 import CategoryProducts from "../components/CategoryProducts";
-import Footer from "../components/Footer";
 import { useProducts } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
 

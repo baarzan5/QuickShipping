@@ -17,9 +17,9 @@ const LocationsContext = createContext();
 
 const locationInitialState = {
   loading: true,
-  address: [],
   countries: [],
   cities: [],
+  address: [],
   error: null,
 };
 
@@ -28,18 +28,6 @@ function locationReducer(state, action) {
     case LOCATION_ACTIONS.SET_LOADING:
       return {
         ...state,
-      };
-
-    case LOCATION_ACTIONS.SET_ADDRESS:
-      return {
-        loading: false,
-        address: action.payload,
-      };
-
-    case LOCATION_ACTIONS.SET_ERROR:
-      return {
-        ...state,
-        error: action.payload,
       };
 
     case LOCATION_ACTIONS.SET_COUNTRIES:
@@ -54,6 +42,18 @@ function locationReducer(state, action) {
         ...state,
         loading: false,
         cities: action.payload,
+      };
+
+    case LOCATION_ACTIONS.SET_ADDRESS:
+      return {
+        loading: false,
+        address: action.payload,
+      };
+
+    case LOCATION_ACTIONS.SET_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
 
     default:
@@ -207,20 +207,21 @@ export function LocationsProvider({ children }) {
 
   const contextData = {
     state,
+    getCountries,
     dispatch,
     loading: state.loading,
+    countries: state.countries,
     error: state.error,
     addCountry,
-    countries: state.countries,
     deleteCountry,
+    addCityForCountry,
+    editCity,
+    deleteCity,
+    getCities,
+    cities: state.cities,
     getUserAddress,
     address: state.address,
     addAddress,
-    addCityForCountry,
-    getCities,
-    cities: state.cities,
-    editCity,
-    deleteCity,
   };
   return (
     <LocationsContext.Provider value={contextData}>
