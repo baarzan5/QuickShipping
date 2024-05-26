@@ -54,7 +54,7 @@ const UserAddressModal = ({
           orderedAt: new Date(),
         };
         
-        await handleOrder(orderData, user, totalMoney, cart);
+        await handleOrder(orderData, user, totalMoney);
         alert("داواکاریەکەت بەسەرکەوتووی کرا");
         setShowUserAddressModal(false);
       }

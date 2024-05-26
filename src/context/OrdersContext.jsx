@@ -6,6 +6,9 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  onSnapshot,
+  orderBy,
+  query,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
@@ -14,8 +17,7 @@ const OrdersContext = createContext();
 
 const ordersInitialState = {
   loading: true,
-  productOrders: [],
-  balanceOrders: [],
+  orders: [],
   error: null,
 };
 
@@ -26,18 +28,11 @@ function ordersReducer(state, action) {
         ...state,
       };
 
-    case ORDERSACTIONS.SET_PRODUCT_ORDERS:
+    case ORDERSACTIONS.SET_ORDERS:
       return {
         loading: false,
-        productOrders: action.payload,
         ...state,
-      };
-
-    case ORDERSACTIONS.SET_BALANCE_ORDERS:
-      return {
-        loading: false,
-        balanceOrders: action.payload,
-        ...state,
+        orders: action.payload,
       };
 
     case ORDERSACTIONS.SET_ERROR:
@@ -55,7 +50,31 @@ function ordersReducer(state, action) {
 export function OrdersProvider({ children }) {
   const [state, dispatch] = useReducer(ordersReducer, ordersInitialState);
 
-  const handleOrder = async (orderData, user, totalMoney, cart) => {
+  const getOrders = async () => {
+    try {
+      const ordersCollection = collection(db, "orders");
+      onSnapshot(
+        query(ordersCollection, orderBy("orderedAt", "desc")),
+        (snapshot) => {
+          const orders = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          // console.log({orders});
+          dispatch({ type: ORDERSACTIONS.SET_ORDERS, payload: orders });
+        }
+      );
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const handleOrder = async (orderData, user, totalMoney) => {
     try {
       const ordersCollection = collection(db, "orders");
       await addDoc(ordersCollection, orderData);
@@ -82,8 +101,7 @@ export function OrdersProvider({ children }) {
   const contextData = {
     state,
     dispatch,
-    productOrders: state.productOrders,
-    balanceOrders: state.balanceOrders,
+    orders: state.orders,
     error: state.error,
     handleOrder,
   };

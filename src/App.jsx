@@ -29,6 +29,7 @@ import AddressPage from "./pages/AddressPage";
 import { LocationsProvider } from "./context/LocationsContext";
 import LocationsPage from "./pages/admin/LocationsPage";
 import CountryPage from "./pages/admin/CountryPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
                       />
                       <Route path="/cart" element={<CartPage />} />
                       <Route path="/address" element={<AddressPage />} />
+                      <Route path="/orders" element={<MyOrdersPage />} />
 
                       {/* Admin Panel */}
                       <Route path="/admin/home" element={<AdminPage />} />

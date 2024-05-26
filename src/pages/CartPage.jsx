@@ -6,13 +6,13 @@ import { IoIosAdd } from "react-icons/io";
 import { FormatMoney } from "../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import UserAddressModal from "../components/modals/UserAddressModal";
 
 const CartPage = () => {
   const { user } = useAuth();
-  const { deleteProductFromCart, getUserCart, cart } = useProducts();
+  const { getUserCart, cart, deleteProductFromCart } = useProducts();
   const [orderNote, setOrderNote] = useState("");
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
 
