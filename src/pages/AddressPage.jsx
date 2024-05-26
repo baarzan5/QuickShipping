@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import AddAddressModal from "../components/modals/AddAddressModal";
 import { useLocations } from "../context/LocationsContext";
+import { BiEdit } from "react-icons/bi";
+import { PiTrash } from "react-icons/pi";
+import EditAddressModal from "../components/modals/EditAddressModal";
 
 const AddressPage = () => {
   const { user } = useAuth();
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
-  const { getUserAddress, address, countries, getCountries } = useLocations();
+  const { getUserAddress, address, countries, getCountries, deleteAddress } =
+    useLocations();
+  const [showEditAddressModal, setShowEditAddressModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -48,6 +53,35 @@ const AddressPage = () => {
                   key={index}
                   className="w-[250px] p-2 border border-[#e4e4e5] rounded-md flex flex-col justify-end items-end gap-2.5"
                 >
+                  <div className="flex flex-row-reverse justify-between items-center w-full">
+                    <button
+                      title="دەستکاری کردنی ناونیشان"
+                      onClick={() =>
+                        setShowEditAddressModal(!showEditAddressModal)
+                      }
+                      className="bg-blue-600 text-white p-1 rounded-full hover:bg-blue-700 active:scale-95 transform transition-all ease-in-out duration-100"
+                    >
+                      <BiEdit size={25} />
+                    </button>
+
+                    {showEditAddressModal && (
+                      <EditAddressModal
+                        showEditAddressModal={showEditAddressModal}
+                        setShowEditAddressModal={setShowEditAddressModal}
+                        userEmail={user.email}
+                        addressInfo={address}
+                      />
+                    )}
+
+                    <button
+                      title="سڕینەوەی ناونیشان"
+                      onClick={() => deleteAddress(user.email, address.id)}
+                      className="bg-red-600 text-white p-1 rounded-full hover:bg-red-700 active:scale-95 transform transition-all ease-in-out duration-100"
+                    >
+                      <PiTrash size={25} />
+                    </button>
+                  </div>
+
                   <div className="flex flex-row-reverse gap-2">
                     <strong>: وڵات</strong>
                     <p>{address.country.countryName}</p>

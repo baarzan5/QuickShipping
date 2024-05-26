@@ -205,6 +205,26 @@ export function LocationsProvider({ children }) {
     }
   };
 
+  const editAddress = async (userEmail, addressData, addressId) => {
+    try {
+      const userAddressDoc = doc(db, `users/${userEmail}/address`, addressId);
+      await updateDoc(userAddressDoc, addressData);
+    } catch (error) {
+      dispatch({ type: LOCATION_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const deleteAddress = async (userEmail, addressId) => {
+    try {
+      const userAddressDoc = doc(db, `users/${userEmail}/address`, addressId);
+      await deleteDoc(userAddressDoc, addressId);
+    } catch (error) {
+      dispatch({ type: LOCATION_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const contextData = {
     state,
     getCountries,
@@ -222,6 +242,8 @@ export function LocationsProvider({ children }) {
     getUserAddress,
     address: state.address,
     addAddress,
+    editAddress,
+    deleteAddress,
   };
   return (
     <LocationsContext.Provider value={contextData}>
