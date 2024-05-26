@@ -37,7 +37,7 @@ const ProfilePage = () => {
                 <p className="pt-3 text-gray-500">د.ع</p>
               </div>
               <h4>
-                سەرفکردوو{" "}
+                باڵانسی سەرفکردوو{" "}
                 <span className="text-lg font-semibold">
                   {FormatMoney(user.userMoneySpent)}
                 </span>{" "}

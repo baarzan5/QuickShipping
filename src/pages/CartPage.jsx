@@ -8,13 +8,13 @@ import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import UserAddressModal from "../components/modals/UserAddressModal";
 
 const CartPage = () => {
   const { user } = useAuth();
-  const [showAddAddress, setShowAddAddress] = useState(false);
-  const { deleteProductFromCart, getUserCart, cart, handleOrder } =
-    useProducts();
+  const { deleteProductFromCart, getUserCart, cart } = useProducts();
   const [orderNote, setOrderNote] = useState("");
+  const [showUserAddressModal, setShowUserAddressModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -205,13 +205,24 @@ const CartPage = () => {
               <button
                 onClick={() => {
                   user?.userMoney >= totalMoney
-                    ? setShowAddAddress(!showAddAddress)
+                    ? setShowUserAddressModal(!showUserAddressModal)
                     : alert("باڵانسی پێویستت نییە بۆ داواکردنی ئەم بەرهەمانە");
                 }}
                 className="bg-[#FF6F00] w-[150px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
               >
                 پشکنین
               </button>
+
+              {showUserAddressModal && (
+                <UserAddressModal
+                  showUserAddressModal={showUserAddressModal}
+                  setShowUserAddressModal={setShowUserAddressModal}
+                  user={user}
+                  cart={cart}
+                  orderNote={orderNote}
+                  totalMoney={totalMoney}
+                />
+              )}
             </div>
           </>
         ) : (

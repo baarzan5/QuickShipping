@@ -1,6 +1,13 @@
 import { createContext, useReducer, useEffect, useContext } from "react";
 import { ORDERSACTIONS } from "../actions/ordersActions";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
 const OrdersContext = createContext();
@@ -48,10 +55,24 @@ function ordersReducer(state, action) {
 export function OrdersProvider({ children }) {
   const [state, dispatch] = useReducer(ordersReducer, ordersInitialState);
 
-  const handleOrder = async (orderData) => {
+  const handleOrder = async (orderData, user, totalMoney, cart) => {
     try {
       const ordersCollection = collection(db, "orders");
       await addDoc(ordersCollection, orderData);
+
+      // Update user money and user money spent
+      const userDoc = doc(db, "users", user.email);
+      await updateDoc(userDoc, {
+        userMoney: user?.userMoney - totalMoney,
+        userMoneySpent: user?.userMoneySpent + totalMoney,
+      });
+
+      // Delete products from cart
+      const userCartCollection = collection(db, `users/${user.email}/cart`);
+      const userCartSnapshot = await getDocs(userCartCollection);
+      userCartSnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
