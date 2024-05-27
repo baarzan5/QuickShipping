@@ -45,7 +45,7 @@ const CategoryProducts = ({ categoryName, categorySlug, products }) => {
         >
           {products.slice(0, 6).map((product, index) => (
             <SwiperSlide key={index}>
-              <ProductCard product={product} />
+              <ProductCard product={product} productOrder={null} />
             </SwiperSlide>
           ))}
         </Swiper>

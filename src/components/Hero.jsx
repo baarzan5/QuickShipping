@@ -5,10 +5,12 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import UserAddressModal from "./modals/UserAddressModal";
 import { FormatMoney } from "../utils/FormatMoney";
+import { useOrders } from "../context/OrdersContext";
 
 const Hero = ({ product }) => {
   const { user } = useAuth();
   const { toggleWishList, getUserWishLists, wishLists } = useProducts();
+  const { orders } = useOrders();
   const [totalPrice, setTotalPrice] = useState(0);
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
 
@@ -165,11 +167,15 @@ const Hero = ({ product }) => {
       <div className="relative flex flex-col justify-end items-end gap-3">
         <h2 className="text-xl font-semibold">مامەڵەکانی ئەمڕۆ</h2>
 
-        {/* <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-4">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </div> */}
+        <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-4">
+          {orders
+            .filter((order) => order.orderType == "Product").slice(0, 3)
+            .flatMap((productOrder) =>
+              productOrder.cart.map((cartItem) => (
+                <ProductCard product={cartItem.product} />
+              ))
+            )}
+        </div>
       </div>
     </div>
   );

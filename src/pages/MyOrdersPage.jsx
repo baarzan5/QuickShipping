@@ -4,18 +4,7 @@ import DataTable from "react-data-table-component";
 import { useOrders } from "../context/OrdersContext";
 import { FormatMoney } from "../utils/FormatMoney";
 import { Link } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
-
-// Function to format Firestore Timestamp to 'DD/MM/YYYY'
-const formatDate = (timestamp) => {
-  const date = new Date(
-    timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-  );
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
+import { FormatDate } from "../utils/FormatDate";
 
 // Function to get the status from the orderStatus object
 const getStatus = (status) => {
@@ -55,7 +44,9 @@ const MyOrdersPage = () => {
     {
       name: "ڕێککەوت",
       selector: (row) => row.date,
-      cell: (row) => <strong className="text-base">{row.date}</strong>,
+      cell: (row) => (
+        <strong className="text-base">{row.date}</strong>
+      ),
     },
     {
       name: "ناوی بەرهەم",
@@ -79,7 +70,7 @@ const MyOrdersPage = () => {
         productName: cartItem.product.productName,
         quantity: cartItem.quantity,
         totalPrice: cartItem.totalPrice,
-        date: formatDate(order.orderedAt),
+        date: FormatDate(order.orderedAt),
         status: getStatus(order.orderStatus),
       }))
     );
