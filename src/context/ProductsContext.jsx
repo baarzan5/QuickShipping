@@ -137,13 +137,10 @@ export function ProductsProvider({ children }) {
     }
   };
 
-  const addToCart = async (user, product) => {
+  const addToCart = async (user, cartData) => {
     try {
       const userCartCollection = collection(db, `users/${user.email}/cart`);
-      await addDoc(userCartCollection, {
-        product,
-        addedAt: new Date(),
-      });
+      await addDoc(userCartCollection, cartData);
       alert("ئەم بەرهەمە بەسەرکەوتووی زیادکرا بۆ لیستی سەبەتەی کڕین");
     } catch (error) {
       dispatch({ type: PRODUCTSACTIONS.SET_ERROR, payload: error.message });

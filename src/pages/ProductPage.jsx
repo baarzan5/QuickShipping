@@ -8,6 +8,7 @@ import { CgMathMinus } from "react-icons/cg";
 import { useOrders } from "../context/OrdersContext";
 import { ORDERSACTIONS } from "../actions/ordersActions";
 import AddToCartModal from "../components/modals/AddToCartModal";
+import UserAddressModal from "../components/modals/UserAddressModal";
 
 const ProductPage = () => {
   const { productId } = useParams();
@@ -18,13 +19,8 @@ const ProductPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { handleOrder, dispatch } = useOrders();
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
-  const [selectedProductAttributes, setSelectedProductAttributes] = useState(
-    []
-  );
-  const [selectedProductSubAttributes, setSelectedProductSubAttributes] =
-    useState([]);
+  const [showUserAddressModal, setShowUserAddressModal] = useState(false);
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id == productId);
@@ -41,6 +37,10 @@ const ProductPage = () => {
     }
   }, [user]);
 
+  const isWishList = wishLists.some(
+    (wishList) => wishList.product.id == product?.id
+  );
+
   useEffect(() => {
     if (product) {
       const price =
@@ -52,10 +52,6 @@ const ProductPage = () => {
       setTotalPrice(price);
     }
   }, [product, quantity]);
-
-  const isWishList = wishLists.some(
-    (wishList) => wishList.product.id == product?.id
-  );
 
   const handleImageSelect = (index) => {
     setSelectedImageIndex(index);
@@ -70,33 +66,6 @@ const ProductPage = () => {
   let increaseQuantity = () => {
     if (quantity) {
       setQuantity(quantity + 1);
-    }
-  };
-
-  const handleOrderProduct = async () => {
-    try {
-      const orderData = {
-        orderType: "Product",
-        order: {
-          product,
-          quantity,
-          user,
-          orderStatus: {
-            isPending: true,
-            isConfirmed: false,
-            isOnDelivered: false,
-            isDelivered: false,
-            isCompleted: false,
-            isCancelled: false,
-          },
-          totalPrice,
-        },
-        orderedAt: new Date(),
-      };
-      await handleOrder(orderData);
-    } catch (error) {
-      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
     }
   };
 
@@ -283,9 +252,9 @@ const ProductPage = () => {
 
               <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-3">
                 <button
-                  onClick={
+                  onClick={() =>
                     user
-                      ? () => toggleWishList(user, product)
+                      ? toggleWishList(user, product)
                       : alert("تکایە سەرەتا بچۆ ژووەرەوە")
                   }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
@@ -296,9 +265,9 @@ const ProductPage = () => {
                 </button>
 
                 <button
-                  onClick={
+                  onClick={() =>
                     user
-                      ? () => setShowAddToCartModal(!showAddToCartModal)
+                      ? setShowAddToCartModal(!showAddToCartModal)
                       : alert("تکایە سەرەتا بچۆ ژوورەوە")
                   }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
@@ -315,15 +284,26 @@ const ProductPage = () => {
                 )}
 
                 <button
-                  onClick={
+                  onClick={() =>
                     user
-                      ? handleOrderProduct
+                      ? setShowUserAddressModal(!showUserAddressModal)
                       : alert("تکایە سەرەتا بچۆ ژوورەوە")
                   }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
                 >
                   داواکردن
                 </button>
+
+                {showUserAddressModal && (
+                  <UserAddressModal
+                    showUserAddressModal={showUserAddressModal}
+                    setShowUserAddressModal={setShowUserAddressModal}
+                    user={user}
+                    cart={product}
+                    orderNote={""}
+                    totalMoney={totalPrice}
+                  />
+                )}
               </div>
             </div>
           </div>

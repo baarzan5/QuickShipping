@@ -1,19 +1,32 @@
-import React, { useEffect } from "react";
-import ProductImage from "../../public/product_image.jpg";
+import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { useProducts } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import UserAddressModal from "./modals/UserAddressModal";
+import { FormatMoney } from "../utils/FormatMoney";
 
 const Hero = ({ product }) => {
   const { user } = useAuth();
   const { toggleWishList, getUserWishLists, wishLists } = useProducts();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [showUserAddressModal, setShowUserAddressModal] = useState(false);
 
   useEffect(() => {
     if (user) {
       getUserWishLists(user);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (product) {
+      const price =
+        product.discountType === "Flat"
+          ? product.productPrice - product.productDiscount
+          : product.productPrice * (1 - product.productDiscount / 100);
+      setTotalPrice(price);
+    }
+  }, [product]);
 
   const isWishListed = wishLists.some(
     (wishList) => wishList.product.id == product.id
@@ -43,9 +56,68 @@ const Hero = ({ product }) => {
             {product.productDescription.slice(0, 300)}
           </Link>
 
+          {/* <Link
+            to={`/product/${product.id}`}
+            className="text-lg font-semibold text-right max-w-[400px] hover:underline hover:underline-offset-2"
+          >
+            {FormatMoney(product.productPrice)} IQD
+          </Link> */}
+
+          <div className="flex justify-center items-center gap-1">
+            {product.productDiscount ? (
+              <>
+                {product.discountType == "Flat" ? (
+                  <div className="flex flex-col justify-center items-center gap-2">
+                    <div className="flex justify-center items-center gap-2">
+                      <p className="text-2xl text-[#FF6F00]">
+                        {FormatMoney(
+                          product.productPrice - product.productDiscount
+                        )}{" "}
+                        IQD
+                      </p>
+                      <p className="text-[#969393] text-sm line-through">
+                        {FormatMoney(product.productDiscount)}IQD
+                      </p>
+                    </div>
+                    <p className="text-xl">
+                      {FormatMoney(
+                        product.productPrice - product.productDiscount
+                      )}{" "}
+                      IQD
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col justify-center items-center gap-2">
+                    <div className="flex justify-center items-center gap-2">
+                      <p className="text-2xl text-[#FF6F00]">
+                        {FormatMoney(
+                          product.productPrice *
+                            (1 - product.productDiscount / 100)
+                        )}{" "}
+                        IQD
+                      </p>
+                      <p className="text-[#969393] text-sm line-through">
+                        {FormatMoney(product.productPrice)} IQD
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col justify-center items-center gap-2">
+                <p className="text-xl">{FormatMoney(product.productPrice)}</p>
+                <p>{FormatMoney(product.productPrice)} IQD</p>
+              </div>
+            )}
+          </div>
+
           <div className="flex flex-wrap flex-row-reverse justify-center items-center gap-3">
             <button
-              onClick={() => toggleWishList(user, product)}
+              onClick={() =>
+                user
+                  ? toggleWishList(user, product)
+                  : alert("تکایە سەرەتا بچۆ ژوورەوە")
+              }
               className="bg-[#FF6F00] py-2 px-3 text-white rounded-md active:scale-95 transform transition-all ease-in-out duration-100 hover:bg-[#e47017]"
             >
               {isWishListed
@@ -53,9 +125,39 @@ const Hero = ({ product }) => {
                 : "زیادی بکە بۆ لیستی دڵخوازەکان"}
             </button>
 
-            <button className="bg-[#FF6F00] py-2 px-3 text-white rounded-md active:scale-95 transform transition-all ease-in-out duration-100 hover:bg-[#e47017]">
+            <button
+              onClick={() =>
+                user
+                  ? setShowUserAddressModal(!showUserAddressModal)
+                  : alert("تکایە سەرەتا بچۆ ژوورەوە")
+              }
+              className="bg-[#FF6F00] py-2 px-3 text-white rounded-md active:scale-95 transform transition-all ease-in-out duration-100 hover:bg-[#e47017]"
+            >
               ئێستا بیکڕە
             </button>
+
+            {showUserAddressModal && (
+              <>
+                {user.userMoney >= product.productPrice ? (
+                  <UserAddressModal
+                    showUserAddressModal={showUserAddressModal}
+                    setShowUserAddressModal={setShowUserAddressModal}
+                    user={user}
+                    cart={[
+                      {
+                        product,
+                        totalPrice,
+                        quantity: 1,
+                      },
+                    ]}
+                    orderNote={""}
+                    totalMoney={product.productPrice}
+                  />
+                ) : (
+                  alert("باڵانسی پێویستت نییە بۆ داواکردنی ئەم بەرهەمە")
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

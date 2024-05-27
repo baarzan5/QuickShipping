@@ -26,8 +26,14 @@ const UserAddressModal = ({
     }
   }, [user]);
 
-  const [activeAddress, setActiveAddress] = useState(address[0]);
+  const [activeAddress, setActiveAddress] = useState(null);
   const { handleOrder, dispatch } = useOrders();
+
+  useEffect(() => {
+    if (address.length > 0) {
+      setActiveAddress(address[0]);
+    }
+  }, [address]);
 
   const handleAddressClick = (selectedAddress) => {
     setActiveAddress(selectedAddress);
@@ -35,7 +41,7 @@ const UserAddressModal = ({
 
   const handleOrderProduct = async () => {
     try {
-      if (cart) {
+      if (activeAddress) {
         const orderData = {
           orderType: "Product",
           cart,
@@ -53,10 +59,12 @@ const UserAddressModal = ({
           totalMoney,
           orderedAt: new Date(),
         };
-        
-        await handleOrder(orderData, user, totalMoney);
-        alert("داواکاریەکەت بەسەرکەوتووی کرا");
+
+        await handleOrder(orderData, user, totalMoney, cart);
+        alert("داواکاریەکەت بەسەرکەوتووی نێردرا");
         setShowUserAddressModal(false);
+      } else {
+        alert("تکایە ناونیشانەکەت هەڵبژێرە");
       }
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });

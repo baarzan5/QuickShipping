@@ -46,6 +46,20 @@ const AddToCartModal = ({
     }
   };
 
+  const handleAddToCart = async () => {
+    try {
+      const cartData = {
+        product,
+        quantity,
+        totalPrice,
+        addedAt: new Date(),
+      };
+      await addToCart(user, cartData);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <div
       className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-full h-screen bg-black/50 backdrop-blur-sm"
@@ -187,7 +201,7 @@ const AddToCartModal = ({
           </div>
 
           <button
-            onClick={() => addToCart(user, { product, quantity, totalPrice })}
+            onClick={handleAddToCart}
             className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
           >
             زیادبکە بۆ لیستی سەبەتەی کڕین

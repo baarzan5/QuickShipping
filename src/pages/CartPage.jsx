@@ -28,8 +28,8 @@ const CartPage = () => {
       const newQuantity = quantity - 1;
       const newTotalPrice = newQuantity * unitPrice;
       await updateDoc(productDoc, {
-        "product.quantity": newQuantity,
-        "product.totalPrice": newTotalPrice,
+        quantity: newQuantity,
+        totalPrice: newTotalPrice,
       });
       getUserCart(user);
     }
@@ -41,8 +41,8 @@ const CartPage = () => {
       const newQuantity = quantity + 1;
       const newTotalPrice = newQuantity * unitPrice;
       await updateDoc(productDoc, {
-        "product.quantity": newQuantity,
-        "product.totalPrice": newTotalPrice,
+        quantity: newQuantity,
+        totalPrice: newTotalPrice,
       });
       getUserCart(user);
     }
@@ -73,10 +73,10 @@ const CartPage = () => {
     },
     {
       name: "نرخ",
-      selector: (row) => row.price,
-      format: (row) => FormatMoney(row.price),
+      selector: (row) => row.totalPrice,
+      format: (row) => FormatMoney(row.totalPrice),
       cell: (row) => (
-        <strong className="text-lg">{FormatMoney(row.price)} IQD</strong>
+        <strong className="text-lg">{FormatMoney(row.totalPrice)} IQD</strong>
       ),
     },
     {
@@ -87,7 +87,7 @@ const CartPage = () => {
           {row.quantity === 1 ? (
             <button
               disabled
-              className="bg-[#FF6F00]/50 text-white rounded-full p-1 hover:bg-[#FF6F00]/45 active:scale-95 transform transition-all duration-100 ease-in-out"
+              className="bg-[#FF6F00]/50 text-white rounded-full p-1 hover:bg-[#FF6F00]/45 transform transition-all duration-100 ease-in-out"
             >
               <CgMathMinus size={25} />
             </button>
@@ -132,16 +132,16 @@ const CartPage = () => {
 
   const data = cart.map((cartItem) => ({
     id: cartItem.id, // Ensure this is the correct unique identifier for each cart item
-    productId: cartItem.product.product.id,
-    productThumbnailImageURL: cartItem.product.product.productThumbnailImageURL,
-    productName: cartItem.product.product.productName,
-    quantity: cartItem.product.quantity,
-    price: cartItem.product.product.productPrice, // This is the unit price
-    totalPrice: cartItem.product.totalPrice,
+    productId: cartItem.product.id,
+    productThumbnailImageURL: cartItem.product.productThumbnailImageURL,
+    productName: cartItem.product.productName,
+    quantity: cartItem.quantity,
+    price: cartItem.product.productPrice, // This is the unit price
+    totalPrice: cartItem.totalPrice,
   }));
 
   const totalMoney = cart.reduce(
-    (acc, cartItem) => acc + cartItem.product.totalPrice,
+    (acc, cartItem) => acc + cartItem.totalPrice,
     0
   );
 
@@ -177,8 +177,9 @@ const CartPage = () => {
       <div className="w-[95%] p-2 flex flex-col text-right gap-4 mainShadow rounded-md mx-auto">
         <div className="flex flex-row-reverse justify-between items-center w-full px-2 pb-1.5 border-b border-b-[#e4e4e5]">
           <h2 className="text-xl font-semibold">سەبەتەکەم</h2>
+
           <strong className="text-xl">
-            باڵانسەکەم : {FormatMoney(user?.userMoney)}د.ع
+            باڵانسەکەم : {FormatMoney(user?.userMoney)} د.ع
           </strong>
         </div>
 

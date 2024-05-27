@@ -53,7 +53,7 @@ const MyWishListsPage = () => {
                 to={`/product/${wishList.product.id}`}
                 className="flex flex-row-reverse justify-between items-center px-2 w-full"
               >
-                <p className="text-lg font-semibold">
+                <p className="text-lg font-semibold hover:underline hover:underline-offset-4">
                   {wishList.product.productName}
                 </p>
                 <p className="text-xl font-bold">

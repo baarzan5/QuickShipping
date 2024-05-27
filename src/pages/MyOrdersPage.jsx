@@ -75,10 +75,10 @@ const MyOrdersPage = () => {
     .flatMap((order) =>
       order.cart.map((cartItem) => ({
         id: order.id,
-        productId: cartItem.product.product.id,
-        productName: cartItem.product.product.productName,
-        quantity: cartItem.product.product.quantity,
-        totalPrice: cartItem.product.product.totalPrice,
+        productId: cartItem.id,
+        productName: cartItem.product.productName,
+        quantity: cartItem.quantity,
+        totalPrice: cartItem.totalPrice,
         date: formatDate(order.orderedAt),
         status: getStatus(order.orderStatus),
       }))

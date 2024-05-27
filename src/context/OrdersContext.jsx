@@ -74,24 +74,26 @@ export function OrdersProvider({ children }) {
     getOrders();
   }, []);
 
-  const handleOrder = async (orderData, user, totalMoney) => {
+  const handleOrder = async (orderData, user, totalMoney, cart) => {
     try {
       const ordersCollection = collection(db, "orders");
       await addDoc(ordersCollection, orderData);
 
-      // Update user money and user money spent
-      const userDoc = doc(db, "users", user.email);
-      await updateDoc(userDoc, {
-        userMoney: user?.userMoney - totalMoney,
-        userMoneySpent: user?.userMoneySpent + totalMoney,
-      });
+      if (cart) {
+        // Update user money and user money spent
+        const userDoc = doc(db, "users", user.email);
+        await updateDoc(userDoc, {
+          userMoney: user?.userMoney - totalMoney,
+          userMoneySpent: user?.userMoneySpent + totalMoney,
+        });
 
-      // Delete products from cart
-      const userCartCollection = collection(db, `users/${user.email}/cart`);
-      const userCartSnapshot = await getDocs(userCartCollection);
-      userCartSnapshot.forEach(async (doc) => {
-        await deleteDoc(doc.ref);
-      });
+        // Delete products from cart
+        const userCartCollection = collection(db, `users/${user.email}/cart`);
+        const userCartSnapshot = await getDocs(userCartCollection);
+        userCartSnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+      }
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
