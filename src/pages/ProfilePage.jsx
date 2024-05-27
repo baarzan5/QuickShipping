@@ -86,7 +86,7 @@ const ProfilePage = () => {
               className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <LiaMoneyCheckAltSolid size={30} />
-              <h3 className="text-lg">داواکاریەکانی باڵانس</h3>
+              <h3 className="text-lg">داواکاریەکانی زیادکردنی باڵانس</h3>
             </Link>
 
             <Link

@@ -30,6 +30,7 @@ import { LocationsProvider } from "./context/LocationsContext";
 import LocationsPage from "./pages/admin/LocationsPage";
 import CountryPage from "./pages/admin/CountryPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
+import BalanceOrdersPage from "./pages/BalanceOrdersPage";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
                       <Route path="/cart" element={<CartPage />} />
                       <Route path="/address" element={<AddressPage />} />
                       <Route path="/orders" element={<MyOrdersPage />} />
+                      <Route path="/balance-orders" element={<BalanceOrdersPage />} />
 
                       {/* Admin Panel */}
                       <Route path="/admin/home" element={<AdminPage />} />

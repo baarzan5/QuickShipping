@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { IoAddCircleOutline, IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 import { hideScrollBar } from "../../hooks/hideScrollBar";
 import { useLocations } from "../../context/LocationsContext";
 import { useOrders } from "../../context/OrdersContext";
 import { ORDERSACTIONS } from "../../actions/ordersActions";
 import { FormatMoney } from "../../utils/FormatMoney";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
 import { IoIosAdd } from "react-icons/io";
 import AddAddressModal from "./AddAddressModal";
 

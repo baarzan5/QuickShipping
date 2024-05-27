@@ -100,12 +100,23 @@ export function OrdersProvider({ children }) {
     }
   };
 
+  const deleteBalanceOrder = async (orderId) => {
+    try {
+      const orderDoc = doc(db, "orders", orderId);
+      await deleteDoc(orderDoc, orderId);
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const contextData = {
     state,
     dispatch,
     orders: state.orders,
     error: state.error,
     handleOrder,
+    deleteBalanceOrder,
   };
   return (
     <OrdersContext.Provider value={contextData}>
