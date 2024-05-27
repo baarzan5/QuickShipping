@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import UserAddressModal from "./modals/UserAddressModal";
 import { FormatMoney } from "../utils/FormatMoney";
 import { useOrders } from "../context/OrdersContext";
+import AddToCartModal from "./modals/AddToCartModal";
 
 const Hero = ({ product }) => {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ const Hero = ({ product }) => {
   const { orders } = useOrders();
   const [totalPrice, setTotalPrice] = useState(0);
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -130,6 +132,25 @@ const Hero = ({ product }) => {
             <button
               onClick={() =>
                 user
+                  ? setShowAddToCartModal(!showAddToCartModal)
+                  : alert("تکایە سەرەتا بچۆ ژوورەوە")
+              }
+              className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
+            >
+              زیادبکە بۆ لیستی سەبەتەی کڕین
+            </button>
+
+            {showAddToCartModal && (
+              <AddToCartModal
+                showAddToCartModal={showAddToCartModal}
+                setShowAddToCartModal={setShowAddToCartModal}
+                product={product}
+              />
+            )}
+
+            <button
+              onClick={() =>
+                user
                   ? setShowUserAddressModal(!showUserAddressModal)
                   : alert("تکایە سەرەتا بچۆ ژوورەوە")
               }
@@ -169,7 +190,8 @@ const Hero = ({ product }) => {
 
         <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-4">
           {orders
-            .filter((order) => order.orderType == "Product").slice(0, 3)
+            .filter((order) => order.orderType == "Product")
+            .slice(0, 3)
             .flatMap((productOrder) =>
               productOrder.cart.map((cartItem) => (
                 <ProductCard product={cartItem.product} />
