@@ -8,12 +8,12 @@ import { FormatDate } from "../utils/FormatDate";
 
 // Function to get the status from the orderStatus object
 const getStatus = (status) => {
-  if (status.isPending) return "چاوەڕێ بە";
-  if (status.isCompleted) return "تەواوبوو";
-  if (status.isConfirmed) return "وەرگیرا";
+  if (status.isPending) return "لە چاوەڕوانیدا";
+  if (status.isConfirmed) return "پەسەندکرا";
+  if (status.isOnDelivered) return "لە گەیاندنە";
+  if (status.isDelivered) return "هاتە گەیاندن";
+  if (status.isCompleted) return "جێ بەجێکرا";
   if (status.isCancelled) return "ڕەتکرایەوە";
-  if (status.isDelivered) return "گەیێنرا";
-  if (status.isOnDelivered) return "لەکاتی گەیاندن";
 };
 
 const MyOrdersPage = () => {
@@ -110,12 +110,19 @@ const MyOrdersPage = () => {
             <div className="flex flex-row-reverse justify-between items-center w-full px-2 pb-1.5 border-b border-b-[#e4e4e5]">
               <h2 className="text-xl font-semibold">داواکاریەکانم</h2>
               <select
-                // onClick={() => setShowAddAddressModal(!showAddAddressModal)}
-                className="border border-[#e4e4e5] rounded-md p-2 transform transition-all duration-100 ease-in-out active:scale-95"
+                className="text-right border border-[#e4e4e5] rounded-md p-2 transform transition-all duration-100 ease-in-out active:scale-95"
               >
-                <option selected disabled>
+                <option selected>
                   <p>ڕیزکردن بەپێی دۆخی گەیاندن</p>
                 </option>
+
+                <option value="">لە چاوەڕوانیدا</option>
+                <option value="">پەسەندکرا</option>
+                <option value="">لە گەیاندنە</option>
+                <option value="">هاتە گەیاندن</option>
+                <option value="">جێ بەجێکرا</option>
+                <option value="">ڕەتکرایەوە</option>
+
               </select>
             </div>
 

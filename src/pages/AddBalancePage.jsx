@@ -26,8 +26,12 @@ const AddBalancePage = () => {
             >
               <button
                 onClick={() => {
-                  setIsSelectedPaymentMethod(!isSelectedPaymentMethod);
-                  setPaymentMethod(paymentMethod);
+                  user
+                    ? [
+                        setIsSelectedPaymentMethod(!isSelectedPaymentMethod),
+                        setPaymentMethod(paymentMethod),
+                      ]
+                    : alert("تکایە سەرەتا بچۆ ژوورەوە");
                 }}
                 className="flex flex-row-reverse justify-start items-center gap-3 w-[350px] p-2 rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out active:scale-95"
               >
@@ -43,19 +47,13 @@ const AddBalancePage = () => {
         </div>
       </div>
 
-      {user ? (
-        <>
-          {isSelectedPaymentMethod && (
-            <PaymentMethodModal
-              isSelectedPaymentMethod={isSelectedPaymentMethod}
-              setIsSelectedPaymentMethod={setIsSelectedPaymentMethod}
-              paymentMethod={paymentMethod}
-              user={user}
-            />
-          )}
-        </>
-      ) : (
-        alert("تکایە سەرەتا بچۆ ژوورەوە")
+      {isSelectedPaymentMethod && (
+        <PaymentMethodModal
+          isSelectedPaymentMethod={isSelectedPaymentMethod}
+          setIsSelectedPaymentMethod={setIsSelectedPaymentMethod}
+          paymentMethod={paymentMethod}
+          user={user}
+        />
       )}
     </div>
   );

@@ -6,9 +6,17 @@ import { PiUsersThree } from "react-icons/pi";
 import { GoStar } from "react-icons/go";
 import { GiProfit } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { useOrders } from "../../context/OrdersContext";
+import { FormatMoney } from "../../utils/FormatMoney";
+import { FormatDate } from "../../utils/FormatDate";
 
 const AdminPage = () => {
   const { user, users } = useAuth();
+  const { orders } = useOrders();
+
+  const totalSales = orders
+    .filter((order) => order.orderType == "Product")
+    .reduce((acc, orderTotalMoney) => acc + orderTotalMoney.totalMoney, 0);
 
   return (
     <>
@@ -47,7 +55,9 @@ const AdminPage = () => {
                         />
                         <h3 className="text-xl font-semibold">Total sales</h3>
                       </div>
-                      <strong className="text-lg">20,000$</strong>
+                      <strong className="text-lg">
+                        {FormatMoney(totalSales)} IQD
+                      </strong>
                     </div>
 
                     <div className="w-full flex flex-col justify-center items-center gap-2 h-full border-r border-r-[#969393]/50">
@@ -69,7 +79,9 @@ const AdminPage = () => {
                         />
                         <h3 className="text-xl font-semibold">Total orders</h3>
                       </div>
-                      <strong className="text-lg">470,656</strong>
+                      <strong className="text-lg">
+                        {FormatMoney(orders.length)}
+                      </strong>
                     </div>
 
                     <div className="w-full flex flex-col justify-center items-center gap-2 h-full">
@@ -84,6 +96,7 @@ const AdminPage = () => {
                     </div>
                   </div>
 
+                  {/* 5 Last Orders */}
                   <div className="flex flex-col justify-center items-center w-full gap-3">
                     <div className="flex justify-between items-center w-full">
                       <h2 className="text-xl font-semibold">Last orders</h2>
@@ -101,22 +114,37 @@ const AdminPage = () => {
                         <td>Name</td>
                         <td>Id</td>
                         <td>Price</td>
-                        <td>Time</td>
+                        <td>Date</td>
                       </tr>
 
-                      <tr className="w-full border-b border-b-[#969393]/25 last:border-none p-1">
-                        <td>Men clothes</td>
-                        <td>asljdmkljLmsjnd1087370qkmxli</td>
-                        <td>15,000 IQD</td>
-                        <td>2h ago</td>
-                      </tr>
-
-                      <tr className="w-full border-b border-b-[#969393]/25 last:border-none p-1">
-                        <td>Men clothes</td>
-                        <td>asljdmkljLmsjnd1087370qkmxli</td>
-                        <td>15,000 IQD</td>
-                        <td>2h ago</td>
-                      </tr>
+                      {orders.map((order, index) => (
+                        <tr
+                          key={index}
+                          className="w-full border-b border-b-[#969393]/25 last:border-none p-1"
+                        >
+                          <td>
+                            <Link to={`/admin/order/${order.id}`}>
+                              {order.orderType == "Product"
+                                ? order.cart.flatMap(
+                                    (order) => order.product.productName
+                                  )
+                                : order.paymentMethod.paymentName}
+                            </Link>
+                          </td>
+                          <td>{order.id}</td>
+                          <td>
+                            {FormatMoney(
+                              order.orderType == "Product"
+                                ? order.cart.flatMap(
+                                    (order) => order.product.productPrice
+                                  )
+                                : order.balanceValue
+                            )}{" "}
+                            IQD
+                          </td>
+                          <td>{FormatDate(order.orderedAt)}</td>
+                        </tr>
+                      ))}
                     </table>
                   </div>
                 </div>

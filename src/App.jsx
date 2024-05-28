@@ -31,6 +31,8 @@ import LocationsPage from "./pages/admin/LocationsPage";
 import CountryPage from "./pages/admin/CountryPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import BalanceOrdersPage from "./pages/BalanceOrdersPage";
+import OrdersPage from "./pages/admin/OrdersPage";
+import OrderPage from "./pages/admin/OrderPage";
 
 function App() {
   return (
@@ -66,7 +68,10 @@ function App() {
                       <Route path="/cart" element={<CartPage />} />
                       <Route path="/address" element={<AddressPage />} />
                       <Route path="/orders" element={<MyOrdersPage />} />
-                      <Route path="/balance-orders" element={<BalanceOrdersPage />} />
+                      <Route
+                        path="/balance-orders"
+                        element={<BalanceOrdersPage />}
+                      />
 
                       {/* Admin Panel */}
                       <Route path="/admin/home" element={<AdminPage />} />
@@ -105,6 +110,16 @@ function App() {
                         excat
                         path="/admin/country/:countryId"
                         element={<CountryPage />}
+                      />
+                      <Route
+                        excat
+                        path="/admin/orders"
+                        element={<OrdersPage />}
+                      />
+                      <Route
+                        excat
+                        path="/admin/order/:orderId"
+                        element={<OrderPage />}
                       />
                     </Routes>
                     <Footer />

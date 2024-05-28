@@ -7,7 +7,7 @@ import { FormatDate } from "../utils/FormatDate";
 
 const BalanceOrdersPage = () => {
   const { user } = useAuth();
-  const { orders, deleteBalanceOrder } = useOrders();
+  const { orders, deleteOrder } = useOrders();
 
   return (
     <>
@@ -24,7 +24,7 @@ const BalanceOrdersPage = () => {
               {orders.filter((order) => order.orderType == "Balance" && order.user.email == user.email).length ==
               0 ? (
                 <strong className="text-2xl">
-                  هیچ داواکاریەکی باڵانست نییە
+                  هیچ داواکاریەکی باڵانست نەکردووە
                 </strong>
               ) : (
                 <div className="flex flex-row-reverse flex-wrap justify-start items-end gap-3">
@@ -42,7 +42,7 @@ const BalanceOrdersPage = () => {
 
                           <button
                             title="سڕینەوە"
-                            onClick={() => deleteBalanceOrder(balanceOrder.id)}
+                            onClick={() => deleteOrder(balanceOrder.id)}
                             className="rounded-full bg-[#FF0000] text-white p-1 hover:bg-red-600 active:scale-95 transform transition-all duration-100 ease-in-out"
                           >
                             <FiTrash2 size={25} />

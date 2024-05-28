@@ -43,7 +43,11 @@ const ProductCard = ({ product }) => {
       <div className="absolute top-0 right-0 w-full p-2 flex flex-row-reverse justify-between items-center">
         {isWishListed ? (
           <button
-            onClick={() => toggleWishList(user, product)}
+            onClick={() =>
+              user
+                ? toggleWishList(user, product)
+                : alert("تکایە سەرەتا بچۆ ژوورەوە")
+            }
             className="bg-black/50 rounded-full p-1 text-white active:scale-95 transform transition-all ease-in-out duration-200"
           >
             <IoIosHeart
@@ -54,7 +58,11 @@ const ProductCard = ({ product }) => {
           </button>
         ) : (
           <button
-            onClick={() => toggleWishList(user, product)}
+            onClick={() =>
+              user
+                ? toggleWishList(user, product)
+                : alert("تکایە سەرەتا بچۆ ژوورەوە")
+            }
             className="bg-black/50 rounded-full p-1 text-white active:scale-95 transform transition-all ease-in-out duration-200"
           >
             <IoIosHeartEmpty size={30} title="زیادبکە بۆ لیستی دڵخوازەکانم" />
@@ -62,7 +70,7 @@ const ProductCard = ({ product }) => {
         )}
 
         <button
-          onClick={() => setShowAddToCartModal(!showAddToCartModal)}
+          onClick={() => user ? setShowAddToCartModal(!showAddToCartModal) : alert("تکایە سەرەتا بچۆ ژوورەوە")}
           className="bg-black/50 rounded-full p-1.5 text-white active:scale-95 transform transition-all ease-in-out duration-200"
         >
           <FiShoppingCart size={25} title="زیادبکە بۆ سەبەتەی کڕین" />

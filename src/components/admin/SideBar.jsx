@@ -68,14 +68,14 @@ const SideBar = () => {
           </Link>
 
           <Link
-            to="/admin/home"
+            to="/admin/orders"
             className="flex justify-center items-center gap-1 hover:bg-[#969393]/25 rounded-md active:scale-95 transform transition-all ease-in-out duration-100 p-2"
           >
             <GrNotes size={25} /> Orders
           </Link>
 
           <Link
-            to="/admin/home"
+            to="/admin/customers"
             className="flex justify-center items-center gap-1 hover:bg-[#969393]/25 rounded-md active:scale-95 transform transition-all ease-in-out duration-100 p-2"
           >
             <PiUsersThree size={25} /> Customers

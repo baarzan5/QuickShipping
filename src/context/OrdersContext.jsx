@@ -100,10 +100,31 @@ export function OrdersProvider({ children }) {
     }
   };
 
-  const deleteBalanceOrder = async (orderId) => {
+  const deleteOrder = async (orderId) => {
     try {
       const orderDoc = doc(db, "orders", orderId);
       await deleteDoc(orderDoc, orderId);
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const addBalance = async (user, order, balanceValue) => {
+    try {
+      const orderDoc = doc(db, "orders", order.id);
+      const userDoc = doc(db, `users`, user.email);
+      await updateDoc(userDoc, {
+        userMoney: user.userMoney + balanceValue,
+      });
+
+      // Update order status to true
+      await updateDoc(orderDoc, {
+        isActive: !order.isActive,
+        "user.userMoney": order.user.userMoney + balanceValue,
+      });
+
+      alert("Balance added successfully!");
     } catch (error) {
       dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -116,7 +137,8 @@ export function OrdersProvider({ children }) {
     orders: state.orders,
     error: state.error,
     handleOrder,
-    deleteBalanceOrder,
+    deleteOrder,
+    addBalance,
   };
   return (
     <OrdersContext.Provider value={contextData}>

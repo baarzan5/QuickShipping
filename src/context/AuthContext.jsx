@@ -249,7 +249,7 @@ export function AuthProvider({ children }) {
     try {
       await signOut(auth);
       dispatch({ type: AUTHACTIONS.SET_LOGOUT, payload: null });
-      navigate("/");
+      return window.location.href = "/";
     } catch (error) {
       dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
