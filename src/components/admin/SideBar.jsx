@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { RxDashboard } from "react-icons/rx";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
@@ -7,26 +7,14 @@ import { GrNotes } from "react-icons/gr";
 import { PiUsersThree } from "react-icons/pi";
 import { CiLocationOn, CiLogout } from "react-icons/ci";
 import { useAuth } from "../../context/AuthContext";
-import { AUTHACTIONS } from "../../actions/authActions";
 import { SiBrandfolder } from "react-icons/si";
 import { LuTableProperties } from "react-icons/lu";
 
 const SideBar = () => {
-  const { logOutUser, dispatch } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogOutUser = async () => {
-    try {
-      await logOutUser();
-      navigate("/");
-    } catch (error) {
-      dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
-      console.error(error.message);
-    }
-  };
+  const { logOutUser } = useAuth();
 
   return (
-    <div className="flex flex-col p-3 justify-between items-start mainShadow w-full h-full">
+    <div className="static top-0 left-0 flex flex-col p-3 justify-between items-start mainShadow w-full h-full">
       <div className="flex flex-col gap-6 justify-start items-start">
         <h2 className="text-2xl font-bold">LOGO</h2>
 
@@ -91,7 +79,7 @@ const SideBar = () => {
       </div>
 
       <button
-        onClick={handleLogOutUser}
+        onClick={logOutUser}
         className="flex justify-center items-center gap-1 hover:bg-[#969393]/25 rounded-md active:scale-95 transform transition-all ease-in-out duration-100 p-2"
       >
         <CiLogout size={25} /> Logout

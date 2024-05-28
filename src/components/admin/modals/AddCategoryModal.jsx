@@ -42,7 +42,7 @@ const AddCategoryModal = ({
     <div
       onClick={() => setShowAddCategoryModal(!showAddCategoryModal)}
       className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 h-screen w-full bg-black/50 backdrop-blur-sm"
-      style={{ zIndex: 3 }}
+      style={{ zIndex: 999 }}
     >
       <div
         onClick={(e) => e.stopPropagation()}

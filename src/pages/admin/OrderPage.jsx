@@ -125,7 +125,13 @@ const OrderPage = () => {
                       </button>
                     </div>
                   ) : (
-                    <div className=""></div>
+                    <div className="flex flex-wrap justify-between items-center p-3">
+
+                      <div></div>
+
+                      <div></div>
+
+                    </div>
                   )}
                 </div>
               ) : (

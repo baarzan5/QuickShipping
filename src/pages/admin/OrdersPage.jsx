@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import SideBar from "../../components/admin/SideBar";
 import { useOrders } from "../../context/OrdersContext";
 import { Link } from "react-router-dom";
 import { FormatDate } from "../../utils/FormatDate";
 import { FormatMoney } from "../../utils/FormatMoney";
+import { FiMoreVertical } from "react-icons/fi";
+import OrderActions from "../../components/admin/OrderActions";
 
 const getStatus = (status) => {
   if (status.isPending) return "Pending";
@@ -19,6 +21,8 @@ const OrdersPage = () => {
   const { user } = useAuth();
   const { orders } = useOrders();
   const [selectedOrderType, setSelectedOrderType] = useState(null);
+  const [showOrderActions, setShowOrderActions] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const filterOrderByOrderType = (selectedOrderType) => {
     if (selectedOrderType === null) {
@@ -33,6 +37,11 @@ const OrdersPage = () => {
   };
 
   const filteredOrders = filterOrderByOrderType(selectedOrderType);
+
+  const handleSelectedOrder = (order) => {
+    setSelectedOrder(order);
+    setShowOrderActions(true);
+  };
 
   return (
     <>
@@ -57,7 +66,7 @@ const OrdersPage = () => {
                       onChange={handleOrderTypeChange}
                     >
                       <option value="null" selected disabled>
-                        Filter order by order type
+                        Filter orders by order type
                       </option>
                       <option value="null">All orders</option>
                       <option value="Product">Product orders</option>
@@ -67,83 +76,104 @@ const OrdersPage = () => {
 
                   <div className="flex flex-wrap justify-start items-start gap-5 p-2">
                     {filteredOrders.map((order, index) => (
-                      <Link
-                        to={`/admin/order/${order.id}`}
-                        key={index}
-                        className="flex flex-col justify-start items-start gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2 transform transition-all ease-in-out duration-200 hover:shadow-lg hover:-translate-y-2 active:scale-95"
-                      >
-                        <strong className="text-lg">
-                          Order type :{" "}
-                          {order.orderType == "Product" ? "Product" : "Balance"}
-                        </strong>
+                      <React.Fragment key={index}>
+                        {order.orderType === "Balance" ? (
+                          <Link
+                            to={`/admin/order/${order.id}`}
+                            className="flex flex-col justify-start items-start gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2 transform transition-all ease-in-out duration-200 hover:shadow-lg hover:-translate-y-2 active:scale-95"
+                          >
+                            <strong className="text-lg">
+                              Order type : {order.orderType}
+                            </strong>
 
-                        <strong className="text-lg">
-                          {order.orderType === "Product" ? (
-                            <>
-                              Prodcut name :{" "}
-                              {order.cart.flatMap(
-                                (cartItem) => cartItem.product.productName
-                              )}
-                            </>
-                          ) : (
-                            <>
+                            <strong className="text-lg">
                               Balance type : {order.paymentMethod.paymentName}
-                            </>
-                          )}
-                        </strong>
+                            </strong>
 
-                        <strong className="text-lg">
-                          Date : {FormatDate(order.orderedAt)}
-                        </strong>
+                            <strong className="text-lg">
+                              Date : {FormatDate(order.orderedAt)}
+                            </strong>
 
-                        <strong className="text-lg">
-                          {order.orderType === "Product" ? (
-                            <>
-                              Quantity :
-                              {order.cart.flatMap(
-                                (cartItem) => cartItem.quantity
-                              )}
-                            </>
-                          ) : (
-                            <>Phone number : {order.phoneNumber}</>
-                          )}
-                        </strong>
+                            <strong className="text-lg">
+                              Phone number : {order.phoneNumber}
+                            </strong>
 
-                        <strong className="text-lg">
-                          {order.orderType === "Product" ? (
-                            <>
-                              Price :
-                              {order.cart.flatMap((cartItem) =>
-                                FormatMoney(cartItem.totalPrice)
-                              )}
-                            </>
-                          ) : (
-                            <>Value : {FormatMoney(order.balanceValue)}</>
-                          )}
-                        </strong>
+                            <strong className="text-lg">
+                              Value : {FormatMoney(order.balanceValue)} IQD
+                            </strong>
 
-                        <strong className="text-lg">
-                          {order.orderType === "Product" ? (
-                            <>Status : {getStatus(order.orderStatus)}</>
-                          ) : (
-                            <>
+                            <strong className="text-lg">
                               Status : {order.isActive ? "Active" : "Pending"}
-                            </>
-                          )}
-                        </strong>
+                            </strong>
 
-                        <strong className="text-lg flex justify-center items-center gap-0.5">
-                          By :
-                          <div className="flex justify-center items-center gap-1">
-                            <img
-                              src={order.user.userImageURL}
-                              className="w-8 h-8 rounded-full object-cover"
-                              alt=""
-                            />
-                            <p>{order.user.fullName}</p>{" "}
+                            <strong className="text-lg flex justify-center items-center gap-0.5">
+                              By :
+                              <div className="flex justify-center items-center gap-1">
+                                <img
+                                  src={order.user.userImageURL}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                  alt=""
+                                />
+                                <p>{order.user.fullName}</p>{" "}
+                              </div>
+                            </strong>
+                          </Link>
+                        ) : (
+                          <div className="relative flex flex-col justify-start items-start gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2">
+                            <button
+                              title="Order actions"
+                              onClick={() => handleSelectedOrder(order)}
+                              className="absolute top-1 right-1 transform transition-all ease-in-out duration-100 p-1 hover:bg-[#969393]/15 rounded-full active:scale-95"
+                            >
+                              <FiMoreVertical size={25} />
+                            </button>
+
+                            {showOrderActions && selectedOrder === order && (
+                              <OrderActions
+                                setShowOrderActions={setShowOrderActions}
+                                order={selectedOrder}
+                              />
+                            )}
+
+                            <strong className="text-lg">
+                              Order type : {order.orderType}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Prodcut name : {order.product.product.productName}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Date : {FormatDate(order.orderedAt)}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Quantity : {order.product.quantity}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Price : {FormatMoney(order.product.totalPrice)}{" "}
+                              IQD
+                            </strong>
+
+                            <strong className="text-lg">
+                              Status : {getStatus(order.orderStatus)}
+                            </strong>
+
+                            <strong className="text-lg flex justify-center items-center gap-0.5">
+                              By :
+                              <div className="flex justify-center items-center gap-1">
+                                <img
+                                  src={order.user.userImageURL}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                  alt=""
+                                />
+                                <p>{order.user.fullName}</p>{" "}
+                              </div>
+                            </strong>
                           </div>
-                        </strong>
-                      </Link>
+                        )}
+                      </React.Fragment>
                     ))}
                   </div>
                 </div>

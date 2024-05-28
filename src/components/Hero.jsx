@@ -192,10 +192,7 @@ const Hero = ({ product }) => {
           {orders
             .filter((order) => order.orderType == "Product")
             .slice(0, 3)
-            .flatMap((productOrder) =>
-              productOrder.cart.map((cartItem) => (
-                <ProductCard product={cartItem.product} />
-              ))
+            .flatMap((productOrder) => <ProductCard product={productOrder.product.product} />
             )}
         </div>
       </div>

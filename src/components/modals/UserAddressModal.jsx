@@ -47,27 +47,27 @@ const UserAddressModal = ({
   const handleOrderProduct = async () => {
     try {
       if (activeAddress) {
-        const orderData = {
-          orderType: "Product",
-          cart,
-          orderNote,
-          orderStatus: {
-            isPending: true,
-            isConfirmed: false,
-            isOnDelivered: false,
-            isDelivered: false,
-            isCompleted: false,
-            isCancelled: false,
-          },
-          user,
-          address: activeAddress,
-          totalMoney,
-          orderedAt: new Date(),
-        };
+        cart.forEach(async (product) => {
+          const orderData = {
+            orderType: "Product",
+            product,
+            orderStatus: {
+              isPending: true,
+              isConfirmed: false,
+              isOnDelivered: false,
+              isDelivered: false,
+              isCompleted: false,
+              isCancelled: false,
+            },
+            orderNote,
+            user,
+            address: activeAddress,
+            orderedAt: new Date(),
+          };
 
-        await handleOrder(orderData, user, totalMoney, cart);
-        alert("داواکاریەکەت بەسەرکەوتووی نێردرا");
-        setShowUserAddressModal(false);
+          await handleOrder(orderData, user, totalMoney, cart);
+          setShowUserAddressModal(false);
+        });
       } else {
         alert("تکایە ناونیشانەکەت هەڵبژێرە");
       }

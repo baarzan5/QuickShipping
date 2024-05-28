@@ -9,6 +9,7 @@ import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import { CiCircleList, CiStar } from "react-icons/ci";
 import { FaRegAddressCard } from "react-icons/fa";
 import EditProfileModal from "../components/modals/EditProfileModal";
+import { GrUserAdmin } from "react-icons/gr";
 
 const ProfilePage = () => {
   const { user, logOutUser } = useAuth();
@@ -73,6 +74,18 @@ const ProfilePage = () => {
           </div>
 
           <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-4">
+            {user.isAdmin ? (
+              <Link
+                to="/admin/home"
+                className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              >
+                <GrUserAdmin size={30} />
+                <h3 className="text-lg">ئەدمین</h3>
+              </Link>
+            ) : (
+              <></>
+            )}
+
             <Link
               to="/add-balance"
               className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"

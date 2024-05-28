@@ -112,12 +112,13 @@ const AdminPage = () => {
                     <table className="w-full text-left bg-[#f9f9f9] rounded-md">
                       <tr className="w-full border-b border-b-[#969393]/25">
                         <td>Name</td>
+                        <td>Type</td>
                         <td>Id</td>
                         <td>Price</td>
                         <td>Date</td>
                       </tr>
 
-                      {orders.map((order, index) => (
+                      {orders.slice(0, 5).map((order, index) => (
                         <tr
                           key={index}
                           className="w-full border-b border-b-[#969393]/25 last:border-none p-1"
@@ -125,19 +126,16 @@ const AdminPage = () => {
                           <td>
                             <Link to={`/admin/order/${order.id}`}>
                               {order.orderType == "Product"
-                                ? order.cart.flatMap(
-                                    (order) => order.product.productName
-                                  )
+                                ? order.product.product.productName
                                 : order.paymentMethod.paymentName}
                             </Link>
                           </td>
+                          <td>{order.orderType}</td>
                           <td>{order.id}</td>
                           <td>
                             {FormatMoney(
                               order.orderType == "Product"
-                                ? order.cart.flatMap(
-                                    (order) => order.product.productPrice
-                                  )
+                                ? order.product.totalPrice
                                 : order.balanceValue
                             )}{" "}
                             IQD

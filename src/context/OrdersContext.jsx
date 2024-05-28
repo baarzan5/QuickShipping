@@ -131,6 +131,30 @@ export function OrdersProvider({ children }) {
     }
   };
 
+  const changeOrderStatus = async (order, newStatus) => {
+    try {
+      const orderDoc = doc(db, "orders", order.id);
+
+      // Reset all statuses to false
+      const updatedStatus = {
+        isPending: false,
+        isConfirmed: false,
+        isOnDelivered: false,
+        isDelivered: false,
+        isCompleted: false,
+        isCancelled: false,
+        [newStatus]: true, // Set the new status to true
+      };
+
+      await updateDoc(orderDoc, {
+        orderStatus: updatedStatus,
+      });
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const contextData = {
     state,
     dispatch,
@@ -139,6 +163,7 @@ export function OrdersProvider({ children }) {
     handleOrder,
     deleteOrder,
     addBalance,
+    changeOrderStatus,
   };
   return (
     <OrdersContext.Provider value={contextData}>

@@ -61,18 +61,17 @@ const MyOrdersPage = () => {
 
   const data = orders
     .filter(
-      (order) => order.orderType === "Product" && order.user.email == user.email
+      (order) => order.orderType === "Product" && order.user.email == user?.email
     )
-    .flatMap((order) =>
-      order.cart.map((cartItem) => ({
+    .flatMap((order) => ({
         id: order.id,
-        productId: cartItem.id,
-        productName: cartItem.product.productName,
-        quantity: cartItem.quantity,
-        totalPrice: cartItem.totalPrice,
+        productId: order.product.product.id,
+        productName: order.product.product.productName,
+        quantity: order.product.quantity,
+        totalPrice: order.product.totalPrice,
         date: FormatDate(order.orderedAt),
         status: getStatus(order.orderStatus),
-      }))
+      })
     );
 
   // Custom styles for the DataTable
