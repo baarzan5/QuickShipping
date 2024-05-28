@@ -21,7 +21,7 @@ const BalanceOrdersPage = () => {
             </div>
 
             <div className="">
-              {orders.filter((order) => order.orderType == "Balance").length ==
+              {orders.filter((order) => order.orderType == "Balance" && order.user.email == user.email).length ==
               0 ? (
                 <strong className="text-2xl">
                   هیچ داواکاریەکی باڵانست نییە
@@ -29,7 +29,7 @@ const BalanceOrdersPage = () => {
               ) : (
                 <div className="flex flex-row-reverse flex-wrap justify-start items-end gap-3">
                   {orders
-                    .filter((order) => order.orderType == "Balance")
+                    .filter((order) => order.orderType == "Balance" && order.user.email == user.email)
                     .map((balanceOrder, index) => (
                       <div
                         key={index}

@@ -44,9 +44,7 @@ const MyOrdersPage = () => {
     {
       name: "ڕێککەوت",
       selector: (row) => row.date,
-      cell: (row) => (
-        <strong className="text-base">{row.date}</strong>
-      ),
+      cell: (row) => <strong className="text-base">{row.date}</strong>,
     },
     {
       name: "ناوی بەرهەم",
@@ -62,7 +60,9 @@ const MyOrdersPage = () => {
   ];
 
   const data = orders
-    .filter((order) => order.orderType === "Product")
+    .filter(
+      (order) => order.orderType === "Product" && order.user.email == user.email
+    )
     .flatMap((order) =>
       order.cart.map((cartItem) => ({
         id: order.id,
@@ -120,11 +120,18 @@ const MyOrdersPage = () => {
             </div>
 
             <div className="w-full">
-              <DataTable
-                columns={columns}
-                data={data}
-                customStyles={customStyles}
-              />
+              {orders.filter(
+                (order) =>
+                  order.orderType == "Product" && order.user.email == user.email
+              ).length == 0 ? (
+                <strong className="text-2xl p-2 flex justify-center items-center">هیچ داواکاریەکت نەکردووە</strong>
+              ) : (
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  customStyles={customStyles}
+                />
+              )}
             </div>
           </div>
         </div>
