@@ -5,6 +5,7 @@ import { useOrders } from "../context/OrdersContext";
 import { FormatMoney } from "../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import { FormatDate } from "../utils/FormatDate";
+import AddReviewModal from "../components/modals/AddReviewModal";
 
 // Function to get the status from the orderStatus object
 const getStatus = (status) => {
@@ -19,11 +20,39 @@ const getStatus = (status) => {
 const MyOrdersPage = () => {
   const { user } = useAuth();
   const { orders } = useOrders();
+  const [showAddReviewModal, setShowAddReviewModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const handleAddReview = (selectedOrder) => {
+    setSelectedOrder(selectedOrder);
+    setShowAddReviewModal(true);
+  }
 
   const columns = [
     {
       name: "دۆخی گەیاندن",
-      cell: (row) => <strong className="text-base">{row.status}</strong>,
+      cell: (row) => (
+        <div className="flex flex-col justify-center items-center gap-3 p-1">
+          <strong className="text-base">{row.status}</strong>
+
+          {row.status == "جێ بەجێکرا" && (
+            <button
+              onClick={() => handleAddReview(row.product)}
+              className="bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 px-1 py-2 rounded-md"
+            >
+              بۆچوون زیادبکە
+            </button>
+          )}
+
+          {showAddReviewModal && (
+            <AddReviewModal
+              showAddReviewModal={showAddReviewModal}
+              setShowAddReviewModal={setShowAddReviewModal}
+              selectedOrder={selectedOrder}
+            />
+          )}
+        </div>
+      ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
@@ -61,18 +90,19 @@ const MyOrdersPage = () => {
 
   const data = orders
     .filter(
-      (order) => order.orderType === "Product" && order.user.email == user?.email
+      (order) =>
+        order.orderType === "Product" && order.user.email == user?.email
     )
     .flatMap((order) => ({
-        id: order.id,
-        productId: order.product.product.id,
-        productName: order.product.product.productName,
-        quantity: order.product.quantity,
-        totalPrice: order.product.totalPrice,
-        date: FormatDate(order.orderedAt),
-        status: getStatus(order.orderStatus),
-      })
-    );
+      id: order.id,
+      product: order.product,
+      productId: order.product.product.id,
+      productName: order.product.product.productName,
+      quantity: order.product.quantity,
+      totalPrice: order.product.totalPrice,
+      date: FormatDate(order.orderedAt),
+      status: getStatus(order.orderStatus),
+    }));
 
   // Custom styles for the DataTable
   const customStyles = {
@@ -115,7 +145,9 @@ const MyOrdersPage = () => {
                 (order) =>
                   order.orderType == "Product" && order.user.email == user.email
               ).length == 0 ? (
-                <strong className="text-2xl p-2 flex justify-center items-center">هیچ داواکاریەکت نەکردووە</strong>
+                <strong className="text-2xl p-2 flex justify-center items-center">
+                  هیچ داواکاریەکت نەکردووە
+                </strong>
               ) : (
                 <DataTable
                   columns={columns}
