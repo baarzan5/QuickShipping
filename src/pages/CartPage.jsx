@@ -73,10 +73,52 @@ const CartPage = () => {
     },
     {
       name: "نرخ",
-      selector: (row) => row.totalPrice,
-      format: (row) => FormatMoney(row.totalPrice),
+      selector: (row) => row.product,
+      format: (row) => FormatMoney(row.product),
       cell: (row) => (
-        <strong className="text-lg">{FormatMoney(row.totalPrice)} IQD</strong>
+        <div className="">
+          {row.product.productDiscount ? (
+            <>
+              {row.product.discountType == "Flat" ? (
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <p className="text-2xl">
+                    {FormatMoney(
+                      row.product.productPrice - row.product.productDiscount
+                    )}{" "}
+                    IQD
+                  </p>
+                  <p className="text-[#969393] text-sm line-through">
+                    {FormatMoney(row.product.productDiscount)}IQD
+                  </p>
+                  <p className="text-xl">
+                    {FormatMoney(
+                      row.product.productPrice - row.product.productDiscount
+                    )}{" "}
+                    IQD
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <strong className="text-xl">
+                    {FormatMoney(
+                      row.product.productPrice *
+                        (1 - row.product.productDiscount / 100)
+                    )}{" "}
+                    IQD
+                  </strong>
+                  <p className="text-[#969393] text-lg line-through">
+                    {FormatMoney(row.product.productPrice)} IQD
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center gap-2">
+              <p className="text-xl">{FormatMoney(row.product.productPrice)}</p>
+              <p>{FormatMoney(row.product.productPrice)} IQD</p>
+            </div>
+          )}
+        </div>
       ),
     },
     {
@@ -93,7 +135,9 @@ const CartPage = () => {
             </button>
           ) : (
             <button
-              onClick={() => decreaseQuantity(row.id, row.quantity, row.price)}
+              onClick={() =>
+                decreaseQuantity(row.id, row.quantity, row.totalPrice)
+              }
               className="bg-[#FF6F00] text-white rounded-full p-1 hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
             >
               <CgMathMinus size={25} />
@@ -101,7 +145,9 @@ const CartPage = () => {
           )}
           <p className="text-lg font-semibold">{row.quantity}</p>
           <button
-            onClick={() => increaseQuantity(row.id, row.quantity, row.price)}
+            onClick={() =>
+              increaseQuantity(row.id, row.quantity, row.totalPrice)
+            }
             className="bg-[#FF6F00] text-white rounded-full p-1 hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
           >
             <IoIosAdd size={25} />
@@ -132,11 +178,12 @@ const CartPage = () => {
 
   const data = cart.map((cartItem) => ({
     id: cartItem.id, // Ensure this is the correct unique identifier for each cart item
+    product: cartItem.product,
     productId: cartItem.product.id,
     productThumbnailImageURL: cartItem.product.productThumbnailImageURL,
     productName: cartItem.product.productName,
     quantity: cartItem.quantity,
-    price: cartItem.product.productPrice, // This is the unit price
+    productPrice: cartItem.product.productPrice, // This is the unit price
     totalPrice: cartItem.totalPrice,
   }));
 

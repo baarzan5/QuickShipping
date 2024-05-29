@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import DataTable from "react-data-table-component";
 import { useOrders } from "../context/OrdersContext";
@@ -108,21 +108,6 @@ const MyOrdersPage = () => {
           <div className="flex flex-col justify-end items-end w-[95%] p-2 rounded-md mainShadow mx-auto">
             <div className="flex flex-row-reverse justify-between items-center w-full px-2 pb-1.5 border-b border-b-[#e4e4e5]">
               <h2 className="text-xl font-semibold">داواکاریەکانم</h2>
-              <select
-                className="text-right border border-[#e4e4e5] rounded-md p-2 transform transition-all duration-100 ease-in-out active:scale-95"
-              >
-                <option selected>
-                  <p>ڕیزکردن بەپێی دۆخی گەیاندن</p>
-                </option>
-
-                <option value="">لە چاوەڕوانیدا</option>
-                <option value="">پەسەندکرا</option>
-                <option value="">لە گەیاندنە</option>
-                <option value="">هاتە گەیاندن</option>
-                <option value="">جێ بەجێکرا</option>
-                <option value="">ڕەتکرایەوە</option>
-
-              </select>
             </div>
 
             <div className="w-full">
