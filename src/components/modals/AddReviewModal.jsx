@@ -5,6 +5,9 @@ import { FormatDate } from "../../utils/FormatDate";
 import { FormatMoney } from "../../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import { BsStar, BsStarFill } from "react-icons/bs";
+import { useReviews } from "../../context/ReviewsContext";
+import { REVIEWS_ACTIONS } from "../../actions/reviewsActions";
+import { useAuth } from "../../context/AuthContext";
 
 const AddReviewModal = ({
   showAddReviewModal,
@@ -16,6 +19,8 @@ const AddReviewModal = ({
 
   const [reviewStar, setReviewStar] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  const { user } = useAuth();
+  const { addReview, dispatch } = useReviews();
 
   const handleStarSelection = (value) => {
     // If the clicked value is the same as the current value, deselect
@@ -41,6 +46,33 @@ const AddReviewModal = ({
       );
     }
     return stars;
+  };
+
+  const handleAddReview = async () => {
+    console.log("ADD REVIEW BUTTON CLICKED");
+
+    try {
+      if (reviewText.trim() != "" && reviewStar != 0) {
+        const reviewData = {
+          productId: selectedOrder.product.id,
+          productThumbnailImageURL:
+            selectedOrder.product.productThumbnailImageURL,
+          productName: selectedOrder.product.productName,
+          productPrice: selectedOrder.product.productPrice,
+          user,
+          reviewStar,
+          reviewText,
+          createdAt: new Date(),
+        };
+
+        await addReview(reviewData);
+        alert("بۆچوونەکەت زیادکرا");
+        setShowAddReviewModal(false);
+      }
+    } catch (error) {
+      dispatch({ type: REVIEWS_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
   };
 
   return (
@@ -113,10 +145,13 @@ const AddReviewModal = ({
             <textarea
               className="text-lg resize-none w-full h-[150px] p-2 text-right border border-[#e4e4e5] rounded-md"
               placeholder="بۆچوون"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              required
             ></textarea>
 
             <button
-              // onClick={() => handleAddReview(row.product)}
+              onClick={handleAddReview}
               className="text-base bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 h-10 p-2 rounded-md w-full"
             >
               بۆچوون زیادبکە

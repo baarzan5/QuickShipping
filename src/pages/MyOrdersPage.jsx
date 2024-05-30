@@ -6,6 +6,7 @@ import { FormatMoney } from "../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import { FormatDate } from "../utils/FormatDate";
 import AddReviewModal from "../components/modals/AddReviewModal";
+import { useReviews } from "../context/ReviewsContext";
 
 // Function to get the status from the orderStatus object
 const getStatus = (status) => {
@@ -22,40 +23,39 @@ const MyOrdersPage = () => {
   const { orders } = useOrders();
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const { reviews } = useReviews();
 
   const handleAddReview = (selectedOrder) => {
     setSelectedOrder(selectedOrder);
     setShowAddReviewModal(true);
-  }
+  };
 
   const columns = [
     {
       name: "دۆخی گەیاندن",
-      cell: (row) => (
-        <div className="flex flex-col justify-center items-center gap-3 p-1">
-          <strong className="text-base">{row.status}</strong>
+      cell: (row) => {
+        const hasReviewed = reviews.some(
+          (review) =>
+            review.productId === row.productId && review.user.email === user?.email
+        );
 
-          {row.status == "جێ بەجێکرا" && (
-            <button
-              onClick={() => handleAddReview(row.product)}
-              className="bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 px-1 py-2 rounded-md"
-            >
-              بۆچوون زیادبکە
-            </button>
-          )}
+        return (
+          <div className="flex flex-col justify-center items-center gap-3 p-1">
+            <strong className="text-base">{row.status}</strong>
 
-          {showAddReviewModal && (
-            <AddReviewModal
-              showAddReviewModal={showAddReviewModal}
-              setShowAddReviewModal={setShowAddReviewModal}
-              selectedOrder={selectedOrder}
-            />
-          )}
-        </div>
-      ),
+            {!hasReviewed && row.status === "جێ بەجێکرا" && (
+              <button
+                onClick={() => handleAddReview(row.product)}
+                className="bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 px-1 py-2 rounded-md"
+              >
+                بۆچوون زیادبکە
+              </button>
+            )}
+          </div>
+        );
+      },
       ignoreRowClick: true,
       allowOverflow: true,
-      button: true,
     },
     {
       name: "نرخ",
@@ -91,7 +91,7 @@ const MyOrdersPage = () => {
   const data = orders
     .filter(
       (order) =>
-        order.orderType === "Product" && order.user.email == user?.email
+        order.orderType === "Product" && order.user.email === user?.email
     )
     .flatMap((order) => ({
       id: order.id,
@@ -139,12 +139,12 @@ const MyOrdersPage = () => {
             <div className="flex flex-row-reverse justify-between items-center w-full px-2 pb-1.5 border-b border-b-[#e4e4e5]">
               <h2 className="text-xl font-semibold">داواکاریەکانم</h2>
             </div>
-
             <div className="w-full">
               {orders.filter(
                 (order) =>
-                  order.orderType == "Product" && order.user.email == user.email
-              ).length == 0 ? (
+                  order.orderType === "Product" &&
+                  order.user.email === user.email
+              ).length === 0 ? (
                 <strong className="text-2xl p-2 flex justify-center items-center">
                   هیچ داواکاریەکت نەکردووە
                 </strong>
@@ -157,6 +157,13 @@ const MyOrdersPage = () => {
               )}
             </div>
           </div>
+          {showAddReviewModal && (
+            <AddReviewModal
+              showAddReviewModal={showAddReviewModal}
+              setShowAddReviewModal={setShowAddReviewModal}
+              selectedOrder={selectedOrder}
+            />
+          )}
         </div>
       ) : (
         <>Loading...</>
