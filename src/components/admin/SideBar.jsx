@@ -9,6 +9,7 @@ import { CiLocationOn, CiLogout } from "react-icons/ci";
 import { useAuth } from "../../context/AuthContext";
 import { SiBrandfolder } from "react-icons/si";
 import { LuTableProperties } from "react-icons/lu";
+import { CiStar } from "react-icons/ci";
 
 const SideBar = () => {
   const { logOutUser } = useAuth();
@@ -74,6 +75,13 @@ const SideBar = () => {
             className="flex justify-center items-center gap-1 hover:bg-[#969393]/25 rounded-md active:scale-95 transform transition-all ease-in-out duration-100 p-2"
           >
             <CiLocationOn size={25} /> Locations
+          </Link>
+
+          <Link
+            to="/admin/reviews"
+            className="flex justify-center items-center gap-1 hover:bg-[#969393]/25 rounded-md active:scale-95 transform transition-all ease-in-out duration-100 p-2"
+          >
+            <CiStar size={25} /> Reviews
           </Link>
         </div>
       </div>

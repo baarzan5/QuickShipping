@@ -35,6 +35,7 @@ import OrdersPage from "./pages/admin/OrdersPage";
 import OrderPage from "./pages/admin/OrderPage";
 import { ReviewsProvider } from "./context/ReviewsContext";
 import MyReviewsPage from "./pages/MyReviewsPage";
+import ReviewsPage from "./pages/admin/ReviewsPage";
 
 function App() {
   return (
@@ -56,7 +57,6 @@ function App() {
                           element={<ForgotPassword />}
                         />
                         <Route path="/signup" element={<SignUpPage />} />
-
 
                         <Route path="/" element={<HomePage />} />
                         <Route
@@ -83,10 +83,7 @@ function App() {
                           path="/balance-orders"
                           element={<BalanceOrdersPage />}
                         />
-                        <Route
-                          path="/reviews"
-                          element={<MyReviewsPage />}
-                        />
+                        <Route path="/reviews" element={<MyReviewsPage />} />
 
                         {/* Admin Panel */}
                         <Route path="/admin/home" element={<AdminPage />} />
@@ -135,6 +132,11 @@ function App() {
                           excat
                           path="/admin/order/:orderId"
                           element={<OrderPage />}
+                        />
+                        <Route
+                          excat
+                          path="/admin/reviews"
+                          element={<ReviewsPage />}
                         />
                       </Routes>
                       <Footer />

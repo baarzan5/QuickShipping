@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { hideScrollBar } from "../../hooks/hideScrollBar";
-import { FormatDate } from "../../utils/FormatDate";
 import { FormatMoney } from "../../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import { BsStar, BsStarFill } from "react-icons/bs";
