@@ -43,7 +43,7 @@ const MyOrdersPage = () => {
           <div className="flex flex-col justify-center items-center gap-3 p-1">
             <strong className="text-base">{row.status}</strong>
 
-            {!hasReviewed && row.status === "جێ بەجێکرا" && (
+            {!hasReviewed && row.orderStatus.isCompleted && (
               <button
                 onClick={() => handleAddReview(row.product)}
                 className="bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 px-1 py-2 rounded-md"
@@ -102,6 +102,7 @@ const MyOrdersPage = () => {
       totalPrice: order.product.totalPrice,
       date: FormatDate(order.orderedAt),
       status: getStatus(order.orderStatus),
+      orderStatus: order.orderStatus,
     }));
 
   // Custom styles for the DataTable
