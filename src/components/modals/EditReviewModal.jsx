@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { hideScrollBar } from "../../hooks/hideScrollBar";
-import { FormatDate } from "../../utils/FormatDate";
-import { FormatMoney } from "../../utils/FormatMoney";
 import { Link } from "react-router-dom";
+import { FormatMoney } from "../../utils/FormatMoney";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import { useReviews } from "../../context/ReviewsContext";
 import { REVIEWS_ACTIONS } from "../../actions/reviewsActions";
-import { useAuth } from "../../context/AuthContext";
 
-const AddReviewModal = ({
-  showAddReviewModal,
-  setShowAddReviewModal,
-  selectedOrder,
+const EditReviewModal = ({
+  showEditReviewModal,
+  setShowEditReviewModal,
+  selectedReview,
 }) => {
-  hideScrollBar(showAddReviewModal);
+  hideScrollBar(showEditReviewModal);
 
-  const [reviewStar, setReviewStar] = useState(0);
-  const [reviewText, setReviewText] = useState("");
-  const { user } = useAuth();
-  const { addReview, dispatch } = useReviews();
+  const [reviewStar, setReviewStar] = useState(selectedReview.reviewStar);
+  const [reviewText, setReviewText] = useState(selectedReview.reviewText);
   const characterLimit = 1500;
+  const { editReview, dispatch } = useReviews();
 
   const handleStarSelection = (value) => {
+    // If the clicked value is the same as the current value, deselect
     if (value === reviewStar) {
       setReviewStar(0);
     } else {
@@ -30,6 +28,7 @@ const AddReviewModal = ({
     }
   };
 
+  // Function to render star icons based on selected rating
   const renderStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -46,27 +45,18 @@ const AddReviewModal = ({
     return stars;
   };
 
-  const handleAddReview = async () => {
-    console.log("ADD REVIEW BUTTON CLICKED");
-
+  const handleEditReview = async () => {
     try {
-      if (reviewText.trim() != "" && reviewStar != 0) {
+      if (reviewText.trim() != "" && reviewStar) {
         const reviewData = {
-          productId: selectedOrder.product.id,
-          productThumbnailImageURL:
-            selectedOrder.product.productThumbnailImageURL,
-          productName: selectedOrder.product.productName,
-          productPrice: selectedOrder.product.productPrice,
-          productQuantity: selectedOrder.quantity,
-          user,
+          id: selectedReview.id,
           reviewStar,
           reviewText,
-          createdAt: new Date(),
         };
 
-        await addReview(reviewData);
-        alert("بۆچوونەکەت زیادکرا");
-        setShowAddReviewModal(false);
+        await editReview(reviewData);
+        alert("بەسەرکەوتووی بۆچوونەکەت دەستکاری کرد");
+        setShowEditReviewModal(false);
       }
     } catch (error) {
       dispatch({ type: REVIEWS_ACTIONS.SET_ERROR, payload: error.message });
@@ -76,8 +66,8 @@ const AddReviewModal = ({
 
   return (
     <div
-      className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-full h-screen bg-black/25 backdrop-blur-sm"
-      onClick={() => setShowAddReviewModal(!showAddReviewModal)}
+      className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-full h-screen bg-black/50 backdrop-blur-sm"
+      onClick={() => setShowEditReviewModal(!showEditReviewModal)}
       style={{ zIndex: 999 }}
     >
       <div
@@ -86,10 +76,10 @@ const AddReviewModal = ({
       >
         <div className="flex justify-between items-center w-full px-2">
           <span></span>
-          <h3 className="text-lg font-semibold">بۆچوون زیادبکە</h3>
+          <h3 className="text-lg font-semibold">دەستکاری کردنی بۆچوون</h3>
           <button
             title="داخستن"
-            onClick={() => setShowAddReviewModal(!showAddReviewModal)}
+            onClick={() => setShowEditReviewModal(!showEditReviewModal)}
             className="hover:bg-[#969393]/25 rounded-full p-1 active:scale-95 transform transition-all duration-100 ease-in-out"
           >
             <IoCloseOutline size={23} />
@@ -99,10 +89,10 @@ const AddReviewModal = ({
         <div className="m-auto p-4 flex flex-col justify-center items-center gap-4">
           <div className="flex flex-col justify-center items-center gap-3">
             <div className="">
-              <Link to={`/product/${selectedOrder.product.id}`}>
+              <Link to={`/product/${selectedReview.productId}`}>
                 {" "}
                 <img
-                  src={selectedOrder.product.productThumbnailImageURL}
+                  src={selectedReview.productThumbnailImageURL}
                   className="w-[500px] h-[250px] object-cover rounded-md"
                   alt=""
                 />
@@ -112,20 +102,24 @@ const AddReviewModal = ({
             <div className="flex flex-col justify-center items-center gap-3">
               <h3 className="text-lg font-semibold">
                 <Link
-                  to={`/product/${selectedOrder.product.id}`}
+                  to={`/product/${selectedReview.productId}`}
                   className="hover:underline hover:underline-offset-2"
                 >
-                  {selectedOrder.product.productName}
+                  {selectedReview.productName}
                 </Link>{" "}
                 : ناوی بەرهەم
               </h3>
 
+              {/* <h3 className="text-lg font-semibold">
+                {FormatDate(selectedReview.quantity)} : ڕێککەوت
+              </h3> */}
+
               <h3 className="text-lg font-semibold">
-                {selectedOrder.quantity} : دانە
+                {selectedReview.productQuantity} : دانە
               </h3>
 
               <h3 className="text-lg font-semibold">
-                {FormatMoney(selectedOrder.totalPrice)} IQD : نرخ
+                {FormatMoney(selectedReview.productPrice)} IQD : نرخ
               </h3>
             </div>
           </div>
@@ -153,10 +147,10 @@ const AddReviewModal = ({
             </div>
 
             <button
-              onClick={handleAddReview}
+              onClick={handleEditReview}
               className="text-base bg-[#FF6F00] text-black transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 h-10 p-2 rounded-md w-full"
             >
-              بۆچوون زیادبکە
+              دەستکاری کردنی بۆچوون
             </button>
           </div>
         </div>
@@ -165,4 +159,4 @@ const AddReviewModal = ({
   );
 };
 
-export default AddReviewModal;
+export default EditReviewModal;

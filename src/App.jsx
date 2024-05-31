@@ -34,6 +34,7 @@ import BalanceOrdersPage from "./pages/BalanceOrdersPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import OrderPage from "./pages/admin/OrderPage";
 import { ReviewsProvider } from "./context/ReviewsContext";
+import MyReviewsPage from "./pages/MyReviewsPage";
 
 function App() {
   return (
@@ -48,12 +49,14 @@ function App() {
                     <ReviewsProvider>
                       <Header />
                       <Routes>
+                        {/* Authentication */}
                         <Route path="/login" element={<LoginPage />} />
                         <Route
                           path="/forgot-password"
                           element={<ForgotPassword />}
                         />
                         <Route path="/signup" element={<SignUpPage />} />
+
 
                         <Route path="/" element={<HomePage />} />
                         <Route
@@ -79,6 +82,10 @@ function App() {
                         <Route
                           path="/balance-orders"
                           element={<BalanceOrdersPage />}
+                        />
+                        <Route
+                          path="/reviews"
+                          element={<MyReviewsPage />}
                         />
 
                         {/* Admin Panel */}

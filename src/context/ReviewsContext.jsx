@@ -3,9 +3,12 @@ import { REVIEWS_ACTIONS } from "../actions/reviewsActions";
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
@@ -78,6 +81,26 @@ export function ReviewsProvider({ children }) {
     }
   };
 
+  const deleteReview = async (reviewId) => {
+    try {
+      const reviewDoc = doc(db, "reviews", reviewId);
+      await deleteDoc(reviewDoc, reviewId);
+    } catch (error) {
+      dispatch({ type: REVIEWS_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
+  const editReview = async (reviewData) => {
+    try {
+      const reviewDoc = doc(db, "reviews", reviewData.id);
+      await updateDoc(reviewDoc, reviewData);
+    } catch (error) {
+      dispatch({ type: REVIEWS_ACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const contextData = {
     state,
     dispatch,
@@ -85,6 +108,8 @@ export function ReviewsProvider({ children }) {
     reviews: state.reviews,
     error: state.error,
     addReview,
+    deleteReview,
+    editReview,
   };
   return (
     <ReviewsContext.Provider value={contextData}>

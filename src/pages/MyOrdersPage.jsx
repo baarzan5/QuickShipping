@@ -103,6 +103,7 @@ const MyOrdersPage = () => {
       date: FormatDate(order.orderedAt),
       status: getStatus(order.orderStatus),
       orderStatus: order.orderStatus,
+      orderedAt: order.orderedAt,
     }));
 
   // Custom styles for the DataTable
