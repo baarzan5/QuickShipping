@@ -8,11 +8,18 @@ import { FormatMoney } from "../../utils/FormatMoney";
 import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import { PiTrash } from "react-icons/pi";
+import EditReviewModal from "../../components/admin/modals/EditReviewModal";
 
 const ReviewsPage = () => {
   const { user } = useAuth();
   const { reviews, deleteReview } = useReviews();
   const [showEditReviewModal, setShowEditReviewModal] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(0);
+
+  const handleSelectedReview = (selectedReview) => {
+    setSelectedReview(selectedReview);
+    setShowEditReviewModal(true);
+  }
 
   return (
     <>
@@ -57,7 +64,7 @@ const ReviewsPage = () => {
 
                             <button
                               title="Edit review"
-                              // onClick={() => handleSelectedReview(review)}
+                              onClick={() => handleSelectedReview(review)}
                               className="bg-blue-600 text-white p-1 rounded-full hover:bg-blue-700 active:scale-95 transform transition-all ease-in-out duration-100"
                             >
                               <BiEdit size={25} />
@@ -65,13 +72,13 @@ const ReviewsPage = () => {
                           </div>
                         </div>
 
-                        {/* {showEditReviewModal && (
+                        {showEditReviewModal && (
                           <EditReviewModal
                             showEditReviewModal={showEditReviewModal}
                             setShowEditReviewModal={setShowEditReviewModal}
                             selectedReview={selectedReview}
                           />
-                        )} */}
+                        )}
 
                         <div className="flex justify-between items-center w-full px-2 border-b border-b-[#e4e4e5]">
                           <Link

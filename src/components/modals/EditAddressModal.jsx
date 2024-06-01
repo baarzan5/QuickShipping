@@ -37,22 +37,22 @@ const EditAddressModal = ({
 
   const handleEditAddress = async () => {
     try {
-      if(country && city && address.trim() != "" && phoneNumber.trim() != ""){
+      if (country && city && address.trim() != "" && phoneNumber.trim() != "") {
         const editedData = {
           country,
           city,
           address,
           phoneNumber,
-        }
+        };
         await editAddress(userEmail, addressInfo.id, editedData);
         alert("ناونیشانەکەت بەسەرکەوتووی دەستکاری کرا");
         setShowEditAddressModal(false);
       }
-    } catch(error){
+    } catch (error) {
       dispatch({ type: LOCATION_ACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
-  }
+  };
 
   return (
     <div

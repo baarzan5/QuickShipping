@@ -16,7 +16,18 @@ const AdminPage = () => {
 
   const totalSales = orders
     .filter((order) => order.orderType == "Product")
-    .reduce((acc, orderTotalMoney) => acc + orderTotalMoney.totalMoney, 0);
+    .reduce(
+      (acc, orderTotalMoney) => acc + orderTotalMoney.product.totalPrice,
+      0
+    );
+
+  const totalProfit = orders
+    .filter((order) => order.orderType == "Product")
+    .reduce(
+      (acc, orderTotalMoney) =>
+        acc + orderTotalMoney.product.product.productProfit,
+      0
+    );
 
   return (
     <>
@@ -92,7 +103,10 @@ const AdminPage = () => {
                         />
                         <h3 className="text-xl font-semibold">Profit</h3>
                       </div>
-                      <strong className="text-lg">15,500$</strong>
+                      
+                      <strong className="text-lg">
+                        {FormatMoney(totalProfit)} IQD
+                      </strong>
                     </div>
                   </div>
 
