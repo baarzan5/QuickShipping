@@ -103,7 +103,7 @@ const AdminPage = () => {
                         />
                         <h3 className="text-xl font-semibold">Profit</h3>
                       </div>
-                      
+
                       <strong className="text-lg">
                         {FormatMoney(totalProfit)} IQD
                       </strong>
@@ -138,11 +138,15 @@ const AdminPage = () => {
                           className="w-full border-b border-b-[#969393]/25 last:border-none p-1"
                         >
                           <td>
-                            <Link to={`/admin/order/${order.id}`}>
-                              {order.orderType == "Product"
-                                ? order.product.product.productName
-                                : order.paymentMethod.paymentName}
-                            </Link>
+                            {order.orderType == "Balance" ? (
+                              <Link to={`/admin/order/${order.id}`}>
+                                {order.paymentMethod.paymentName}
+                              </Link>
+                            ) : (
+                              <Link to="/admin/orders">
+                                {order.product.product.productName}
+                              </Link>
+                            )}
                           </td>
                           <td>{order.orderType}</td>
                           <td>{order.id}</td>

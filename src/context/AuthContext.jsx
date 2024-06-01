@@ -266,6 +266,16 @@ export function AuthProvider({ children }) {
         await deleteDoc(userOrderDoc.ref);
       });
 
+      // Delete user reviews
+      const userReviewsCollection = collection(db, "reviews");
+      const userReviewsSnapshot = await getDocs(userReviewsCollection);
+      const userReviews = userReviewsSnapshot.docs.filter(
+        (userReview) => userReview.user.email == userEmail
+      );
+      userReviews.forEach(async (userReviewDoc) => {
+        await deleteDoc(userReviewDoc.ref);
+      });
+
       // Delete user address
       const userAddressCollection = collection(
         db,
