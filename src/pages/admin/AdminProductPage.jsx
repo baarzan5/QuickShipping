@@ -3,11 +3,23 @@ import { useAuth } from "../../context/AuthContext";
 import { IoIosArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../context/ProductsContext";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiMoreVertical } from "react-icons/fi";
 import { PiTrashThin } from "react-icons/pi";
 import DeleteProduct from "../../components/admin/modals/DeleteProduct";
 import { FormatMoney } from "../../utils/FormatMoney";
 import EditProductModal from "../../components/admin/modals/EditProductModal";
+import { useOrders } from "../../context/OrdersContext";
+import { FormatDate } from "../../utils/FormatDate";
+import OrderActions from "../../components/admin/OrderActions";
+
+const getStatus = (status) => {
+  if (status.isPending) return "Pending";
+  if (status.isConfirmed) return "Confirmed";
+  if (status.isOnDelivered) return "On delivery";
+  if (status.isDelivered) return "Delivered";
+  if (status.isCompleted) return "Completed";
+  if (status.isCancelled) return "Cancelled";
+};
 
 const AdminProductPage = () => {
   const { user } = useAuth();
@@ -17,6 +29,9 @@ const AdminProductPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the index of the selected image
   // const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
+  const { orders } = useOrders();
+  const [showOrderActions, setShowOrderActions] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id === productId);
@@ -29,6 +44,11 @@ const AdminProductPage = () => {
 
   const handleImageSelect = (index) => {
     setSelectedImageIndex(index);
+  };
+
+  const handleSelectedOrder = (order) => {
+    setSelectedOrder(order);
+    setShowOrderActions(true);
   };
 
   return (
@@ -53,7 +73,7 @@ const AdminProductPage = () => {
                     </h3>
 
                     <div className="flex justify-center items-center gap-3">
-                     {/*  <button
+                      {/*  <button
                         onClick={() =>
                           setShowEditProductModal(!showEditProductModal)
                         }
@@ -75,7 +95,7 @@ const AdminProductPage = () => {
                     </div>
                   </header>
 
-                 {/*  {showEditProductModal && (
+                  {/*  {showEditProductModal && (
                     <EditProductModal
                       showEditProductModal={showEditProductModal}
                       setShowEditProductModal={setShowEditProductModal}
@@ -161,16 +181,21 @@ const AdminProductPage = () => {
                       </p>
 
                       <div>
-                        {product.productAttributes.map((productAttribute, index) => (
-                          <div key={index} className="flex justify-start items-center gap-6">
-                            {productAttribute.attributeName}: 
-                            {productAttribute.subAttributes.map((subAttribute, index) => (
-                              <div key={index}>
-                                {subAttribute.label}
-                              </div>
-                            ))}
-                          </div>
-                        ))}
+                        {product.productAttributes.map(
+                          (productAttribute, index) => (
+                            <div
+                              key={index}
+                              className="flex justify-start items-center gap-6"
+                            >
+                              {productAttribute.attributeName}:
+                              {productAttribute.subAttributes.map(
+                                (subAttribute, index) => (
+                                  <div key={index}>{subAttribute.label}</div>
+                                )
+                              )}
+                            </div>
+                          )
+                        )}
                       </div>
                     </div>
                   </div>
@@ -179,6 +204,70 @@ const AdminProductPage = () => {
                     <h2 className="text-xl font-semibold">
                       Orders for this product
                     </h2>
+
+                    <div className="flex flex-wrap justify-center items-center mx-auto gap-4 p-2">
+                      {orders
+                        .filter(
+                          (order) =>
+                            order.orderType == "Product" &&
+                            order.product.product.id == product.id
+                        )
+                        .map((order) => (
+                          <div className="relative flex flex-col justify-start items-start gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2">
+                            <button
+                              title="Order actions"
+                              onClick={() => handleSelectedOrder(order)}
+                              className="absolute top-1 right-1 transform transition-all ease-in-out duration-100 p-1 hover:bg-[#969393]/15 rounded-full active:scale-95"
+                            >
+                              <FiMoreVertical size={25} />
+                            </button>
+
+                            {showOrderActions && selectedOrder === order && (
+                              <OrderActions
+                                setShowOrderActions={setShowOrderActions}
+                                order={selectedOrder}
+                              />
+                            )}
+
+                            <strong className="text-lg">
+                              Order type : {order.orderType}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Prodcut name : {order.product.product.productName}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Date : {FormatDate(order.orderedAt)}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Quantity : {order.product.quantity}
+                            </strong>
+
+                            <strong className="text-lg">
+                              Price : {FormatMoney(order.product.totalPrice)}{" "}
+                              IQD
+                            </strong>
+
+                            <strong className="text-lg">
+                              Status : {getStatus(order.orderStatus)}
+                            </strong>
+
+                            <strong className="text-lg flex justify-center items-center gap-0.5">
+                              By :
+                              <div className="flex justify-center items-center gap-1">
+                                <img
+                                  src={order.user.userImageURL}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                  alt=""
+                                />
+                                <p>{order.user.fullName}</p>{" "}
+                              </div>
+                            </strong>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 </div>
               ) : (

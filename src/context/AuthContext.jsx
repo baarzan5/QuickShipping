@@ -3,8 +3,10 @@ import { AUTHACTIONS } from "../actions/authActions";
 import { auth, db } from "../firebase/firebaseConfig";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -245,11 +247,62 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const deleteUser = async (userEmail) => {
+    try {
+      // Delete the user document
+      const userDoc = doc(db, "users", userEmail);
+      await deleteDoc(userDoc);
+
+      // Fetch user orders
+      const userOrdersCollection = collection(db, "orders");
+      const userOrdersSnapshot = await getDocs(userOrdersCollection);
+
+      // Convert the snapshot to an array of documents
+      const userOrders = userOrdersSnapshot.docs.filter(
+        (userOrder) => userOrder.data().user.email === userEmail
+      );
+      // Delete each user order
+      userOrders.forEach(async (userOrderDoc) => {
+        await deleteDoc(userOrderDoc.ref);
+      });
+
+      // Delete user address
+      const userAddressCollection = collection(
+        db,
+        `users/${userEmail}/address`
+      );
+      const userAddressSnapshot = await getDocs(userAddressCollection);
+      userAddressSnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+
+      // Delete user cart
+      const userCartCollection = collection(db, `users/${userEmail}/cart`);
+      const userCartSnapshot = await getDocs(userCartCollection);
+      userCartSnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+
+      // Delete user wishlists
+      const userWishListsCollection = collection(
+        db,
+        `users/${userEmail}/wishLists`
+      );
+      const userWishListsSnapshot = await getDocs(userWishListsCollection);
+      userWishListsSnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+    } catch (error) {
+      dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const logOutUser = async () => {
     try {
       await signOut(auth);
       dispatch({ type: AUTHACTIONS.SET_LOGOUT, payload: null });
-      return window.location.href = "/";
+      return (window.location.href = "/");
     } catch (error) {
       dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -269,6 +322,7 @@ export function AuthProvider({ children }) {
     googleSignIn,
     facebookSignIn,
     editProfile,
+    deleteUser,
     logOutUser,
   };
   return (

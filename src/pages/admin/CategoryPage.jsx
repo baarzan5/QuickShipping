@@ -6,15 +6,18 @@ import { IoIosAdd, IoMdArrowBack } from "react-icons/io";
 import AddSubCategory from "../../components/admin/modals/AddSubCategory";
 import { RiDeleteBin4Line } from "react-icons/ri";
 import DeleteModal from "../../components/admin/modals/DeleteModal";
+import { useProducts } from "../../context/ProductsContext";
+import AdminProductCard from "../../components/admin/AdminProductCard";
 
 const CategoryPage = () => {
   const { user } = useAuth();
   const { categorySlug } = useParams();
-  const { categories, deleteCategory, getSubCategories, subCategories } =
+  const { categories, deleteCategory, getSubCategories, subCategories, deleteSubCategory } =
     useCategories();
   const [category, setCategory] = useState(null);
   const [showAddSubCategoryModal, setShowAddSubCategoryModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { products } = useProducts();
 
   const getCategory = () => {
     const foundCategory = categories.find(
@@ -99,13 +102,20 @@ const CategoryPage = () => {
                         {subCategories.length > 0 ? (
                           <>
                             {subCategories.map((subCategory, index) => (
-                              <Link
+                              <div
                                 key={index}
-                                to={`/admin/subCategory/${subCategory.subCategorySlug}`}
-                                className="w-[150px] p-1.5 border border-[#e4e4e5] rounded-md text-center transform transition-all ease-in-out duration-200 hover:-translate-y-1 active:scale-95"
+                                className="relative w-[150px] p-2 border border-[#e4e4e5] rounded-md text-center"
                               >
-                                {subCategory.subCategoryName}
-                              </Link>
+                                <button
+                                  title="Delete sub category"
+                                  onClick={() => deleteSubCategory(category.id, subCategory.id)}
+                                  className="absolute top-0 left-0 p-1 bg-red-600 text-white hover:bg-red-700 rounded-md transform transition-all ease-in-out duration-100 active:scale-95"
+                                >
+                                  <RiDeleteBin4Line size={20} />
+                                </button>
+
+                                <p>{subCategory.subCategoryName}</p>
+                              </div>
                             ))}
                           </>
                         ) : (
@@ -114,8 +124,22 @@ const CategoryPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col justify-center items-center gap-2">
-                      <h2 className="text-xl font-semibold">Products</h2>
+                    <div className="flex flex-col justify-center items-center gap-4">
+                      <h2 className="text-xl font-semibold">
+                        Products for this category
+                      </h2>
+
+                      <div className="flex flex-wrap justify-center items-center gap-5 p-2">
+                        {products
+                          .filter(
+                            (product) =>
+                              product.productCategory.categoryName ==
+                              category.categoryName
+                          )
+                          .map((product, index) => (
+                            <AdminProductCard key={index} product={product} />
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -151,6 +151,21 @@ export function CategoriesProvider({ children }) {
     }
   };
 
+  const deleteSubCategory = async (categoryId, subCategoryId) => {
+    try {
+      const subCategoryDoc = doc(
+        db,
+        `categories/${categoryId}/subCategories`,
+        subCategoryId
+      );
+      await deleteDoc(subCategoryDoc, subCategoryId);
+      alert("Sub category deleted successfully!");
+    } catch (error) {
+      dispatch({ type: CATEGORIESACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const contextData = {
     categories: state.categories,
     addCategory,
@@ -158,6 +173,7 @@ export function CategoriesProvider({ children }) {
     addSubCategory,
     getSubCategories,
     subCategories: state.subCategories,
+    deleteSubCategory,
     state,
     dispatch,
   };

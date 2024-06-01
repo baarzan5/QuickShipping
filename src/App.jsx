@@ -36,6 +36,8 @@ import OrderPage from "./pages/admin/OrderPage";
 import { ReviewsProvider } from "./context/ReviewsContext";
 import MyReviewsPage from "./pages/MyReviewsPage";
 import ReviewsPage from "./pages/admin/ReviewsPage";
+import CustomersPage from "./pages/admin/CustomersPage";
+import CustomerPage from "./pages/admin/CustomerPage";
 
 function App() {
   return (
@@ -137,6 +139,16 @@ function App() {
                           excat
                           path="/admin/reviews"
                           element={<ReviewsPage />}
+                        />
+                        <Route
+                          excat
+                          path="/admin/customers"
+                          element={<CustomersPage />}
+                        />
+                        <Route
+                          excat
+                          path="/admin/customer/:customerEmail"
+                          element={<CustomerPage />}
                         />
                       </Routes>
                       <Footer />
