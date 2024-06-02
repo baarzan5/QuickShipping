@@ -74,19 +74,19 @@ export function OrdersProvider({ children }) {
     getOrders();
   }, []);
 
-  const handleOrder = async (orderData, user, totalMoney, cart) => {
+  const handleOrder = async (orderData, user, totalMoney, cart, isFromCart) => {
     try {
       const ordersCollection = collection(db, "orders");
       await addDoc(ordersCollection, orderData);
 
-      if (cart) {
-        // Update user money and user money spent
-        const userDoc = doc(db, "users", user.email);
-        await updateDoc(userDoc, {
-          userMoney: user?.userMoney - totalMoney,
-          userMoneySpent: user?.userMoneySpent + totalMoney,
-        });
+      // Update user money and user money spent
+      const userDoc = doc(db, "users", user.email);
+      await updateDoc(userDoc, {
+        userMoney: user?.userMoney - totalMoney,
+        userMoneySpent: user?.userMoneySpent + totalMoney,
+      });
 
+      if (isFromCart) {
         // Delete products from cart
         const userCartCollection = collection(db, `users/${user.email}/cart`);
         const userCartSnapshot = await getDocs(userCartCollection);

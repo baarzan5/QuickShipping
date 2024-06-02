@@ -15,6 +15,7 @@ const CartPage = () => {
   const { getUserCart, cart, deleteProductFromCart } = useProducts();
   const [orderNote, setOrderNote] = useState("");
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
+  const isInCart = true;
 
   useEffect(() => {
     if (user) {
@@ -88,7 +89,7 @@ const CartPage = () => {
                     IQD
                   </p>
                   <p className="text-[#969393] text-sm line-through">
-                    {FormatMoney(row.product.productDiscount)}IQD
+                    {FormatMoney(row.product.productDiscount)} IQD
                   </p>
                   <p className="text-xl">
                     {FormatMoney(
@@ -161,7 +162,7 @@ const CartPage = () => {
       cell: (row) => (
         <Link
           to={`/product/${row.productId}`}
-          className="flex flex-row-reverse gap-1 items-center"
+          className="flex flex-row-reverse justify-center items-center gap-1"
         >
           <img
             src={row.productThumbnailImageURL}
@@ -269,6 +270,7 @@ const CartPage = () => {
                   cart={cart}
                   orderNote={orderNote}
                   totalMoney={totalMoney}
+                  isFromCart={true}
                 />
               )}
             </div>

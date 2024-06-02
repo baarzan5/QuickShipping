@@ -23,6 +23,15 @@ const ProductPage = () => {
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
   const { reviews } = useReviews();
+  const [selectedProductAttributes, setSelectedProductAttributes] = useState(
+    () => {
+      return product && product.productAttributes
+        ? product.productAttributes.map((attr) =>
+            attr.subAttributes.length > 0 ? attr.subAttributes[0].label : ""
+          )
+        : [];
+    }
+  );
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id == productId);
@@ -69,6 +78,12 @@ const ProductPage = () => {
     if (quantity) {
       setQuantity(quantity + 1);
     }
+  };
+
+  const handleAttributeChange = (attributeIndex, subAttributeLabel) => {
+    const updatedAttributes = [...selectedProductAttributes];
+    updatedAttributes[attributeIndex] = subAttributeLabel;
+    setSelectedProductAttributes(updatedAttributes);
   };
 
   return (
@@ -209,18 +224,33 @@ const ProductPage = () => {
                 :رەنگ
               </p>
 
-              <div className="">
+              <div className="flex flex-col justify-end items-end gap-4">
                 {product.productAttributes.map((productAttribute, index) => (
                   <div
                     key={index}
-                    className="flex flex-row-reverse justify-start items-center gap-6"
+                    className="flex flex-row-reverse justify-center items-center gap-2"
                   >
-                    :{productAttribute.attributeName}
-                    {productAttribute.subAttributes.map(
-                      (subAttribute, index) => (
-                        <div key={index}>{subAttribute.label}</div>
-                      )
-                    )}
+                    <span>: {productAttribute.attributeName}</span>
+                    <div className="flex justify-center items-center gap-2">
+                      {productAttribute.subAttributes.map(
+                        (subAttribute, subIndex) => (
+                          <button
+                            key={subIndex}
+                            onClick={() =>
+                              handleAttributeChange(index, subAttribute.label)
+                            }
+                            className={`p-1 border rounded-md ${
+                              selectedProductAttributes[index] ===
+                              subAttribute.label
+                                ? "bg-[#FF6F00] text-white"
+                                : "bg-white text-black"
+                            }`}
+                          >
+                            {subAttribute.label}
+                          </button>
+                        )
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -302,9 +332,17 @@ const ProductPage = () => {
                     showUserAddressModal={showUserAddressModal}
                     setShowUserAddressModal={setShowUserAddressModal}
                     user={user}
-                    cart={product}
+                    cart={[
+                      {
+                        product,
+                        selectedProductAttributes,
+                        totalPrice,
+                        quantity: 1,
+                      },
+                    ]}
                     orderNote={""}
                     totalMoney={totalPrice}
+                    isFromCart={false}
                   />
                 )}
               </div>
@@ -317,11 +355,12 @@ const ProductPage = () => {
             </h2>
 
             <div className="flex flex-row-reverse flex-wrap justify-end items-end gap-4">
-              {reviews.filter((review) => review.productId == product.id).map((review, index) => (
-                <div key={index}>{review.reviewText}</div>
-              ))}
+              {reviews
+                .filter((review) => review.productId == product.id)
+                .map((review, index) => (
+                  <div key={index}>{review.reviewText}</div>
+                ))}
             </div>
-
           </div>
         </div>
       ) : (

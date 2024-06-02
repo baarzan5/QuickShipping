@@ -15,6 +15,7 @@ const UserAddressModal = ({
   cart,
   orderNote,
   totalMoney,
+  isFromCart
 }) => {
   hideScrollBar(showUserAddressModal);
 
@@ -65,7 +66,7 @@ const UserAddressModal = ({
             orderedAt: new Date(),
           };
 
-          await handleOrder(orderData, user, totalMoney, cart);
+          await handleOrder(orderData, user, totalMoney, cart, isFromCart);
           setShowUserAddressModal(false);
         });
       } else {

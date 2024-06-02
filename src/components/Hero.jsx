@@ -15,6 +15,15 @@ const Hero = ({ product }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
+  const [selectedProductAttributes, setSelectedProductAttributes] = useState(
+    () => {
+      return product && product.productAttributes
+        ? product.productAttributes.map((attr) =>
+            attr.subAttributes.length > 0 ? attr.subAttributes[0].label : ""
+          )
+        : [];
+    }
+  );
 
   useEffect(() => {
     if (user) {
@@ -169,12 +178,14 @@ const Hero = ({ product }) => {
                     cart={[
                       {
                         product,
+                        selectedProductAttributes,
                         totalPrice,
                         quantity: 1,
                       },
                     ]}
                     orderNote={""}
                     totalMoney={product.productPrice}
+                    isFromCart={false}
                   />
                 ) : (
                   alert("باڵانسی پێویستت نییە بۆ داواکردنی ئەم بەرهەمە")
@@ -192,8 +203,9 @@ const Hero = ({ product }) => {
           {orders
             .filter((order) => order.orderType == "Product")
             .slice(0, 3)
-            .flatMap((productOrder) => <ProductCard product={productOrder.product.product} />
-            )}
+            .flatMap((productOrder) => (
+              <ProductCard product={productOrder.product.product} />
+            ))}
         </div>
       </div>
     </div>

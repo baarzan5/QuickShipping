@@ -18,6 +18,17 @@ const AddToCartModal = ({
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  // Initialize selectedProductAttributes safely
+  const [selectedProductAttributes, setSelectedProductAttributes] = useState(
+    () => {
+      return product && product.productAttributes
+        ? product.productAttributes.map((attr) =>
+            attr.subAttributes.length > 0 ? attr.subAttributes[0].label : ""
+          )
+        : [];
+    }
+  );
+
   useEffect(() => {
     if (product) {
       const price =
@@ -34,13 +45,13 @@ const AddToCartModal = ({
     setSelectedImageIndex(index);
   };
 
-  let decreaseQuantity = () => {
+  const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   };
 
-  let increaseQuantity = () => {
+  const increaseQuantity = () => {
     if (quantity) {
       setQuantity(quantity + 1);
     }
@@ -51,6 +62,7 @@ const AddToCartModal = ({
       const cartData = {
         product,
         quantity,
+        selectedProductAttributes,
         totalPrice,
         addedAt: new Date(),
       };
@@ -58,6 +70,12 @@ const AddToCartModal = ({
     } catch (error) {
       console.error(error.message);
     }
+  };
+
+  const handleAttributeChange = (attributeIndex, subAttributeLabel) => {
+    const updatedAttributes = [...selectedProductAttributes];
+    updatedAttributes[attributeIndex] = subAttributeLabel;
+    setSelectedProductAttributes(updatedAttributes);
   };
 
   return (
@@ -110,6 +128,52 @@ const AddToCartModal = ({
 
         <div className="flex flex-col justify-end items-end gap-2.5">
           <h3 className="text-lg font-semibold">{product.productName}</h3>
+
+          <p className="flex justify-center items-center gap-2">
+            {product.productColors.map((color, index) => (
+              <span
+                key={index}
+                style={{
+                  backgroundColor: `#${color.colorCode}`,
+                  padding: "5px",
+                  borderRadius: "8px",
+                  width: "40px",
+                  height: "40px",
+                }}
+                title={`${color.colorName} ڕەنگی`}
+              ></span>
+            ))}
+            :رەنگ
+          </p>
+
+          <div className="flex flex-col justify-end items-end gap-4">
+            {product.productAttributes.map((productAttribute, index) => (
+              <div key={index} className="flex flex-row-reverse justify-center items-center gap-2">
+                <span>: {productAttribute.attributeName}</span>
+                <div className="flex justify-center items-center gap-2">
+                  {productAttribute.subAttributes.map(
+                    (subAttribute, subIndex) => (
+                      <button
+                        key={subIndex}
+                        onClick={() =>
+                          handleAttributeChange(index, subAttribute.label)
+                        }
+                        className={`p-1 border rounded-md ${
+                          selectedProductAttributes[index] ===
+                          subAttribute.label
+                            ? "bg-[#FF6F00] text-white"
+                            : "bg-white text-black"
+                        }`}
+                      >
+                        {subAttribute.label}
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div className="flex justify-center items-center gap-1">
             {product.productDiscount ? (
               <>
@@ -196,13 +260,14 @@ const AddToCartModal = ({
             >
               <IoIosAdd size={25} />
             </button>
+            <p>: بڕ</p>
           </div>
 
           <button
             onClick={handleAddToCart}
             className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
           >
-            زیادبکە بۆ لیستی سەبەتەی کڕین
+            زیادبکە بۆ سەبەتەی کڕین
           </button>
         </div>
       </div>
