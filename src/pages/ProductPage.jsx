@@ -9,6 +9,7 @@ import { useOrders } from "../context/OrdersContext";
 import { ORDERSACTIONS } from "../actions/ordersActions";
 import AddToCartModal from "../components/modals/AddToCartModal";
 import UserAddressModal from "../components/modals/UserAddressModal";
+import { useReviews } from "../context/ReviewsContext";
 
 const ProductPage = () => {
   const { productId } = useParams();
@@ -21,6 +22,7 @@ const ProductPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
   const [showUserAddressModal, setShowUserAddressModal] = useState(false);
+  const { reviews } = useReviews();
 
   const getProduct = () => {
     const foundProduct = products.find((product) => product.id == productId);
@@ -248,6 +250,7 @@ const ProductPage = () => {
                 >
                   <IoIosAdd size={25} />
                 </button>
+                <p>: بڕ</p>
               </div>
 
               <div className="flex flex-row-reverse flex-wrap justify-center items-center gap-3">
@@ -272,7 +275,7 @@ const ProductPage = () => {
                   }
                   className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
                 >
-                  زیادبکە بۆ لیستی سەبەتەی کڕین
+                  زیادبکە بۆ سەبەتەی کڕین
                 </button>
 
                 {showAddToCartModal && (
@@ -312,6 +315,13 @@ const ProductPage = () => {
             <h2 className="text-xl font-semibold border-b border-b-[#e4e4e5] w-full py-2 text-right">
               بۆچوونەکان
             </h2>
+
+            <div className="flex flex-row-reverse flex-wrap justify-end items-end gap-4">
+              {reviews.filter((review) => review.productId == product.id).map((review, index) => (
+                <div key={index}>{review.reviewText}</div>
+              ))}
+            </div>
+
           </div>
         </div>
       ) : (

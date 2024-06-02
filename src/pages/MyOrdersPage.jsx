@@ -20,7 +20,7 @@ const getStatus = (status) => {
 
 const MyOrdersPage = () => {
   const { user } = useAuth();
-  const { orders } = useOrders();
+  const { orders, cancelOrder } = useOrders();
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const { reviews } = useReviews();
@@ -36,12 +36,22 @@ const MyOrdersPage = () => {
       cell: (row) => {
         const hasReviewed = reviews.some(
           (review) =>
-            review.productId === row.productId && review.user.email === user?.email
+            review.productId === row.productId &&
+            review.user.email === user?.email
         );
 
         return (
           <div className="flex flex-col justify-center items-center gap-3 p-1">
             <strong className="text-base">{row.status}</strong>
+
+            {!row.orderStatus.isCompleted && !row.orderStatus.isCancelled && (
+              <button
+                onClick={() => cancelOrder(row.order)}
+                className="hover:bg-[#e42727] border border-[#e42727] text-[#e42727] transform transition-all ease-in-out duration-100 hover:text-white active:scale-95 px-1 py-2 rounded-md"
+              >
+                هەڵوەشاندنەوەی داواکاری
+              </button>
+            )}
 
             {!hasReviewed && row.orderStatus.isCompleted && (
               <button
@@ -94,6 +104,7 @@ const MyOrdersPage = () => {
         order.orderType === "Product" && order.user.email === user?.email
     )
     .flatMap((order) => ({
+      order: order,
       id: order.id,
       product: order.product,
       productId: order.product.product.id,

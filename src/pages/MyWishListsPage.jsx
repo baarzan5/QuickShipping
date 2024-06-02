@@ -34,13 +34,13 @@ const MyWishListsPage = () => {
               {wishLists.map((wishList, index) => (
                 <div
                   key={index}
-                  className="w-[350px] bg-white mainShadow rounded-md flex flex-col justify-center items-center gap-3"
+                  className="user-wish-list md:w-[350px] w-[300px] bg-white mainShadow rounded-md flex flex-col justify-center items-center gap-3"
                 >
                   <div className="relative w-full">
                     <Link to={`/product/${wishList.product.id}`}>
                       <img
                         src={wishList.product.productThumbnailImageURL}
-                        className="w-full h-[200px] object-cover rounded-tr-md rounded-tl-md"
+                        className="user-wish-list-product-image w-full h-[200px] object-cover rounded-tr-md rounded-tl-md"
                         alt=""
                       />
                     </Link>
@@ -68,7 +68,7 @@ const MyWishListsPage = () => {
                   <div className="py-2">
                     <button
                       onClick={() => setShowAddToCartModal(!showAddToCartModal)}
-                      className="flex justify-center items-center gap-2 w-[300px] rounded-md p-2 bg-[#FF6F00] text-black hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
+                      className="user-wish-list-add-to-cart-btn flex justify-center items-center gap-2 md:w-[300px] w-[250px] rounded-md p-2 bg-[#FF6F00] text-black hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
                     >
                       <FiShoppingCart size={25} />
                       زیادبکە بۆ سەبەتەی کڕین

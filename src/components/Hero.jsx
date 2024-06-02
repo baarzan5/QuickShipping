@@ -37,8 +37,8 @@ const Hero = ({ product }) => {
   );
 
   return (
-    <div className="relative bg-[#F5E5D7] w-full h-[600px] flex flex-col justify-center items-center gap-5 pt-48 pb-2">
-      <div className="flex flex-wrap flex-row-reverse justify-start items-center mx-auto gap-10">
+    <div className="hero relative bg-[#F5E5D7] w-full h-[600px] flex flex-col justify-center items-center gap-5 pt-48 pb-2">
+      <div className="hero flex flex-wrap flex-row-reverse justify-start items-center mx-auto gap-10">
         <img
           src={product.productThumbnailImageURL}
           className="w-[350px] h-[400px] rounded-md"
@@ -137,7 +137,7 @@ const Hero = ({ product }) => {
               }
               className="bg-[#FF6F00] text-white p-2 rounded-md hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
             >
-              زیادبکە بۆ لیستی سەبەتەی کڕین
+              زیادبکە بۆ سەبەتەی کڕین
             </button>
 
             {showAddToCartModal && (

@@ -10,7 +10,7 @@ const AddBalancePage = () => {
 
   return (
     <div className="pt-[30px]">
-      <div className="flex flex-col gap-5 justify-center items-center p-3 border border-[#e4e4e5] w-[400px] rounded-md mx-auto">
+      <div className="add-balance flex flex-col gap-5 justify-center items-center p-3 border border-[#e4e4e5] w-[400px] rounded-md mx-auto">
         <div className="flex flex-col justify-center items-center gap-3 text-center w-full">
           <h3 className="text-lg font-semibold">زیادکردنی باڵانس</h3>
           <p>
@@ -22,7 +22,7 @@ const AddBalancePage = () => {
           {paymentMethods.map((paymentMethod, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center gap-4"
+              className="flex flex-col justify-center items-center gap-4 w-full"
             >
               <button
                 onClick={() => {
@@ -33,7 +33,7 @@ const AddBalancePage = () => {
                       ]
                     : alert("تکایە سەرەتا بچۆ ژوورەوە");
                 }}
-                className="flex flex-row-reverse justify-start items-center gap-3 w-[350px] p-2 rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out active:scale-95"
+                className="add-balance-btn flex flex-row-reverse justify-start items-center gap-3 w-[350px] p-2 rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out active:scale-95"
               >
                 <img
                   src={paymentMethod.paymentImage}

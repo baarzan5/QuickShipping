@@ -100,6 +100,29 @@ export function OrdersProvider({ children }) {
     }
   };
 
+  const cancelOrder = async (order) => {
+    try {
+      const orderDoc = doc(db, "orders", order.id);
+
+      const newOrderStatus = {
+        isPending: false,
+        isConfirmed: false,
+        isOnDelivered: false,
+        isDelivered: false,
+        isCompleted: false,
+        isCancelled: true,
+      };
+
+      await updateDoc(orderDoc, {
+        orderStatus: newOrderStatus,
+      });
+      alert("داواکاریەکە ڕەتکرایەوە");
+    } catch (error) {
+      dispatch({ type: ORDERSACTIONS.SET_ERROR, payload: error.message });
+      console.error(error.message);
+    }
+  };
+
   const deleteOrder = async (orderId) => {
     try {
       const orderDoc = doc(db, "orders", orderId);
@@ -161,6 +184,7 @@ export function OrdersProvider({ children }) {
     orders: state.orders,
     error: state.error,
     handleOrder,
+    cancelOrder,
     deleteOrder,
     addBalance,
     changeOrderStatus,

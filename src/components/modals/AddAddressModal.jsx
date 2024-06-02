@@ -61,7 +61,7 @@ const AddAddressModal = ({
       style={{ zIndex: 999 }}
     >
       <div
-        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-white rounded-md flex flex-col justify-start items-start gap-2 p-2"
+        className="add-address absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-white rounded-md flex flex-col justify-start items-start gap-2 p-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center w-full px-2">
@@ -148,7 +148,7 @@ const AddAddressModal = ({
 
           <button
             onClick={handleAddAddress}
-            className="bg-[#FF6F00] w-[350px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
+            className="add-address-btn bg-[#FF6F00] w-[350px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
           >
             زیادکردن
           </button>

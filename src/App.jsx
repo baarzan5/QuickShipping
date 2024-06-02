@@ -38,6 +38,7 @@ import MyReviewsPage from "./pages/MyReviewsPage";
 import ReviewsPage from "./pages/admin/ReviewsPage";
 import CustomersPage from "./pages/admin/CustomersPage";
 import CustomerPage from "./pages/admin/CustomerPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
                 <OrdersProvider>
                   <LocationsProvider>
                     <ReviewsProvider>
+                      <ScrollToTop />
                       <Header />
                       <Routes>
                         {/* Authentication */}

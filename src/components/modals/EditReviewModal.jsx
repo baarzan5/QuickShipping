@@ -71,7 +71,7 @@ const EditReviewModal = ({
       style={{ zIndex: 999 }}
     >
       <div
-        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-w-[600px] h-[500px] overflow-y-auto bg-white rounded-md flex flex-col justify-start items-start gap-2 p-2"
+        className="edit-review absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] overflow-y-auto bg-white rounded-md flex flex-col justify-start items-start gap-2 p-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center w-full px-2">

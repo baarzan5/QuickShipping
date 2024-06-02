@@ -8,8 +8,7 @@ const Categories = ({ setShowCategories }) => {
 
   return (
     <div
-      onMouseLeave={() => setShowCategories(false)}
-      className="absolute top-14 left-0 w-full bg-[#F5E5D7]/95 flex flex-col justify-end items-end gap-3 p-2"
+      className="md:absolute md:top-14 md:left-0 w-full bg-[#F5E5D7]/95 flex flex-col justify-end items-end gap-3 p-2"
       style={{ zIndex: 999 }}
     >
         <>

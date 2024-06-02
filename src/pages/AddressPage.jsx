@@ -5,6 +5,7 @@ import { useLocations } from "../context/LocationsContext";
 import { BiEdit } from "react-icons/bi";
 import { PiTrash } from "react-icons/pi";
 import EditAddressModal from "../components/modals/EditAddressModal";
+import { IoIosAdd } from "react-icons/io";
 
 const AddressPage = () => {
   const { user } = useAuth();
@@ -32,9 +33,15 @@ const AddressPage = () => {
               <h2 className="text-xl font-semibold">ناونیشانەکانم</h2>
               <button
                 onClick={() => setShowAddAddressModal(!showAddAddressModal)}
-                className="bg-[#FF6F00] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
+                className="bg-[#FF6F00] text-black sm:rounded-md rounded-full p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
               >
-                زیادکردنی ناونیشانی نوێ
+                <p className="sm:flex hidden">زیادکردنی ناونیشانی نوێ</p>
+                <span
+                  title="زیادکردنی ناونیشانی نوێ"
+                  className="sm:hidden flex"
+                >
+                  <IoIosAdd size={30} />
+                </span>
               </button>
 
               {showAddAddressModal && (
@@ -47,11 +54,11 @@ const AddressPage = () => {
               )}
             </div>
 
-            <div className="flex flex-row-reverse flex-wrap justify-end items-end gap-4 p-2">
+            <div className="address flex flex-row-reverse flex-wrap justify-start items-end gap-4 p-2">
               {address.map((address, index) => (
                 <div
                   key={index}
-                  className="w-[250px] p-2 border border-[#e4e4e5] rounded-md flex flex-col justify-end items-end gap-2.5"
+                  className="address-card w-[250px] p-2 border border-[#e4e4e5] rounded-md flex flex-col justify-end items-end gap-2.5"
                 >
                   <div className="flex flex-row-reverse justify-between items-center w-full">
                     <button

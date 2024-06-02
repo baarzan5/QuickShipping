@@ -48,7 +48,7 @@ const EditProfileModal = ({
       style={{ zIndex: 999 }}
     >
       <div
-        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[260px] bg-white rounded-md flex flex-col justify-start items-start gap-2.5 p-2"
+        className="edit-profile absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[260px] bg-white rounded-md flex flex-col justify-start items-start gap-2.5 p-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center w-full px-2">
@@ -69,7 +69,7 @@ const EditProfileModal = ({
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="ناوی تەواو"
-            className="w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right"
+            className="edit-profile-input w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right"
             required
           />
 
@@ -78,7 +78,7 @@ const EditProfileModal = ({
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="ژمارەی مۆبایل"
-            className="w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="edit-profile-input w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             required
           />
 
@@ -87,13 +87,13 @@ const EditProfileModal = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ئیمەیڵ"
-            className="w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right"
+            className="edit-profile-input w-[350px] border border-[#e4e4e5] rounded-md p-2 text-right"
             required
           />
 
           <button
             onClick={handleEditProfile}
-            className="bg-[#FF6F00] w-[350px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
+            className="edit-profile-btn bg-[#FF6F00] w-[350px] text-black rounded-md p-2 transform transition-all duration-100 ease-in-out hover:text-white active:scale-95"
           >
             دەستکاری کردن
           </button>

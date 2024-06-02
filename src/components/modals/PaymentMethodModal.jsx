@@ -53,7 +53,7 @@ const PaymentMethodModal = ({
       style={{ zIndex: 999 }}
     >
       <div
-        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[500px] bg-white rounded-md flex flex-col justify-center items-center gap-4"
+        className="payment-method absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[500px] bg-white rounded-md flex flex-col justify-center items-center gap-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center w-full px-2">
@@ -69,21 +69,21 @@ const PaymentMethodModal = ({
         </div>
         <p>خاڵبەندی زیادکردنی باڵانس</p>
 
-        <div className="flex flex-row-reverse justify-center items-center gap-0.5">
+        <div className="flex flex-row-reverse justify-center items-center gap-0.5 w-full">
           <p>زیادکردنی باڵانس بەڕێگای</p>
           <p>{paymentMethod.paymentName}</p>
           <img src={paymentMethod.paymentImage} className="w-7 h-7" alt="" />
         </div>
         <p>خاڵبەندی زیادکردنی باڵانس</p>
 
-        <div className="flex flex-col justify-end items-end gap-2">
+        <div className="flex flex-col justify-end items-end gap-2 text-right">
           <p>١- ناردنی ئەو بڕە پارەی دەتەوێت بۆ ئەم ژمارەیە</p>
           <strong className="mx-auto">
             <a href="tel:+96407518980248">07518980248</a>
           </strong>
         </div>
 
-        <div className="flex flex-col justify-end items-end gap-2">
+        <div className="flex flex-col justify-center items-center gap-2 text-right w-full">
           <p>٢- ئەو ژمارەیە بنووسە کە باڵانست پێناردووە</p>
           <input
             type="number"
@@ -91,12 +91,12 @@ const PaymentMethodModal = ({
             min={0}
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(parseInt(e.target.value))}
-            className={`w-[300px] p-2 border border-[#e4e4e5] rounded-md text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+            className={`payment-method-input w-[300px] p-2 border border-[#e4e4e5] rounded-md text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
             required
           />
         </div>
 
-        <div className="flex flex-col justify-end items-end gap-2">
+        <div className="flex flex-col justify-center items-center gap-2 text-right w-full">
           <p>٣- بڕی ئەو پارەیە بنووسە کە ناردووتە</p>
           <input
             type="number"
@@ -104,14 +104,14 @@ const PaymentMethodModal = ({
             min={1}
             value={balanceValue}
             onChange={(e) => setBalanceValue(parseInt(e.target.value))}
-            className={`w-[300px] p-2 border border-[#e4e4e5] rounded-md text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+            className={`payment-method-input w-[300px] p-2 border border-[#e4e4e5] rounded-md text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
             required
           />
         </div>
 
         <button
           onClick={handleOrderBalance}
-          className="w-[300px] rounded-md p-2 bg-[#FF6F00] text-white hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
+          className="payment-method-btn w-[300px] rounded-md p-2 bg-[#FF6F00] text-white hover:bg-[#FF6F00]/90 active:scale-95 transform transition-all duration-100 ease-in-out"
         >
           ناردن
         </button>

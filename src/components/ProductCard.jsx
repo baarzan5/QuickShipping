@@ -31,11 +31,11 @@ const ProductCard = ({ product }) => {
   );
 
   return (
-    <div className="relative">
+    <div className="relative w-[250px] h-[300px]">
       <Link to={`/product/${product.id}`}>
         <img
           src={product.productThumbnailImageURL}
-          className="w-[250px] h-[300px] rounded-md object-cover"
+          className="w-full h-full rounded-md object-cover"
           alt=""
         />
       </Link>

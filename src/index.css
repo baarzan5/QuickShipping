@@ -26,3 +26,143 @@ body {
 body.modal-active {
   overflow-y: hidden;
 }
+
+@media (max-width: 948px) {
+  .hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding-top: 20px;
+  }
+
+  .newestProducts {
+    padding-top: 2px;
+  }
+}
+
+@media (max-width: 662px) {
+  .balance-order-card {
+    width: 250px;
+  }
+}
+
+@media (max-width: 650px) {
+  .user-profile-info {
+    width: 250px;
+    height: 100px;
+  }
+
+  .user-wish-list {
+    width: 250px;
+  }
+
+  .user-wish-list-product-image {
+    height: 150px;
+  }
+
+  .user-wish-list-add-to-cart-btn {
+    width: 200px;
+    gap: 1px;
+  }
+}
+
+@media (max-width: 577px) {
+  .address {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .address-card {
+    width: 200px;
+  }
+}
+
+@media (max-width: 555px) {
+  .balance-orders {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 550px) {
+  .user-profile-info {
+    width: 200px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 510px) {
+  .add-review {
+    width: 95%;
+  }
+
+  .edit-review {
+    width: 95%;
+  }
+}
+
+@media (max-width: 450px) {
+  .user-profile-info {
+    width: 250px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 410px) {
+  .add-balance {
+    width: 95%;
+  }
+
+  .add-balance-btn {
+    width: 100%;
+  }
+
+  .add-address {
+    width: 95%;
+  }
+
+  .add-address-btn {
+    width: 100%;
+  }
+
+  .edit-address {
+    width: 95%;
+    height: auto;
+  }
+
+  .edit-address-btn {
+    width: 100%;
+  }
+
+  .edit-profile {
+    width: 95%;
+    height: auto;
+  }
+
+  .edit-profile-input {
+    width: 90%;
+  }
+
+  .edit-profile-btn {
+    width: 90%;
+  }
+}
+
+@media (max-width: 355px) {
+  .payment-method {
+    width: 95%;
+    height: auto;
+    padding: 5px;
+  }
+
+  .payment-method-input {
+    width: 90%;
+  }
+
+  .payment-method-btn {
+    width: 90%;
+  }
+}

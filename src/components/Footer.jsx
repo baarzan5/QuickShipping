@@ -13,11 +13,11 @@ const Footer = () => {
   return (
     <div className="pt-10 w-full">
       <footer className="flex flex-col justify-center items-center gap-5 w-full bg-[#F5E5D7]">
-        <div className="w-full flex flex-row-reverse flex-wrap justify-around items-center p-2">
+        <div className="w-full flex flex-col justify-center items-center gap-5 sm:flex-row-reverse sm:justify-around sm:items-start p-4">
           <div className="flex flex-col justify-center items-center gap-7">
             <h2 className="text-2xl font-bold">LOGO</h2>
 
-            <div className="flex flex-wrap justify-center items-center gap-3">
+            <div className="sm:flex hidden flex-wrap justify-center items-center gap-3">
               <a href="" target="_blank" className="hover:text-[#FF6F00]">
                 <LuFacebook size={25} />
               </a>
@@ -33,27 +33,33 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center gap-7">
+          <div className="flex flex-col justify-center items-center gap-7 sm:gap-3">
             <h3 className="text-xl font-semibold">دەربارە</h3>
 
-            <div className="flex flex-col justify-center items-center gap-4">
+            <div className="flex flex-col justify-center items-center gap-4 sm:gap-2">
               <Link to="" className="hover:text-[#FF6F00]">
                 داواکاری
+              </Link>
+
+              <Link to="/add-balance" className="hover:text-[#FF6F00]">
+                پارەدان
               </Link>
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center gap-7">
-            <h3 className="text-xl font-semibold">یارمەتی</h3>
-
-            <div className="flex flex-col justify-center items-center gap-4">
-              <Link to="/add-balance" className="hover:text-[#FF6F00]">
-                پارەدان
-              </Link>
-              <Link to="" className="hover:text-[#FF6F00]">
-                پەیوەندی کردن
-              </Link>
-            </div>
+          <div className="flex sm:hidden flex-wrap justify-center items-center gap-3">
+            <a href="" target="_blank" className="hover:text-[#FF6F00]">
+              <LuFacebook size={25} />
+            </a>
+            <a href="" target="_blank" className="hover:text-[#FF6F00]">
+              <LuInstagram size={25} />
+            </a>
+            <a href="" target="_blank" className="hover:text-[#FF6F00]">
+              <PiTiktokLogoThin size={25} />
+            </a>
+            <a href="" target="_blank" className="hover:text-[#FF6F00]">
+              <PiSnapchatLogoLight size={25} />
+            </a>
           </div>
         </div>
 

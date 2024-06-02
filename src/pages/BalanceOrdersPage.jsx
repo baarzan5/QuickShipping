@@ -15,7 +15,7 @@ const BalanceOrdersPage = () => {
         <div className="pt-[30px]">
           <div className="flex flex-col gap-5 justify-end items-end w-[95%] p-2 rounded-md mainShadow mx-auto">
             <div className="flex flex-row-reverse justify-between items-center w-full px-2 pb-1.5 border-b border-b-[#e4e4e5]">
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold text-right">
                 داواکاریەکانی زیادکردنی باڵانس
               </h2>
             </div>
@@ -23,17 +23,17 @@ const BalanceOrdersPage = () => {
             <div className="">
               {orders.filter((order) => order.orderType == "Balance" && order.user.email == user.email).length ==
               0 ? (
-                <strong className="text-2xl">
+                <strong className="text-2xl text-right">
                   هیچ داواکاریەکی باڵانست نەکردووە
                 </strong>
               ) : (
-                <div className="flex flex-row-reverse flex-wrap justify-start items-end gap-3">
+                <div className="balance-orders flex flex-row-reverse flex-wrap justify-start items-end gap-3">
                   {orders
                     .filter((order) => order.orderType == "Balance" && order.user.email == user.email)
                     .map((balanceOrder, index) => (
                       <div
                         key={index}
-                        className="flex flex-col justify-end items-end gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2"
+                        className="balance-order-card flex flex-col justify-end items-end gap-4 w-[300px] rounded-md border border-[#e4e4e5] text-right p-2"
                       >
                         <div className="flex flex-row-reverse justify-between items-center w-full">
                           <strong key={index}>

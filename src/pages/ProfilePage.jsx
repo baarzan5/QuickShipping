@@ -16,11 +16,11 @@ const ProfilePage = () => {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
 
   return (
-    <>
+    <div className="pt-5">
       {user ? (
         <div className="flex flex-col justify-center items-center gap-5 p-2">
-          <div className="mainShadow w-full h-[250px] p-2 flex flex-row-reverse justify-between items-start rounded-md">
-            <div className="flex flex-col justify-end items-end gap-3">
+          <div className="mainShadow w-full sm:h-[250px] p-2 flex flex-col gap-7 sm:flex-row-reverse sm:justify-between justify-center sm:items-start items-center rounded-md">
+            <div className="flex flex-col sm:justify-end sm:items-end justify-center items-center gap-3">
               <img
                 src={user.userImageURL}
                 className="w-16 h-16 object-cover rounded-full"
@@ -46,7 +46,7 @@ const ProfilePage = () => {
               </h4>
             </div>
 
-            <div className="flex flex-col justify-between items-start h-full">
+            <div className="flex sm:flex-col flex-row-reverse flex-wrap gap-5 sm:justify-between sm:items-start justify-center items-center h-full">
               <button
                 onClick={() => setShowEditProfileModal(!showEditProfileModal)}
                 className="flex justify-center items-center gap-2 border border-[#FF6F00] text-[#FF6F00] p-1 rounded-md hover:bg-[#FF6F00] hover:text-white transform transition-all duration-100 ease-in-out active:scale-95"
@@ -77,7 +77,7 @@ const ProfilePage = () => {
             {user.isAdmin ? (
               <Link
                 to="/admin/home"
-                className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+                className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
               >
                 <GrUserAdmin size={30} />
                 <h3 className="text-lg">ئەدمین</h3>
@@ -88,7 +88,7 @@ const ProfilePage = () => {
 
             <Link
               to="/add-balance"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <RiMoneyDollarCircleLine size={30} />
               <h3 className="text-lg">زیادکردنی باڵانس</h3>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
 
             <Link
               to="/balance-orders"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse text-right justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <LiaMoneyCheckAltSolid size={30} />
               <h3 className="text-lg">داواکاریەکانی زیادکردنی باڵانس</h3>
@@ -104,7 +104,7 @@ const ProfilePage = () => {
 
             <Link
               to="/orders"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <CiCircleList size={30} />
               <h3 className="text-lg">داواکاریەکانم</h3>
@@ -112,7 +112,7 @@ const ProfilePage = () => {
 
             <Link
               to="/reviews"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <CiStar size={30} />
               <h3 className="text-lg">بۆچوونەکانم</h3>
@@ -120,7 +120,7 @@ const ProfilePage = () => {
 
             <Link
               to="/wishlists"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <IoIosHeartEmpty size={30} />
               <h3 className="text-lg">دڵخوازەکانم</h3>
@@ -128,7 +128,7 @@ const ProfilePage = () => {
 
             <Link
               to="/address"
-              className="flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
+              className="user-profile-info flex flex-row-reverse justify-start items-center px-2 gap-5 w-[300px] h-[115px] bg-white rounded-md border border-[#e4e4e5] transform transition-all duration-100 ease-in-out"
             >
               <FaRegAddressCard size={30} />
               <h3 className="text-lg">ناونیشانەکانم</h3>
@@ -138,7 +138,7 @@ const ProfilePage = () => {
       ) : (
         <>Loading...</>
       )}
-    </>
+    </div>
   );
 };
 

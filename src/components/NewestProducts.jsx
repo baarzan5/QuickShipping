@@ -25,10 +25,10 @@ const NewestProducts = () => {
   };
 
   return (
-    <div className="pt-[160px]">
+    <div className="newestProducts pt-[160px]">
       <div className="flex flex-col justify-center items-center gap-5 bg-white mainShadow w-[95%] mx-auto rounded-md p-2">
         <div className="flex flex-row-reverse justify-between items-center w-full px-2">
-          <h2 className="text-2xl font-semibold">نوێترین بەرهەمەکان</h2>
+          <h2 className="text-2xl font-semibold text-right">نوێترین بەرهەمەکان</h2>
 
           <div className="flex flex-row-reverse justify-center items-center gap-5">
             <button

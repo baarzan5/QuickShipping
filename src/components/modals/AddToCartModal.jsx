@@ -67,10 +67,18 @@ const AddToCartModal = ({
       style={{ zIndex: 999 }}
     >
       <div
-        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[400px] overflow-y-auto bg-white rounded-md flex justify-between items-start gap-2 p-2"
+        className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[400px] overflow-y-auto bg-white rounded-md flex flex-wrap justify-between items-center gap-2 p-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-start items-start gap-2">
+          <button
+            title="داخستن"
+            onClick={() => setShowAddToCartModal(!showAddToCartModal)}
+            className="hover:bg-[#969393]/15 p-1 rounded-full active:scale-95 transform transition-all ease-in-out duration-100"
+          >
+            <CgClose size={25} />
+          </button>
+
           <Suspense fallback={<>Loading...</>}>
             <div className="flex justify-start items-start gap-2">
               <div className="flex flex-col justify-start items-center gap-2">
@@ -100,15 +108,7 @@ const AddToCartModal = ({
           </Suspense>
         </div>
 
-        <div className="flex flex-col justify-start items-start gap-2.5">
-          <button
-            title="داخستن"
-            onClick={() => setShowAddToCartModal(!showAddToCartModal)}
-            className="hover:bg-[#969393]/15 p-1 rounded-full active:scale-95 transform transition-all ease-in-out duration-100"
-          >
-            <CgClose size={25} />
-          </button>
-
+        <div className="flex flex-col justify-end items-end gap-2.5">
           <h3 className="text-lg font-semibold">{product.productName}</h3>
           <div className="flex justify-center items-center gap-1">
             {product.productDiscount ? (
@@ -124,16 +124,14 @@ const AddToCartModal = ({
                       <p className="text-[#969393] text-sm line-through">
                         {FormatMoney(product.productDiscount)}IQD
                       </p>
+                      : نرخ
                     </div>
                     <p className="text-xl">
-                      کۆی گشتی نرخ :
-                      <p>
-                        {FormatMoney(
-                          quantity * product.productPrice -
-                            product.productDiscount
-                        )}{" "}
-                        IQD
-                      </p>
+                      {FormatMoney(
+                        quantity * product.productPrice -
+                          product.productDiscount
+                      )}{" "}
+                      IQD : کۆی گشتی
                     </p>
                   </div>
                 ) : (
@@ -143,20 +141,21 @@ const AddToCartModal = ({
                         {FormatMoney(
                           product.productPrice *
                             (1 - product.productDiscount / 100)
-                        )}
+                        )}{" "}
+                        IQD
                       </p>
                       <p className="text-[#969393] text-sm line-through">
-                        {FormatMoney(product.productPrice)}
+                        {FormatMoney(product.productPrice)} IQD
                       </p>
+                      : نرخ
                     </div>
                     <p className="text-xl">
-                      کۆی گشتی نرخ :{" "}
                       {FormatMoney(
                         quantity *
                           product.productPrice *
                           (1 - product.productDiscount / 100)
                       )}{" "}
-                      IQD
+                      IQD : کۆی گشتی
                     </p>
                   </div>
                 )}
@@ -170,7 +169,6 @@ const AddToCartModal = ({
                 </p>
               </div>
             )}{" "}
-            IQD : نرخ
           </div>
 
           <div className="flex justify-center items-center gap-2">
