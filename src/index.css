@@ -27,8 +27,12 @@ body.modal-active {
   overflow-y: hidden;
 }
 
-@media (max-width: 913px) {
+@media (max-width: 912px) {
   .cart {
+    display: none;
+  }
+
+  .orders {
     display: none;
   }
 
@@ -43,6 +47,10 @@ body.modal-active {
 
 @media (min-width: 913px) {
   .cart-products {
+    display: none;
+  }
+
+  .product-orders {
     display: none;
   }
 }
@@ -148,6 +156,14 @@ body.modal-active {
 
   .edit-review {
     width: 95%;
+  }
+
+  .product-order-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: end;
+    align-items: end;
   }
 }
 

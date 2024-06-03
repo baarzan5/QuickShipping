@@ -61,7 +61,10 @@ const Footer = () => {
 
         <div className="w-full border-t border-t-[#969393]/50 py-2 flex justify-center items-center">
           <span className="text-gray-500">
-            <strong>@BarzanDR</strong> 2024 All Rights Reserved
+            گەشەپێدەر{" "}
+            <Link target="_blank" to="https://www.instagram.com/baarzan5">
+              <strong>بارزان</strong>
+            </Link>
           </span>
         </div>
       </footer>
