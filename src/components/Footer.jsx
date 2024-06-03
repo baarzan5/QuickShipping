@@ -37,10 +37,6 @@ const Footer = () => {
             <h3 className="text-xl font-semibold">دەربارە</h3>
 
             <div className="flex flex-col justify-center items-center gap-4 sm:gap-2">
-              <Link to="" className="hover:text-[#FF6F00]">
-                داواکاری
-              </Link>
-
               <Link to="/add-balance" className="hover:text-[#FF6F00]">
                 پارەدان
               </Link>

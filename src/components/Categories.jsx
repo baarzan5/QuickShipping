@@ -8,7 +8,7 @@ const Categories = ({ setShowCategories }) => {
 
   return (
     <div
-      className="md:absolute md:top-14 md:left-0 w-full bg-[#F5E5D7]/95 flex flex-col justify-end items-end gap-3 p-2"
+      className="md:absolute md:top-10 md:left-0 md:h-14 w-full bg-[#F5E5D7]/95 flex flex-col justify-end items-end gap-3 p-2"
       style={{ zIndex: 999 }}
     >
         <>

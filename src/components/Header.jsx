@@ -33,6 +33,15 @@ const Header = () => {
     return cart.length;
   }, [cart]);
 
+  // Function to scroll to the bottom of the page
+  const scrollToBottom = () => {
+    // Scroll to the bottom of the page with smooth behavior
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div
       className="sticky top-0 left-0 w-full h-16 bg-[#F5E5D7]/95 backdrop-blur-sm flex flex-row-reverse justify-between items-center px-2"
@@ -54,11 +63,11 @@ const Header = () => {
             <Link to="/">سەرەتا</Link>
           </li>
 
-          <li className="">
+          <li className="relative">
             <button
               onMouseEnter={() => setShowCategories(true)}
               onMouseLeave={() => setShowCategories(false)}
-              className="flex flex-row-reverse justify-center items-center gap-1"
+              className="flex flex-row-reverse justify-center items-center gap-1 w-full"
             >
               بەشەکان
               <IoIosArrowDown size={25} />
@@ -70,11 +79,11 @@ const Header = () => {
           </li>
 
           <li>
-            <Link to="/">دەربارە</Link>
+            <button onClick={scrollToBottom}>دەربارە</button>
           </li>
 
           <li>
-            <Link to="/">پەیوەندی</Link>
+            <button onClick={scrollToBottom}>پەیوەندی</button>
           </li>
         </ul>
       </nav>
@@ -143,11 +152,11 @@ const Header = () => {
               </li>
 
               <li onClick={() => setOpenNav(!openNav)}>
-                <Link to="/">دەربارە</Link>
+                <button onClick={scrollToBottom}>دەربارە</button>
               </li>
 
               <li onClick={() => setOpenNav(!openNav)}>
-                <Link to="/">پەیوەندی</Link>
+                <button onClick={scrollToBottom}>پەیوەندی</button>
               </li>
             </ul>
           </nav>

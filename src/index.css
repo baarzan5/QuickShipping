@@ -27,6 +27,26 @@ body.modal-active {
   overflow-y: hidden;
 }
 
+@media (max-width: 913px) {
+  .cart {
+    display: none;
+  }
+
+  .cart-text {
+    font-size: 16px;
+  }
+
+  .user-cart-balance {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 913px) {
+  .cart-products {
+    display: none;
+  }
+}
+
 @media (max-width: 948px) {
   .hero {
     display: flex;
@@ -38,6 +58,33 @@ body.modal-active {
 
   .newestProducts {
     padding-top: 2px;
+  }
+}
+
+@media (max-width: 881px) {
+  .product {
+    display: flex;
+    flex-direction: column;
+    justify-content:  center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .product-images {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content:  center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content:  center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
   }
 }
 
@@ -151,6 +198,16 @@ body.modal-active {
   }
 }
 
+@media (max-width: 400px) {
+  .cart-total-price {
+    font-size: 14px;
+  }
+
+  .product-image {
+    height: 50px;
+  }
+}
+
 @media (max-width: 355px) {
   .payment-method {
     width: 95%;
@@ -164,5 +221,25 @@ body.modal-active {
 
   .payment-method-btn {
     width: 90%;
+  }
+}
+
+@media (max-width: 318px) {
+  .user-cart-balance {
+    display: none;
+  }
+
+  .user-cart-balance-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+@media (min-width: 318px) {
+  .user-cart-balance-text {
+    display: none;
   }
 }

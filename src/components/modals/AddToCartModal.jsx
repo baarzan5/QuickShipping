@@ -62,7 +62,9 @@ const AddToCartModal = ({
       const cartData = {
         product,
         quantity,
-        selectedProductAttributes,
+        selectedProductAttributes: selectedProductAttributes.map((selectedProductAttribute) => ({
+          label: selectedProductAttribute,
+        })),
         totalPrice,
         addedAt: new Date(),
       };
