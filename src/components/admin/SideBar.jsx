@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../../assets/img/logo.png";
 import { Link } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { RxDashboard } from "react-icons/rx";
@@ -17,7 +18,9 @@ const SideBar = () => {
   return (
     <div className="static top-0 left-0 flex flex-col p-3 justify-between items-start mainShadow w-full h-full">
       <div className="flex flex-col gap-6 justify-start items-start">
-        <h2 className="text-2xl font-bold">LOGO</h2>
+        <Link to="/admin/home">
+          <img src={Logo} className="h-[100px]" alt="Logo" />
+        </Link>
 
         <div className="flex flex-col justify-start items-start gap-3">
           <Link

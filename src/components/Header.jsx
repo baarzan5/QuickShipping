@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import Logo from "../assets/img/logo.png";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -72,7 +73,7 @@ const Header = () => {
     >
       <div className="flex justify-center items-center gap-2">
         <Link to="/" className="text-2xl font-bold">
-          LOGO
+          <img src={Logo} className="h-[100px]" alt="" />
         </Link>
 
         <button onClick={() => setOpenNav(!openNav)} className="md:hidden flex">

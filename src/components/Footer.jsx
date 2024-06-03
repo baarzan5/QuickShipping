@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../assets/img/logo.png";
 import { LuFacebook, LuInstagram } from "react-icons/lu";
 import { PiTiktokLogoThin, PiSnapchatLogoLight } from "react-icons/pi";
 import { Link, useLocation } from "react-router-dom";
@@ -15,7 +16,9 @@ const Footer = () => {
       <footer className="flex flex-col justify-center items-center gap-5 w-full bg-[#F5E5D7]">
         <div className="w-full flex flex-col justify-center items-center gap-5 sm:flex-row-reverse sm:justify-around sm:items-start p-4">
           <div className="flex flex-col justify-center items-center gap-7">
-            <h2 className="text-2xl font-bold">LOGO</h2>
+            <Link to="/">
+              <img src={Logo} className="h-[100px]" alt="" />
+            </Link>
 
             <div className="sm:flex hidden flex-wrap justify-center items-center gap-3">
               <a href="" target="_blank" className="hover:text-[#FF6F00]">
