@@ -8,7 +8,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase/firebaseConfig";
 
 const SignUpPage = () => {
-  const { user, signUpUser, dispatch, googleSignIn, facebookSignIn } =
+  const { user, signUpUser, dispatch, googleSignIn, facebookSignIn, loading } =
     useAuth();
   const navigate = useNavigate();
   const [userImage, setUserImage] = useState(null);
@@ -18,10 +18,10 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user && !loading) {
       return navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleUploadUserImage = async () => {
     try {
@@ -64,6 +64,7 @@ const SignUpPage = () => {
           createdAt: new Date(),
           lastLogin: new Date(),
         };
+
         await signUpUser(userData);
       }
     } catch (error) {
@@ -163,6 +164,16 @@ const SignUpPage = () => {
           </div>
         </div>
       </div>
+
+      {loading && (
+        <div
+          className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 justify-center items-center bg-black/50 backdrop-blur-sm"
+          style={{ zIndex: 999 }}
+        >
+          <div className="loader"></div>
+          <p>خۆتۆمارکردن</p>
+        </div>
+      )}
     </div>
   );
 };

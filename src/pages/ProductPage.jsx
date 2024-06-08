@@ -137,10 +137,10 @@ const ProductPage = () => {
                     ))}
                   </div>
 
-                  <div>
+                  <div className="w-full">
                     <img
                       src={product.productImageURLS[selectedImageIndex]}
-                      className="w-full h-[500px] rounded-md"
+                      className="product-main-image w-full h-[500px] rounded-md"
                       alt=""
                     />
                   </div>
@@ -387,7 +387,7 @@ const ProductPage = () => {
               بۆچوونەکان
             </h2>
 
-            <div className="flex flex-row-reverse flex-wrap justify-start items-start gap-4 w-full p-2">
+            <div className="product-reviews flex flex-row-reverse flex-wrap justify-start items-start gap-4 w-full p-2">
               {reviews.filter((review) => review.productId == product.id)
                 .length == 0 ? (
                 <strong className="text-xl">

@@ -6,31 +6,34 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
 const LoginPage = () => {
-  const { user, loginUser, dispatch, googleSignIn, facebookSignIn } = useAuth();
+  const { user, loginUser, dispatch, googleSignIn, facebookSignIn, loading } =
+    useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
-      return navigate("/");
+    if (user && !loading) {
+      navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleLoginUser = async () => {
-    try {
-      if (email.trim() == "") {
-        alert("ئیمەیڵەکەت بنووسە");
-      } else if (password.trim() == "") {
-        alert("وشەی نهێنیت بنووسە");
-      } else {
-        const userData = {
-          email,
-          password,
-        };
+    if (email.trim() === "") {
+      alert("ئیمەیڵەکەت بنووسە");
+      return;
+    } else if (password.trim() === "") {
+      alert("وشەی نهێنیت بنووسە");
+      return;
+    }
 
-        await loginUser(userData);
-      }
+    try {
+      const userData = {
+        email,
+        password,
+      };
+
+      await loginUser(userData);
     } catch (error) {
       dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
@@ -62,7 +65,10 @@ const LoginPage = () => {
               required
             />
 
-            <Link to="/forgot-password" className="text-gray-400 mr-auto ml-0 px-7 text-center">
+            <Link
+              to="/forgot-password"
+              className="text-gray-400 mr-auto ml-0 px-7 text-center"
+            >
               وشەی نهێنیت لەبیر کردووە؟
             </Link>
           </div>
@@ -104,6 +110,16 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
+
+      {loading && (
+        <div
+          className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 justify-center items-center bg-black/50 backdrop-blur-sm"
+          style={{ zIndex: 999 }}
+        >
+          <div className="loader"></div>
+          <p>چوونەژوورەوە</p>
+        </div>
+      )}
     </div>
   );
 };
