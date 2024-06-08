@@ -116,9 +116,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signUpUser = async (userData) => {
-    dispatch({ type: AUTHACTIONS.SET_LOADING, payload: true });
-
     try {
+      dispatch({ type: AUTHACTIONS.SET_LOADING, payload: true });
+
       const userDoc = doc(db, "users", userData.email);
       const userSnapshot = await getDoc(userDoc);
 
@@ -138,6 +138,7 @@ export function AuthProvider({ children }) {
         }, 2000);
       } else {
         alert("ئەم بەکارهێنەرە پێشتر هەبووە");
+        dispatch({ type: AUTHACTIONS.SET_LOADING, payload: false });
       }
     } catch (error) {
       dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
@@ -146,9 +147,9 @@ export function AuthProvider({ children }) {
   };
 
   const loginUser = async (userData) => {
-    dispatch({ type: AUTHACTIONS.SET_LOADING, payload: true });
-
     try {
+      dispatch({ type: AUTHACTIONS.SET_LOADING, payload: true });
+
       const userDoc = doc(db, "users", userData.email);
       const userSnapshot = await getDoc(userDoc);
 
@@ -204,6 +205,8 @@ export function AuthProvider({ children }) {
 
   const createUserProfileWithSocialMediaIfNotExists = async (user) => {
     try {
+      dispatch({ type: AUTHACTIONS.SET_LOADING, payload: true });
+
       const userDoc = doc(db, "users", user.email);
       const userSnapshot = await getDoc(userDoc);
 
@@ -226,6 +229,7 @@ export function AuthProvider({ children }) {
         });
       }
     } catch (error) {
+      dispatch({ type: AUTHACTIONS.SET_LOADING, payload: false });
       dispatch({ type: AUTHACTIONS.SET_ERROR, payload: error.message });
       console.error(error.message);
     }
